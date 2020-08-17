@@ -1,0 +1,5 @@
+.navbar {
+  &.navbar-scroll {
+    transition: background 0.5s ease-in-out, padding 0.5s ease-in-out;
+  }
+}
