@@ -1,48 +1,15 @@
-
 ![MDB Logo](https://mdbootstrap.com/img/Marketing/general/logo/medium/mdb-r.png)
 
+# MDB  5 PRO
 
-# MDB  5 Beta
+### The world's most powerful tools and platform for building responsive, mobile-first websites and apps
 
-### Bootstrap 5 & Material Design 2.0 UI KIT
+<p>The PRO version provides to 300+ premium components, 200+ design blocks, 100+ pages, 30+ plugins, 20+ integrations, 15+ templates, premium support, gitlab access & unlimited updates</p>
 
-**[>> Get Started in 3 steps](https://mdbootstrap.com/docs/standard/getting-started/installation/)**
+## `⭐⭐⭐⭐⭐` <a href="#reviews">4.9/5 (reviews)</a>
 
-**[>> Get Started with Webpack](https://github.com/mdbootstrap/mdb-webpack-starter)**
 
-**[>> MDB 5 Demo](https://mdbootstrap.com/docs/standard/#demo)**
-
-<a href="https://npmcharts.com/compare/mdbootstrap?minimal=true"> <img src="https://img.shields.io/npm/dm/mdbootstrap.svg?label=MDB%20Downloads" alt="Downloads"></a>
-<a href="https://github.com/mdbootstrap/bootstrap-material-design/blob/master/License.pdf"><img src="https://img.shields.io/badge/license-MIT-green.svg" alt="License"></a>
-<a href="https://twitter.com/intent/tweet/?text=Thanks+@mdbootstrap+for+creating+amazing+and+free+Material+Design+for+Bootstrap+4+UI+KIT%20https://mdbootstrap.com/docs/jquery/&hashtags=javascript,code,webdesign,bootstrap"><img src="https://img.shields.io/twitter/url/http/shields.io.svg?style=social&label=Let%20us%20know%20you%20were%20here%21&"></a>
-<a href="https://www.youtube.com/watch?v=c9B4TPnak1A&t=6s"><img alt="YouTube Video Views" src="https://img.shields.io/youtube/views/c9B4TPnak1A?label=Bootstrap%205%20Tutorial%20Views&style=social"></a>
-___
-
-<table>
-  <tbody>
-    <tr>
-      <td>
-          <a href="https://mdbootstrap.com/docs/standard/" alt="Bootstrap 5" rel="dofollow">
-          		<img src="https://z9t4u9f6.stackpathcdn.com/wp-content/themes/mdbootstrap4/content/en/_mdb5/standard/about/assets/mdb5-about.jpg">
-          </a>
-      </td>
-      <td>
-        <ul>
-        <li><b>500+ material UI components</b></li>
-         <li>Super simple, 1 minute installation</li>
-         <li>Detailed docs & multiple practical examples</li>
-         <li>Lots of tutorials</li>
-         <li>Plenty of free templates</li>
-         <li><b>Plain javascript (but works also with jQuery)</b></li>
-         <li>Huge and active community</li>
-         <li><b>MIT license - free for personal & commercial use</b></li>
-        </ul>
-      </td>
-    </tr>
-   </tbody>
-</table>
-
-Trusted by <b>2 000 000+</b> developers & designers. Used by companies like
+Trusted by <b>2 000 000+</b> developers & designers. Used by companies like:
 <table>
   <tbody>
     <tr>
@@ -62,38 +29,268 @@ Trusted by <b>2 000 000+</b> developers & designers. Used by companies like
    </tbody>
 </table>
 
+<table>
+  <tbody>
+    <tr>
+      <td>
+          <a href="https://mdbootstrap.com/docs/standard/pro/" alt="Bootstrap 5" rel="dofollow">
+          		<img src="https://mdbootstrap.com/wp-content/themes/mdbootstrap4/content/en/_mdb5/standard/pro/_main/assets/mdb5-pro.jpg">
+          </a>
+      </td>
+      <td>
+        <ul>
+        <li><b>Latest Bootstrap 5 & Material Design 2.0</b></li>
+         <li>Premium components</li>
+         <li>Design blocks</li>
+         <li>LAB access and thousands of snippets</li>
+         <li>No ads in documentation</li>
+         <li>Premium support</li>
+         <li>Source code access</li>
+         <li>Git repository</li>
+         <li>Installation via NPM</li>
+         <li>Unlimited updates</li>
+         <li>Lifetime usage</li>
+        </ul>
+      </td>
+    </tr>
+   </tbody>
+</table>
 
 ___
 
+## Reviews
 
-### Super simple, 1 min installation
-###### Simplicity and ease of use are key features of MDB 5 UI Kit. You need only one minute to install and run it.
+|<b>Jonas Singh</b> |<b>Gerard Sanderson</b>|<b>Adele Parker</b> |
+|-------|-------|-------|
+|⭐⭐⭐⭐⭐|⭐⭐⭐⭐⭐|⭐⭐⭐⭐⭐|
+|⠀*I have been working with data for many years but I have never dealt with a product so well suited to data visualization projects. As a programmer, in the MDB 5 Pro I primarily appreciate great documentation, minimalist design, and a multitude of practical examples.* |⠀*Design is stunning. Charts look just beautiful. But what’s more important they work as they should. Usage is simple and fast. Plenty of practical examples make the work a pure pleasure.* |⠀*Beautiful, minimalist design and simplicity – this is something that every project definitely needs. Great documentation focused on practical solutions.*
+
+<h4>Read more <a href="https://mdbootstrap.com/docs/standard/pro/reviews/">reviews</a>, rate MDB 5 Pro</h4>
+
+<a href="https://twitter.com/intent/tweet/?text=Thanks+@mdbootstrap+for+creating+amazing+PRO+Material+Design+for+Bootstrap+5+UI+KIT%20https://mdbootstrap.com/docs/standard/&hashtags=javascript,bootstrap5,webdesign,bootstrap,code"><img src="https://img.shields.io/twitter/url/http/shields.io.svg?style=social&label=Let%20us%20know%20you%20were%20here%21&"></a>
 
 
-**[>> Click here for a 3-step installation guide](https://mdbootstrap.com/docs/standard/getting-started/installation/)**
+## Demo & details
 
-**Or click below to watch 2 minute installation tutorial**
 
-<a href="https://www.youtube.com/watch?v=biwC8jK7YYY" alt="Bootstrap 5" rel="dofollow"><img src="https://mcusercontent.com/461480655ccce528d909d3f42/images/c872f264-a491-4a86-8756-933cac5f72a0.png"></a>
-
+<table>
+  <tbody>
+     <tr>
+      <td>
+        <h4 align="center">Premium components</h4>
+      </td>
+      <td>
+        <h4 align="center">Design blocks</h4>
+     </td>
+    </tr>
+    <tr>
+      <td>
+          <a href="https://mdbootstrap.com/docs/standard/pro/" alt="Bootstrap 5" rel="dofollow">
+          		<img src="https://mdbootstrap.com/wp-content/themes/mdbootstrap4/content/en/_mdb5/standard/pro/_main/assets/mdb5-premium-components.jpg">
+          </a>
+      </td>
+      <td>
+          <a href="https://mdbootstrap.com/docs/standard/pro/" alt="Bootstrap 5" rel="dofollow">
+          		<img src="https://mdbootstrap.com/wp-content/themes/mdbootstrap4/content/en/_mdb5/standard/pro/_main/assets/mdb5-design-blocks.jpg">
+          </a>
+      </td>
+    </tr>
+   </tbody>
+</table>
 
 ___
 
+### MDB 5 Pro Qucik Start
+
+##### Simplicity and ease of use are key features of MDB 5 Pro UI Kit. 
+
+
+**[>> The fastest way to start with MDB Pro](https://mdbootstrap.com/docs/standard/pro/quick-start/)**
+
+**[>> Installation via MDB CLI, NPM or .zip package](https://mdbootstrap.com/docs/standard/pro/quick-start/)**
+
+___
+
+<table>
+  <tbody>
+     <tr>
+      <td>
+        <h4 align="center">Premium Support</h4>
+      </td>
+      <td>
+        <h4 align="center">Git access</h4>
+      </td>
+      <td>
+        <h4 align="center">Unlimited updates</h4>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <p align="center">
+          <a href="https://mdbootstrap.com/docs/standard/pro/" alt="Bootstrap 5" rel="dofollow">
+          		<img src="https://mdbootstrap.com/wp-content/themes/mdbootstrap4/content/en/_mdb5/standard/pro/_main/assets/mdb5-premium-support.jpg" align="center" width="288px" height="151px">
+          </a>
+         </p>
+      </td>
+      <td>
+        <p align="center">
+          <a href="https://mdbootstrap.com/docs/standard/pro/" alt="Bootstrap 5" rel="dofollow">
+          		<img src="https://mdbootstrap.com/wp-content/themes/mdbootstrap4/content/en/_mdb5/standard/pro/_main/assets/mdb5-git-access.jpg" width="288px" height="151px">
+          </a>
+         </p>
+      </td>
+      <td>
+        <p align="center">
+          <a href="https://mdbootstrap.com/docs/standard/pro/" alt="Bootstrap 5" rel="dofollow">
+          		<img src="https://mdbootstrap.com/wp-content/themes/mdbootstrap4/content/en/_mdb5/standard/pro/_main/assets/mdb5-unlimited-updates.jpg" width="288px" height="151px">
+          </a>
+         </p>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <ul>
+        <p>In order to provide you with the best possible experience & speed up your work, your purchase comes with Premium Support.</p>
+         <li>Premium badge on the support forum</li>
+         <li>Professional answer guarantee</li>
+         <li>Help directly on your code</li>
+         <li>Issue status updates</li>
+         <li>Issues usually resolved within 1 workday</li>
+        </ul>
+      </td>
+      <td>
+        <ul>
+        <p>Git makes it easier to track changes, update & collaborate on your project. Check what you'll get with Git access included in your purchase.</p>
+         <li>Access to a shared repository</li>
+         <li>Access to source code</li>
+         <li>NPM intallation option</li>
+         <li>Team collaboration options</li>
+         <li>MDB CLI access & features</li>
+        </ul>
+      </td>
+      <td>
+        <ul>
+        <p>Frequent updates and continuous product improvement is our priority. We strive to remain the leading front-end technology and uphold the highest standards.</p>
+         <li>Update every 2 weeks</li>
+         <li>Detailed changelog</li>
+         <li>Concern for backward compatibility</li>
+         <li>User-friendly migration instructions</li>
+         <li>Unlimited downloads</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td align="center">
+          <a href="https://mdbootstrap.com/docs/standard/pro/support/" alt="Bootstrap 5" rel="dofollow">
+          		<img src="https://mdbootstrap.com/wp-content/uploads/2020/08/premium-support.png">
+          </a>
+      </td>
+      <td align="center">
+          <a href="https://mdbootstrap.com/docs/standard/pro/git/" alt="Bootstrap 5" rel="dofollow">
+          		<img src="https://mdbootstrap.com/wp-content/uploads/2020/08/git-access.png">
+          </a>
+      </td>
+      <td align="center">
+          <a href="https://mdbootstrap.com/docs/standard/pro/updates/" alt="Bootstrap 5" rel="dofollow">
+          		<img src="https://mdbootstrap.com/wp-content/uploads/2020/08/updates.png">
+          </a>
+      </td>
+    </tr>
+   </tbody>
+</table>
+
+
+___
 
 
 ### Learn Bootstrap 5 -  crash course for beginners in 1.5H (June 2020)
-###### Tutorial for the latest Bootstrap v.5 Alpha. In this video we'll learn about the changes implemented into v.5.
+##### Tutorial for the latest Bootstrap v.5 Alpha. In this video we'll learn about the changes implemented into v.5.
+
 
 **[>> Click here for a written tutorial](https://mdbootstrap.com/docs/standard/getting-started/quick-start/)**
 
-**Or click below to watch the full 1.5H Bootstrap 5 tutorial**
+**Or click below to watch the full 1.5H Bootstrap 5 tutorial** <a href="https://www.youtube.com/watch?v=c9B4TPnak1A&t=6s"><img alt="YouTube Video Views" src="https://img.shields.io/youtube/views/c9B4TPnak1A?label=Bootstrap%205%20Tutorial%20Views&style=social"></a>
 
-<a href="https://www.youtube.com/watch?v=c9B4TPnak1A" alt="Bootstrap 5" rel="dofollow"><img src="https://mcusercontent.com/461480655ccce528d909d3f42/images/35c32804-eeae-40a0-a37f-c248c71d9439.png"></a>
+
+<a href="https://www.youtube.com/watch?v=c9B4TPnak1A" alt="Bootstrap 5" rel="dofollow"><img src="https://mdbootstrap.com/wp-content/uploads/2020/08/github-tutorial.png"></a>
 
 ___
 
 # Demo
-#### Simplicity and ease of use are key features of MDB 5 UI Kit. You need only one minute to install and run it.
+
+### Sidenav
+
+<p>The side navigation component provides an easy way to navigate through your website. Its appearance & behaviour are easily adjustable with data-attributes and methods - additional functionality such as touch events and focus trap (in an over mode) are available out of the box.</p>
+
+<a href="https://mdbootstrap.com/docs/standard/navigation/sidenav/" alt="MDB 5 Pro" rel="dofollow">
+  <p align="center">
+    <img src="https://mdbootstrap.com/img/Marketing/campaigns/demo5-sidenav.gif">
+  </p>
+</a>
+
+### Charts
+
+<p>MDB charts are visual representations of data. They are responsive and easy to customize. At your disposal are eight types of charts with multiple options for customization.</p>
+
+<a href="https://mdbootstrap.com/docs/standard/data/charts/" alt="MDB 5 Pro" rel="dofollow">
+  <p align="center">
+    <img src="https://mdbootstrap.com/img/Marketing/campaigns/demo5-charts.gif">
+  </p>
+</a>
+
+<a href="https://mdbootstrap.com/docs/standard/data/charts/" alt="MDB 5 Pro" rel="dofollow">
+  <p align="center">
+    <img src="https://mdbootstrap.com/img/Marketing/campaigns/demo5-charts2.png">
+  </p>
+</a>
+
+### Lightbox
+
+<p>MDB lightbox is a group of images combined in one responsive gallery. Elements are grouped in a thumbnail grid, which can be displayed as a slideshow.</p>
+
+<a href="https://mdbootstrap.com/docs/standard/components/lightbox/" alt="MDB 5 Pro" rel="dofollow">
+  <p align="center">
+    <img src="https://mdbootstrap.com/img/Marketing/campaigns/demo5-lightbox.gif">
+  </p>
+</a>
+
+### Datepicker
+
+<p>Date picker is a plugin that adds the function of selecting time without the necessity of using custom JavaScript code.</p>
+
+<a href="https://mdbootstrap.com/docs/standard/forms/datepicker/" alt="MDB 5 Pro" rel="dofollow">
+  <p align="center">
+    <img src="https://mdbootstrap.com/img/Marketing/campaigns/demo5-datepicker.gif">
+  </p>
+</a>
+
+### Timepicker
+
+<p>Use MDB custom TimePicker component to select time.</p>
+
+<a href="https://mdbootstrap.com/docs/standard/forms/timepicker/" alt="MDB 5 Pro" rel="dofollow">
+  <p align="center">
+    <img src="https://mdbootstrap.com/img/Marketing/campaigns/demo5-timepicker.gif">
+  </p>
+</a>
+
+### Rating
+
+<p>Rating component can be used to allow the users to share their opinion about the product, documentation page, photo and more.</p>
+
+<a href="https://mdbootstrap.com/docs/standard/components/rating/" alt="MDB 5 Pro" rel="dofollow">
+  <p align="center">
+    <img src="https://mdbootstrap.com/img/Marketing/campaigns/demo5-rating.gif">
+  </p>
+</a>
+
+<a href="https://mdbootstrap.com/docs/standard/components/rating/" alt="MDB 5 Pro" rel="dofollow">
+  <p align="center">
+    <img src="https://mdbootstrap.com/img/Marketing/campaigns/demo5-rating2.gif">
+  </p>
+</a>
+
+
 
 ### Carousel
 
@@ -445,3 +642,6 @@ ___
   </tr>
    </tbody>
 </table>
+
+
+
