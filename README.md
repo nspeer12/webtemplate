@@ -4,7 +4,7 @@
 
 ### The world's most powerful tools and platform for building responsive, mobile-first websites and apps
 
-<p>The PRO version provides to 300+ premium components, 200+ design blocks, 100+ pages, 30+ plugins, 20+ integrations, 15+ templates, premium support, gitlab access & unlimited updates</p>
+<p>The PRO version provides access to 300+ premium components, 200+ design blocks, 100+ pages, 30+ plugins, 20+ integrations, 15+ templates, premium support, gitlab access & unlimited updates</p>
 
 ## `⭐⭐⭐⭐⭐` <a href="#reviews">4.9/5 (reviews)</a>
 
