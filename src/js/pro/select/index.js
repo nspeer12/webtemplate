@@ -286,6 +286,7 @@ class Select {
     this._listenToComponentKeydown();
     this._listenToInputClick();
     this._listenToClearBtnClick();
+    this._listenToClearBtnKeydown();
   }
 
   _setDefaultSelections() {
@@ -350,7 +351,6 @@ class Select {
   }
 
   _handleClosedKeydown(event) {
-    event.preventDefault();
     const key = event.keyCode;
     const isOpenKey =
       key === ENTER ||
@@ -394,6 +394,8 @@ class Select {
           return;
       }
     }
+
+    event.preventDefault();
   }
 
   _scrollToOption(option) {
@@ -526,6 +528,16 @@ class Select {
   _listenToClearBtnClick() {
     EventHandler.on(this.clearButton, 'click', () => {
       this._handleClear();
+    });
+  }
+
+  _listenToClearBtnKeydown() {
+    EventHandler.on(this.clearButton, 'keydown', (event) => {
+      if (event.keyCode === ENTER) {
+        this._handleClear();
+        event.preventDefault();
+        event.stopPropagation();
+      }
     });
   }
 
@@ -734,6 +746,7 @@ class Select {
     }
 
     this._openDropdown();
+    this._updateDropdownWidth();
     this._setFirstActiveOption();
     this._scrollToOption(this._activeOption);
 
@@ -795,6 +808,11 @@ class Select {
     }, 0);
   }
 
+  _updateDropdownWidth() {
+    const inputWidth = this._input.offsetWidth;
+    this._dropdownContainer.style.width = `${inputWidth}px`;
+  }
+
   _setFirstActiveOption() {
     const options = this._getNavigationOptions();
     const currentActive = this._activeOption;
@@ -827,8 +845,7 @@ class Select {
 
   _handleWindowResize() {
     if (this._dropdownContainer) {
-      const inputWidth = this._input.offsetWidth;
-      this._dropdownContainer.style.width = `${inputWidth}px`;
+      this._updateDropdownWidth();
     }
   }
 
@@ -1064,6 +1081,7 @@ class Select {
     EventHandler.off(this.input, 'click');
     EventHandler.off(this.wrapper, this._handleKeydown.bind(this));
     EventHandler.off(this.clearButton, 'click');
+    EventHandler.off(this.clearButton, 'keydown');
     EventHandler.off(window, 'resize', this._handleWindowResize.bind(this));
   }
 

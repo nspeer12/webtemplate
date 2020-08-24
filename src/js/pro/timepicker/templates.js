@@ -1,6 +1,7 @@
+/* eslint-disable import/prefer-default-export */
 /* eslint-disable indent */
 
-export default function TimePickerHTML({
+export const getTimepickerTemplate = ({
   format24,
   okLabel,
   cancelLabel,
@@ -11,7 +12,9 @@ export default function TimePickerHTML({
   clearLabel,
   inline,
   showClearBtn,
-}) {
+  amLabel,
+  pmLabel,
+}) => {
   const normalTemplate = `<div id='${pickerID}' class='timepicker-wrapper h-100 d-flex align-items-center justify-content-center flex-column position-fixed'>
                <div class="d-flex align-items-center justify-content-center flex-column shadow timepicker-container">
                   <div class="d-flex flex-column timepicker-elements justify-content-around">
@@ -30,8 +33,8 @@ export default function TimePickerHTML({
                       ${
                         !format24
                           ? `<div class="d-flex flex-column justify-content-center timepicker-mode-wrapper">
-                              <button type='button' class="timepicker-hour-mode timepicker-am ripple" tabindex="0">AM</button>
-                              <button class="timepicker-hour-mode timepicker-pm ripple" tabindex="0">PM</button>
+                              <button type='button' class="timepicker-hour-mode timepicker-am ripple" tabindex="0">${amLabel}</button>
+                              <button class="timepicker-hour-mode timepicker-pm ripple" tabindex="0">${pmLabel}</button>
                             </div>`
                           : ''
                       }
@@ -88,8 +91,8 @@ export default function TimePickerHTML({
                       ${
                         !format24
                           ? `<div class="d-flex justify-content-center timepicker-mode-wrapper">
-                              <button type='button' class="timepicker-hour-mode timepicker-am ripple mr-2 ml-4" tabindex="0">AM</button>
-                              <button class="timepicker-hour-mode timepicker-pm ripple" tabindex="0">PM</button>
+                              <button type='button' class="timepicker-hour-mode timepicker-am ripple mr-2 ml-4" tabindex="0">${amLabel}</button>
+                              <button class="timepicker-hour-mode timepicker-pm ripple" tabindex="0">${pmLabel}</button>
                               <button type='button' class='timepicker-button timepicker-submit timepicker-submit-inline ripple py-1 px-2 mb-0' tabindex="0">${okLabel}</button>
                             </div>`
                           : ''
@@ -107,4 +110,14 @@ export default function TimePickerHTML({
   `;
 
   return inline ? inlineTemplate : normalTemplate;
-}
+};
+
+export const getToggleButtonTemplate = (options, id) => {
+  const { iconClass } = options;
+
+  return `
+  <button id="${id}" tabindex="0" type="button" class="timepicker-toggle-button" data-toggle="timepicker"  >
+    <i class="${iconClass}"></i>
+  </button>
+`;
+};

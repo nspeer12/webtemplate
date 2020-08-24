@@ -1,12 +1,13 @@
-.datepicker-toggle {
+.datepicker-toggle-button {
   position: absolute;
+  outline: none;
+  border: none;
+  background-color: transparent;
   right: $datepicker-toggle-right;
   top: $datepicker-toggle-top;
-  cursor: pointer;
 
   &:focus {
     color: $datepicker-toggle-focus-color;
-    outline: none;
   }
 }
 

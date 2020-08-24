@@ -1,8 +1,8 @@
 /* eslint-disable consistent-return */
 /* eslint-disable no-else-return */
 import Popper from 'popper.js';
-import { typeCheckConfig, getjQuery, element } from '../../mdb/util/index';
-import TimePickerHTML from './html/timepicker-default';
+import { typeCheckConfig, getjQuery, element, getUID } from '../../mdb/util/index';
+import { getTimepickerTemplate, getToggleButtonTemplate } from './templates';
 import Data from '../../mdb/dom/data';
 import Manipulator from '../../mdb/dom/manipulator';
 import EventHandler, { EventHandlerMulti } from '../../mdb/dom/event-handler';
@@ -26,6 +26,9 @@ import { UP_ARROW, DOWN_ARROW, LEFT_ARROW, RIGHT_ARROW, ESCAPE } from '../../mdb
  */
 
 const NAME = 'timepicker';
+
+const DATA_KEY = `mdb.${NAME}`;
+
 const ACTIVE_CLASS = 'active';
 const AM_CLASS = `${NAME}-am`;
 const BUTTON_CANCEL_CLASS = `${NAME}-cancel`;
@@ -38,7 +41,7 @@ const CLOCK_INNER_CLASS = `${NAME}-clock-inner`;
 const CLOCK_WRAPPER_CLASS = `${NAME}-clock-wrapper`;
 const CURRENT_CLASS = `.${NAME}-current`;
 const CURRENT_INLINE_CLASS = `${NAME}-current-inline`;
-const DATA_KEY = `mdb.${NAME}`;
+
 const FADE_CLASS = 'fade';
 const HAND_CLASS = `${NAME}-hand-pointer`;
 const HOUR_CLASS = `${NAME}-hour`;
@@ -60,6 +63,7 @@ const TIPS_INNER_HOURS_CLASS = `${NAME}-time-tips-inner`;
 const TIPS_MINUTES_CLASS = `${NAME}-time-tips-minutes`;
 const TRANSFORM_CLASS = `${NAME}-transform`;
 const WRAPPER_CLASS = `${NAME}-wrapper`;
+const INPUT_CLASS = `${NAME}-input`;
 
 const Default = {
   appendValidationInfo: true,
@@ -79,7 +83,7 @@ const Default = {
   headID: '',
   increment: false,
   inline: false,
-  invalidText: 'Invalid Time Format',
+  invalidLabel: 'Invalid Time Format',
   maxHour: '',
   minHour: '',
   maxTime: '',
@@ -91,6 +95,10 @@ const Default = {
   readOnly: false,
   showClearBtn: true,
   switchHoursToMinutesOnClick: true,
+  iconClass: 'fas fa-clock fa-sm timepicker-icon',
+  withIcon: true,
+  pmLabel: 'PM',
+  amLabel: 'AM',
 };
 
 const DefaultType = {
@@ -109,7 +117,7 @@ const DefaultType = {
   headID: 'string',
   increment: 'boolean',
   inline: 'boolean',
-  invalidText: 'string',
+  invalidLabel: 'string',
   maxHour: '(string|number)',
   minHour: '(string|number)',
   modalID: 'string',
@@ -120,6 +128,10 @@ const DefaultType = {
   showClearBtn: 'boolean',
   switchHoursToMinutesOnClick: 'boolean',
   defaultTime: '(string|date|number)',
+  iconClass: 'string',
+  withIcon: 'boolean',
+  pmLabel: 'string',
+  amLabel: 'string',
 };
 
 /**
@@ -128,70 +140,78 @@ const DefaultType = {
  * ------------------------------------------------------------------------
  */
 
-class TimePicker {
+class Timepicker {
   constructor(element, options = {}) {
-    this._element = Manipulator.hasClass(element, NAME) ? element : null;
+    this._element = element;
 
-    if (this._element !== null) {
+    if (this._element) {
       Data.setData(element, DATA_KEY, this);
-
-      this._document = document;
-      this._options = this._getConfig(options);
-      this._currentTime = null;
-
-      this.hoursArray = ['12', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'];
-      this.innerHours = ['00', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23'];
-      this.minutesArray = ['00', '05', '10', '15', '20', '25', '30', '35', '40', '45', '50', '55'];
-
-      this.input = element.querySelector('input');
-      this.inputFormatShow = element.querySelector('[data-timepicker-format24]');
-      this.inputFormat =
-        this.inputFormatShow === null ? '' : Object.values(this.inputFormatShow.dataset)[0];
-      this.elementToggle = SelectorEngine.findOne('[data-toggle]', this._element);
-      this.toggleElement = Object.values(element.querySelector('[data-toggle]').dataset)[0];
-
-      this._hour = null;
-      this._minutes = null;
-      this._AM = null;
-      this._PM = null;
-      this._wrapper = null;
-      this._modal = null;
-      this._hand = null;
-      this._circle = null;
-      this._focusTrap = null;
-      this._popper = null;
-      this._interval = null;
-
-      if (this._options.format24) {
-        this._options.format12 = false;
-        this._currentTime = formatNormalHours(this._options.defaultTime);
-      }
-
-      if (this._options.format12) {
-        this._options.format24 = false;
-        this._currentTime = formatToAmPm(this._options.defaultTime);
-      }
-
-      if (this._options.readOnly) {
-        this.input.setAttribute('readonly', true);
-      }
-
-      if (this.inputFormat && this.inputFormat !== '') {
-        this._options.format12 = false;
-        this._options.format24 = true;
-        this._currentTime = formatNormalHours(this._options.defaultTime);
-      }
-
-      this.init();
-
-      this._isHours = true;
-      this._isMinutes = false;
-      this._isInvalidTimeFormat = false;
-      this._isMouseMove = false;
-      this._isInner = false;
-      this._isAmEnabled = false;
-      this._isPmEnabled = false;
     }
+
+    this._document = document;
+    this._options = this._getConfig(options);
+    this._currentTime = null;
+    this._toggleButtonId = getUID('timepicker-toggle-');
+
+    this.hoursArray = ['12', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'];
+    this.innerHours = ['00', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23'];
+    this.minutesArray = ['00', '05', '10', '15', '20', '25', '30', '35', '40', '45', '50', '55'];
+
+    this.input = SelectorEngine.findOne('input', this._element);
+    this.dataWithIcon = element.dataset.withIcon;
+    this.dataToggle = element.dataset.toggle;
+    this.customIcon = SelectorEngine.findOne('.timepicker-toggle-button', this._element);
+
+    this._checkToggleButton();
+
+    this.inputFormatShow = SelectorEngine.findOne('[data-timepicker-format24]', this._element);
+
+    this.inputFormat =
+      this.inputFormatShow === null ? '' : Object.values(this.inputFormatShow.dataset)[0];
+    this.elementToggle = SelectorEngine.findOne('[data-toggle]', this._element);
+    this.toggleElement = Object.values(element.querySelector('[data-toggle]').dataset)[0];
+
+    this._hour = null;
+    this._minutes = null;
+    this._AM = null;
+    this._PM = null;
+    this._wrapper = null;
+    this._modal = null;
+    this._hand = null;
+    this._circle = null;
+    this._focusTrap = null;
+    this._popper = null;
+    this._interval = null;
+
+    if (this._options.format24) {
+      this._options.format12 = false;
+      this._currentTime = formatNormalHours(this._options.defaultTime);
+    }
+
+    if (this._options.format12) {
+      this._options.format24 = false;
+      this._currentTime = formatToAmPm(this._options.defaultTime);
+    }
+
+    if (this._options.readOnly) {
+      this.input.setAttribute('readonly', true);
+    }
+
+    if (this.inputFormat && this.inputFormat !== '') {
+      this._options.format12 = false;
+      this._options.format24 = true;
+      this._currentTime = formatNormalHours(this._options.defaultTime);
+    }
+
+    this.init();
+
+    this._isHours = true;
+    this._isMinutes = false;
+    this._isInvalidTimeFormat = false;
+    this._isMouseMove = false;
+    this._isInner = false;
+    this._isAmEnabled = false;
+    this._isPmEnabled = false;
   }
 
   // Getters
@@ -207,6 +227,8 @@ class TimePicker {
     let zero;
     let hoursFormat;
     let _amOrPm;
+
+    Manipulator.addClass(this.input, INPUT_CLASS);
 
     if (this._currentTime !== undefined) {
       const { hours, minutes, amOrPm } = this._currentTime;
@@ -249,11 +271,35 @@ class TimePicker {
 
     this._element = null;
     this._options = null;
+    this.input = null;
+    this._focusTrap = null;
 
     EventHandler.off(this._document, 'click', `[data-toggle='${this.toggleElement}']`);
   }
 
   // private
+
+  _checkToggleButton() {
+    if (this.customIcon === null) {
+      if (this.dataWithIcon !== undefined) {
+        this._options.withIcon = null;
+
+        if (this.dataWithIcon === 'true') {
+          this._appendToggleButton(this._options);
+        }
+      }
+
+      if (this._options.withIcon) {
+        this._appendToggleButton(this._options);
+      }
+    }
+  }
+
+  _appendToggleButton() {
+    const toggleButton = getToggleButtonTemplate(this._options, this._toggleButtonId);
+
+    this.input.insertAdjacentHTML('afterend', toggleButton);
+  }
 
   _getDomElements() {
     this._hour = SelectorEngine.findOne(`.${HOUR_CLASS}`);
@@ -643,7 +689,7 @@ class TimePicker {
         this.input.blur();
         e.target.blur();
 
-        div.innerHTML = TimePickerHTML(this._options);
+        div.innerHTML = getTimepickerTemplate(this._options);
         Manipulator.addClass(div, MODAL_CLASS);
 
         div.setAttribute('role', 'dialog');
@@ -2060,13 +2106,13 @@ class TimePicker {
   }
 
   _getValidate(event) {
-    const { invalidText, format24, format12, appendValidationInfo } = this._options;
+    const { invalidLabel, format24, format12, appendValidationInfo } = this._options;
     let inValidDiv;
 
     if (appendValidationInfo) {
       inValidDiv = element('div');
       Manipulator.addClass(inValidDiv, 'invalid-feedback');
-      inValidDiv.innerHTML = invalidText;
+      inValidDiv.innerHTML = invalidLabel;
     }
 
     EventHandlerMulti.on(this.input, event, ({ target }) => {
@@ -2082,8 +2128,13 @@ class TimePicker {
       if ((testedNormalRegex !== true && format24) || (testedAMRegex !== true && format12)) {
         if (appendValidationInfo) {
           Manipulator.addClass(this.input, 'is-invalid');
+
           this.input.parentNode.insertBefore(inValidDiv, this.input.nextSibling);
         }
+
+        Manipulator.addStyle(target, { marginBottom: 0 });
+        Manipulator.addStyle(inValidDiv, { bottom: '-23px' });
+
         this._isInvalidTimeFormat = true;
       } else {
         Manipulator.removeClass(this.input, 'is-invalid');
@@ -2110,7 +2161,7 @@ class TimePicker {
       }
 
       if (!data) {
-        data = new TimePicker(this, _config);
+        data = new Timepicker(this, _config);
       }
 
       if (typeof config === 'string') {
@@ -2128,17 +2179,15 @@ class TimePicker {
   }
 }
 
-export default TimePicker;
+export default Timepicker;
 
-EventHandler.on(window, 'DOMContentLoaded', '', () => {
-  const data = SelectorEngine.find('[data-target]');
+EventHandler.on(window, 'DOMContentLoaded', () => {
+  SelectorEngine.find(`.${NAME}`).forEach((timepicker) => {
+    let instance = Timepicker.getInstance(timepicker);
 
-  return data.forEach((picker) => {
-    if (Manipulator.hasClass(picker, 'timepicker')) {
-      return new TimePicker(picker);
+    if (!instance) {
+      instance = new Timepicker(timepicker);
     }
-
-    return picker;
   });
 });
 
@@ -2154,10 +2203,10 @@ const $ = getjQuery();
 if ($) {
   const JQUERY_NO_CONFLICT = $.fn[NAME];
 
-  $.fn[NAME] = TimePicker.jQueryInterface;
-  $.fn[NAME].Constructor = TimePicker;
+  $.fn[NAME] = Timepicker.jQueryInterface;
+  $.fn[NAME].Constructor = Timepicker;
   $.fn[NAME].noConflict = () => {
     $.fn[NAME] = JQUERY_NO_CONFLICT;
-    return TimePicker.jQueryInterface;
+    return Timepicker.jQueryInterface;
   };
 }

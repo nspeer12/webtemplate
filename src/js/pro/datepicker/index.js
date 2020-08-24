@@ -3,7 +3,7 @@ import Data from '../../mdb/dom/data';
 import EventHandler from '../../mdb/dom/event-handler';
 import Manipulator from '../../mdb/dom/manipulator';
 import SelectorEngine from '../../mdb/dom/selector-engine';
-import { typeCheckConfig, getjQuery } from '../../mdb/util/index';
+import { typeCheckConfig, getjQuery, getUID } from '../../mdb/util/index';
 import FocusTrap from '../../mdb/util/focusTrap';
 import {
   getDate,
@@ -24,6 +24,7 @@ import {
   isNextDateDisabled,
   isPreviousDateDisabled,
   getYearsOffset,
+  isValidDate,
 } from './date-utils';
 import {
   getBackdropTemplate,
@@ -31,6 +32,7 @@ import {
   createDayViewTemplate,
   createMonthViewTemplate,
   createYearViewTemplate,
+  getToggleButtonTemplate,
 } from './templates';
 import {
   ENTER,
@@ -66,7 +68,7 @@ const EVENT_OPEN = `open${EVENT_KEY}`;
 const EVENT_DATE_CHANGE = `dateChange${EVENT_KEY}`;
 const EVENT_CLICK_DATA_API = `click${EVENT_KEY}${DATA_API_KEY}`;
 
-const SELECTOR_DATEPICKER = '[data-datepicker="datepicker"]';
+const SELECTOR_DATEPICKER = '.datepicker';
 const SELECTOR_DATA_TOGGLE = '[data-toggle="datepicker"]';
 const SELECTOR_MODAL_CONTAINER = '.datepicker-modal-container';
 const SELECTOR_DROPDOWN_CONTAINER = '.datepicker-dropdown-container';
@@ -124,7 +126,8 @@ const Default = {
   filter: null,
 
   inline: false,
-  disableToggle: false,
+  toggleButton: true,
+  disableToggleButton: false,
   disableInput: false,
 };
 
@@ -161,7 +164,8 @@ const DefaultType = {
   filter: '(null|function)',
 
   inline: 'boolean',
-  disableToggle: 'boolean',
+  toggleButton: 'boolean',
+  disableToggleButton: 'boolean',
   disableInput: 'boolean',
 };
 
@@ -175,7 +179,6 @@ class Datepicker {
   constructor(element, options) {
     this._element = element;
     this._input = SelectorEngine.findOne('input', this._element);
-    this._toggle = SelectorEngine.findOne(SELECTOR_DATA_TOGGLE, this._element);
     this._options = this._getConfig(options);
     this._activeDate = new Date();
     this._selectedDate = null;
@@ -185,22 +188,21 @@ class Datepicker {
     this._popper = null;
     this._focusTrap = null;
     this._isOpen = false;
+    this._toggleButtonId = getUID('datepicker-toggle-');
 
     if (this._element) {
       Data.setData(element, DATA_KEY, this);
     }
 
-    if (this._options.disableToggle) {
-      this._toggle.disabled = 'true';
+    this._init();
+
+    if (this.toggleButton && this._options.disableToggle) {
+      this.toggleButton.disabled = 'true';
     }
 
     if (this._options.disableInput) {
       this._input.disabled = 'true';
     }
-
-    this._listenToUserInput();
-    this._listenToToggleClick();
-    this._listenToToggleKeydown();
   }
 
   // Getters
@@ -286,6 +288,10 @@ class Datepicker {
     return SelectorEngine.findOne(SELECTOR_DATES_CONTAINER, this.container);
   }
 
+  get toggleButton() {
+    return SelectorEngine.findOne('.datepicker-toggle-button', this._element);
+  }
+
   _getConfig(config) {
     const dataAttributes = Manipulator.getDataAttributes(this._element);
 
@@ -306,6 +312,21 @@ class Datepicker {
     }
 
     return config;
+  }
+
+  _init() {
+    if (!this.toggleButton && this._options.toggleButton) {
+      this._appendToggleButton();
+    }
+
+    this._listenToUserInput();
+    this._listenToToggleClick();
+    this._listenToToggleKeydown();
+  }
+
+  _appendToggleButton() {
+    const toggleButton = getToggleButtonTemplate(this._toggleButtonId);
+    this._element.insertAdjacentHTML('beforeend', toggleButton);
   }
 
   open() {
@@ -339,7 +360,6 @@ class Datepicker {
 
     this._listenToDateSelection();
     this._addControlsListeners();
-    this._listenToOutsideClick();
     this._listenToEscapeClick();
     this._listenToKeyboardNavigation();
     this._listenToDatesContainerFocus();
@@ -352,6 +372,12 @@ class Datepicker {
     this._asyncFocusDatesContainer();
     this._updateViewControlsAndAttributes(this._view);
     this._isOpen = true;
+
+    // Wait for the component to open to prevent immediate calling of the
+    // close method upon detecting a click on toggle element (input/button)
+    setTimeout(() => {
+      this._listenToOutsideClick();
+    }, 0);
   }
 
   _openDropdown(template) {
@@ -483,7 +509,10 @@ class Datepicker {
 
   _listenToOutsideClick() {
     EventHandler.on(document, EVENT_CLICK_DATA_API, (e) => {
-      if (this.container && !this.container.contains(e.target) && e.target !== this._toggle) {
+      const isContainer = e.target === this.container;
+      const isContainerContent = this.container && this.container.contains(e.target);
+
+      if (!isContainer && !isContainerContent) {
         this.close();
       }
     });
@@ -493,7 +522,6 @@ class Datepicker {
     EventHandler.on(document, 'keydown', (event) => {
       if (event.keyCode === ESCAPE && this._isOpen) {
         this.close();
-        this._toggle.focus();
       }
     });
   }
@@ -788,6 +816,12 @@ class Datepicker {
 
     this._isOpen = false;
     this._view = this._options.view;
+
+    if (this.toggleButton) {
+      this.toggleButton.focus();
+    } else {
+      this._input.focus();
+    }
   }
 
   _closeDropdown() {
@@ -846,11 +880,16 @@ class Datepicker {
 
     this._removeInputAndToggleListeners();
 
+    const generatedToggleButton = SelectorEngine.findOne(`#${this._toggleButtonId}`);
+
+    if (generatedToggleButton) {
+      this._element.removeChild(generatedToggleButton);
+    }
+
     Data.removeData(this._element, DATA_KEY);
 
     this._element = null;
     this._input = null;
-    this._toggle = null;
     this._options = null;
     this._activeDate = null;
     this._selectedDate = null;
@@ -1234,8 +1273,16 @@ class Datepicker {
   _handleUserInput(input) {
     const delimeters = this._getDelimeters(this._options.format);
     const date = this._parseDate(input, this._options.format, delimeters);
-    this._activeDate = date;
-    this._selectedDate = date;
+
+    if (isValidDate(date)) {
+      this._activeDate = date;
+      this._selectedDate = date;
+    } else {
+      this._activeDate = new Date();
+      this._selectedDate = null;
+      this._selectedMonth = null;
+      this._selectedYear = null;
+    }
   }
 
   _getDelimeters(format) {

@@ -450,3 +450,11 @@ function getYearsArray(date, yearsInView, yearsInRow) {
 
   return years;
 }
+
+export function getToggleButtonTemplate(id) {
+  return `
+    <button id="${id}" class="datepicker-toggle-button" data-toggle="datepicker">
+      <i class="far fa-calendar datepicker-toggle-icon"></i>
+    </button>
+  `;
+}

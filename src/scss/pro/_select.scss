@@ -1,5 +1,13 @@
-input[type='checkbox'] {
+// fix for checkbox checked styles in container with scroll
+// prevent the check mark from moving while scrolling
+.select-dropdown .form-check-input {
   position: relative;
+}
+
+// fix for checkbox checked styles in FireFox, resolves problem
+// with check mark position
+.select-dropdown .form-check-input label {
+  display: block;
 }
 
 .select.initialized {
@@ -19,13 +27,29 @@ input[type='checkbox'] {
   }
 }
 
+.was-validated .form-control:valid ~ .select-arrow {
+  color: #00b74a;
+}
+
+.was-validated .form-control:invalid ~ .select-arrow {
+  color: #f93154;
+}
+
 .select-clear-btn {
   color: black;
   font-size: 1rem;
-  cursor: pointer;
   position: absolute;
   top: 8px;
   right: 30px;
+
+  &:focus {
+    color: $blue-accent-400;
+    outline: none;
+  }
+}
+
+.select-dropdown-container {
+  z-index: 1050;
 }
 
 .select-dropdown {

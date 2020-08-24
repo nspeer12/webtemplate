@@ -378,18 +378,16 @@
     height: $timepicker-icon-btn-height;
   }
 
-  &-input:focus .timepicker-btn-icon {
-    color: $timepicker-input-color;
-  }
-
-  &-btn-icon {
+  &-toggle-button {
     position: absolute;
+    outline: none;
+    border: none;
+    background-color: transparent;
     right: $timepicker-btn-icon-right;
-    transform: $timepicker-btn-icon-transform;
     top: $timepicker-btn-icon-top;
-    cursor: pointer;
+    transform: $timepicker-btn-icon-transform;
     transition: $timepicker-btn-icon-transition;
-    box-shadow: none;
+    cursor: pointer;
 
     &:hover {
       color: $timepicker-btn-icon-hover-color;
@@ -398,6 +396,16 @@
     &:focus {
       color: $timepicker-btn-icon-focus-color;
     }
+  }
+
+  &-input:focus + &-toggle-button,
+  &-input:focus + &-toggle-button i {
+    color: $timepicker-input-color;
+  }
+
+  a.timepicker-toggle-button,
+  &-toggle-button.timepicker-icon {
+    right: 1px;
   }
 }
 

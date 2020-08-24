@@ -55,6 +55,7 @@ export function getWrapperTemplate(id, config, label) {
   Manipulator.addClass(clearBtn, 'select-clear-btn');
   const clearBtnText = document.createTextNode('\u2715');
   clearBtn.appendChild(clearBtnText);
+  clearBtn.setAttribute('tabindex', '0');
 
   const arrow = element('span');
   Manipulator.addClass(arrow, 'select-arrow');

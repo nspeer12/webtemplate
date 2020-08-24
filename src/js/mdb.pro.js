@@ -11,7 +11,6 @@ import Tooltip from './bootstrap/src/tooltip';
 // MDB FREE COMPONENTS
 import Input from './free/input';
 import Dropdown from './free/dropdown';
-import Treeview from './free/treeview';
 import Ripple from './free/ripple';
 
 // MDB PRO COMPONENTS
@@ -22,7 +21,7 @@ import Rating from './pro/rating';
 import Sidenav from './pro/sidenav';
 import Alert from './pro/alert';
 import Toast from './pro/toast';
-import TimePicker from './pro/timepicker';
+import Timepicker from './pro/timepicker';
 import Navbar from './pro/navbar';
 import InfiniteScroll from './pro/infiniteScroll';
 import LazyLoad from './pro/lazyLoad';
@@ -52,7 +51,6 @@ export {
   Ripple,
   Tab,
   Tooltip,
-  Treeview,
   // PRO
   Alert,
   Animate,
@@ -65,7 +63,7 @@ export {
   Rating,
   Sidenav,
   SmoothScroll,
-  TimePicker,
+  Timepicker,
   Toast,
   InfiniteScroll,
   LazyLoad,
