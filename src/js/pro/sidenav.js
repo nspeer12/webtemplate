@@ -388,6 +388,10 @@ class Sidenav {
 
     if (this.options.backdrop) {
       this._setupBackdrop();
+
+      if (!this.options.hidden) {
+        this._appendBackdrop();
+      }
     }
 
     // Collapse
@@ -779,10 +783,10 @@ class Sidenav {
     }
   }
 
-  async _appendBackdrop() {
+  _appendBackdrop() {
     this.container.appendChild(this._backdrop);
 
-    await setTimeout(() => Manipulator.style(this._backdrop, { opacity: 1 }), 0);
+    setTimeout(() => Manipulator.style(this._backdrop, { opacity: 1 }), 0);
   }
 
   _toggleCategory(e, instance) {

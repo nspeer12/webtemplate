@@ -216,16 +216,10 @@ class Alert extends BSAlert {
 
   _setupPosition() {
     if (this._options.container) {
-      Manipulator.style(this.parent, {
-        position: 'relative',
-      });
-      Manipulator.style(this._element, {
-        position: 'absolute',
-      });
+      Manipulator.addClass(this.parent, 'parent-alert-relative');
+      Manipulator.addClass(this._element, 'alert-absolute');
     } else {
-      Manipulator.style(this._element, {
-        position: 'fixed',
-      });
+      Manipulator.addClass(this._element, 'alert-fixed');
     }
   }
 

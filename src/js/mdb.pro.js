@@ -33,6 +33,7 @@ import Sticky from './pro/sticky';
 import Select from './pro/select';
 import Touch from './pro/touch';
 import SmoothScroll from './pro/smooth-scroll';
+import PerfectScrollbar from './pro/perfectScrollbar';
 
 // AUTO INIT
 [...document.querySelectorAll('[data-toggle="tooltip"]')].map((tooltip) => new Tooltip(tooltip));
@@ -71,4 +72,5 @@ export {
   Sticky,
   Select,
   Touch,
+  PerfectScrollbar,
 };

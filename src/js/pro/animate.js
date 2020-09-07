@@ -16,40 +16,40 @@ const SELECTOR_EXPAND = '[data-toggle="animation"]';
 
 const DefaultType = {
   animation: 'string',
-  start: 'string',
-  showOnLoad: 'boolean',
+  animationStart: 'string',
+  animationShowOnLoad: 'boolean',
   onStart: '(null|function)',
   onEnd: '(null|function)',
   onHide: '(null|function)',
   onShow: '(null|function)',
-  animateOnScroll: '(string)',
-  windowHeight: 'number',
-  offset: '(number|string)',
-  delay: '(number|string)',
-  duration: '(number|string)',
-  reverse: 'boolean',
-  interval: '(number|string)',
-  repeat: '(number|boolean)',
-  reset: 'boolean',
+  animationOnScroll: '(string)',
+  animationWindowHeight: 'number',
+  animationOffset: '(number|string)',
+  animationDelay: '(number|string)',
+  animationDuration: '(number|string)',
+  animationReverse: 'boolean',
+  animationInterval: '(number|string)',
+  animationRepeat: '(number|boolean)',
+  animationReset: 'boolean',
 };
 
 const Default = {
   animation: 'fade',
-  start: 'onClick',
-  showOnLoad: true,
+  animationStart: 'onClick',
+  animationShowOnLoad: true,
   onStart: null,
   onEnd: null,
   onHide: null,
   onShow: null,
-  animateOnScroll: 'once',
-  windowHeight: 0,
-  offset: 0,
-  delay: 0,
-  duration: 500,
-  reverse: false,
-  interval: 0,
-  repeat: false,
-  reset: false,
+  animationOnScroll: 'once',
+  animationWindowHeight: 0,
+  animationOffset: 0,
+  animationDelay: 0,
+  animationDuration: 500,
+  animationReverse: false,
+  animationInterval: 0,
+  animationRepeat: false,
+  animationReset: false,
 };
 
 /**
@@ -88,7 +88,7 @@ class Animate {
 
   // Private
   _init() {
-    switch (this._options.start) {
+    switch (this._options.animationStart) {
       case 'onHover':
         this._bindHoverEvents();
         break;
@@ -103,13 +103,13 @@ class Animate {
         break;
     }
     this._bindTriggerOnEndCallback();
-    if (this._options.reset) {
+    if (this._options.animationReset) {
       this._bindResetAnimationAfterFinish();
     }
   }
 
   _getAnimateElement() {
-    const targetId = Manipulator.getDataAttribute(this._element, 'target');
+    const targetId = Manipulator.getDataAttribute(this._element, 'animation-target');
     return targetId ? SelectorEngine.find(targetId)[0] : this._element;
   }
 
@@ -132,8 +132,8 @@ class Animate {
     const elementHeight = this._animateElement.offsetHeight;
     const windowHeight = window.innerHeight;
     const shouldBeVisible =
-      elementOffsetTop + this._options.offset <= windowHeight &&
-      elementOffsetTop + this._options.offset + elementHeight >= 0;
+      elementOffsetTop + this._options.animationOffset <= windowHeight &&
+      elementOffsetTop + this._options.animationOffset + elementHeight >= 0;
     const isElementVisible = this._animateElement.style.visibility === 'visible';
 
     switch (true) {
@@ -146,7 +146,7 @@ class Animate {
         this._hideAnimateElement();
         break;
       case shouldBeVisible && !isElementVisible && this._repeatAnimateOnScroll:
-        if (this._options.animateOnScroll !== 'repeat') {
+        if (this._options.animationOnScroll !== 'repeat') {
           this._repeatAnimateOnScroll = false;
         }
         this._callback(this._options.onShow);
@@ -177,49 +177,50 @@ class Animate {
 
     this._addAnimatedClass();
 
-    if (this._options.repeat && !this._options.interval) {
+    if (this._options.animationRepeat && !this._options.animationInterval) {
       this._setAnimationRepeat();
     }
 
-    if (this._options.reverse) {
+    if (this._options.animationReverse) {
       this._setAnimationReverse();
     }
 
-    if (this._options.delay) {
+    if (this._options.animationDelay) {
       this._setAnimationDelay();
     }
 
-    if (this._options.duration) {
+    if (this._options.animationDuration) {
       this._setAnimationDuration();
     }
 
-    if (this._options.interval) {
+    if (this._options.animationInterval) {
       this._setAnimationInterval();
     }
   }
 
   _setAnimationReverse() {
     Manipulator.style(this._animateElement, {
-      animationIterationCount: this._options.repeat === true ? 'infinite' : '2',
+      animationIterationCount: this._options.animationRepeat === true ? 'infinite' : '2',
       animationDirection: 'alternate',
     });
   }
 
   _setAnimationDuration() {
     Manipulator.style(this._animateElement, {
-      animationDuration: `${this._options.duration}ms`,
+      animationDuration: `${this._options.animationDuration}ms`,
     });
   }
 
   _setAnimationDelay() {
     Manipulator.style(this._animateElement, {
-      animationDelay: `${this._options.delay}ms`,
+      animationDelay: `${this._options.animationDelay}ms`,
     });
   }
 
   _setAnimationRepeat() {
     Manipulator.style(this._animateElement, {
-      animationIterationCount: this._options.repeat === true ? 'infinite' : this._options.repeat,
+      animationIterationCount:
+        this._options.animationRepeat === true ? 'infinite' : this._options.animationRepeat,
     });
   }
 
@@ -228,7 +229,7 @@ class Animate {
       this._clearAnimationClass();
       setTimeout(() => {
         this._addAnimatedClass();
-      }, this._options.interval);
+      }, this._options.animationInterval);
     });
   }
 
@@ -253,7 +254,7 @@ class Animate {
   }
 
   _bindScrollEvents() {
-    if (!this._options.showOnLoad) {
+    if (!this._options.animationShowOnLoad) {
       this._animateOnScroll();
     }
 

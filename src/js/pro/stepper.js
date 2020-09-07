@@ -311,6 +311,14 @@ class Stepper {
         this._updateProgressBar();
       }
     }
+
+    const inputs = this.activeStep.querySelectorAll('.form-outline');
+
+    if (inputs.length) {
+      inputs.forEach((formOutline) => {
+        new mdb.Input(formOutline).init();
+      });
+    }
   }
 
   _resetStepperHeight() {

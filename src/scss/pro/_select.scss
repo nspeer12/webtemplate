@@ -1,16 +1,10 @@
-// fix for checkbox checked styles in container with scroll
-// prevent the check mark from moving while scrolling
-.select-dropdown .form-check-input {
-  position: relative;
-}
-
 // fix for checkbox checked styles in FireFox, resolves problem
 // with check mark position
 .select-dropdown .form-check-input label {
   display: block;
 }
 
-.select.initialized {
+select.select-initialized {
   display: none !important;
 }
 
@@ -41,6 +35,7 @@
   position: absolute;
   top: 8px;
   right: 30px;
+  cursor: pointer;
 
   &:focus {
     color: $blue-accent-400;
@@ -91,6 +86,10 @@
 
 .select-input {
   cursor: pointer;
+
+  &[disabled] {
+    cursor: default;
+  }
 }
 
 .select-input.focused {
@@ -127,7 +126,7 @@
   }
 }
 
-.select-input:focus ~ .select-arrow {
+.select-input.focused ~ .select-arrow {
   color: #4285f4;
 }
 

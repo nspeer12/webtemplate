@@ -5,13 +5,13 @@
 }
 
 .popconfirm-popover {
-  z-index: $popconfirm-popover-z-index;
+  z-index: $zindex-popconfirm;
   width: $popconfirm-popover-width;
   margin: $popconfirm-popover-margin;
 }
 
 .popconfirm-modal {
-  z-index: $popconfirm-modal-z-index;
+  z-index: $zindex-popconfirm;
   width: $popconfirm-modal-width;
   position: absolute;
 }
@@ -27,7 +27,7 @@
 .popconfirm-backdrop {
   height: 100%;
   width: 100%;
-  z-index: $popconfirm-backdrop-z-index;
+  z-index: $zindex-popconfirm-backdrop;
   position: fixed;
   top: 0;
   left: 0;

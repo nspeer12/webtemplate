@@ -95,7 +95,7 @@ const Default = {
   readOnly: false,
   showClearBtn: true,
   switchHoursToMinutesOnClick: true,
-  iconClass: 'fas fa-clock fa-sm timepicker-icon',
+  iconClass: 'far fa-clock fa-sm timepicker-icon',
   withIcon: true,
   pmLabel: 'PM',
   amLabel: 'AM',
@@ -183,24 +183,28 @@ class Timepicker {
     this._popper = null;
     this._interval = null;
 
+    this._inputValue =
+      this._options.defaultTime !== '' ? this._options.defaultTime : this.input.value;
+
     if (this._options.format24) {
       this._options.format12 = false;
-      this._currentTime = formatNormalHours(this._options.defaultTime);
+
+      this._currentTime = formatNormalHours(this._inputValue);
     }
 
     if (this._options.format12) {
       this._options.format24 = false;
-      this._currentTime = formatToAmPm(this._options.defaultTime);
+      this._currentTime = formatToAmPm(this._inputValue);
     }
 
     if (this._options.readOnly) {
       this.input.setAttribute('readonly', true);
     }
 
-    if (this.inputFormat && this.inputFormat !== '') {
+    if (this.inputFormat === 'true' && this.inputFormat !== '') {
       this._options.format12 = false;
       this._options.format24 = true;
-      this._currentTime = formatNormalHours(this._options.defaultTime);
+      this._currentTime = formatNormalHours(this._inputValue);
     }
 
     this.init();
@@ -212,6 +216,8 @@ class Timepicker {
     this._isInner = false;
     this._isAmEnabled = false;
     this._isPmEnabled = false;
+
+    this._objWithDataOnChange = { degrees: null };
   }
 
   // Getters
@@ -654,6 +660,17 @@ class Timepicker {
     }
   }
 
+  _getScrollbarWidth() {
+    // thx d.walsh
+    const scrollDiv = document.createElement('div');
+    scrollDiv.className = 'modal-scrollbar-measure';
+    document.body.appendChild(scrollDiv);
+    const scrollbarWidth = scrollDiv.getBoundingClientRect().width - scrollDiv.clientWidth;
+
+    document.body.removeChild(scrollDiv);
+    return scrollbarWidth;
+  }
+
   _handleOpen() {
     EventHandlerMulti.on(this._element, 'click', `[data-toggle='${this.toggleElement}']`, (e) => {
       if (this._options === null) {
@@ -753,7 +770,7 @@ class Timepicker {
 
           if (!checkBrowser()) {
             Manipulator.addStyle(this._document.body, {
-              paddingRight: '17px',
+              paddingRight: `${this._getScrollbarWidth()}px`,
             });
           }
         }
@@ -1086,7 +1103,7 @@ class Timepicker {
       this._toggleBackdropAnimation(true);
       this._removeModal();
 
-      EventHandler.trigger(this.input, 'input.bs.timepicker');
+      EventHandler.trigger(this.input, 'input.mdb.timepicker');
     });
   }
 
@@ -1505,11 +1522,17 @@ class Timepicker {
               return;
             }
 
-            this._minutes.textContent =
-              minuteTimes >= 10 || minuteTimes === '00' ? minuteTimes : `0${minuteTimes}`;
+            const changeMinutes = () => {
+              return minuteTimes >= 10 || minuteTimes === '00' ? minuteTimes : `0${minuteTimes}`;
+            };
+
+            this._minutes.textContent = changeMinutes();
 
             this._toggleClassActive(this.minutesArray, this._minutes, allTipsMinutes);
             this._toggleBackgroundColorCircle(`${TIPS_MINUTES_CLASS}`);
+
+            this._objWithDataOnChange.degreesMinutes = _degrees;
+            this._objWithDataOnChange.minutes = minuteTimes;
           }
         }
 
@@ -1533,7 +1556,7 @@ class Timepicker {
                 hour
               );
 
-              this._handleMoveHand(elFromPoint, touchHours, touchDegrees);
+              return this._handleMoveHand(elFromPoint, touchHours, touchDegrees);
             } else {
               const { degrees: movedDegrees, hour: movedHours } = this._makeHourDegrees(
                 target,
@@ -1541,9 +1564,11 @@ class Timepicker {
                 hour
               );
 
-              this._handleMoveHand(target, movedHours, movedDegrees);
+              return this._handleMoveHand(target, movedHours, movedDegrees);
             }
           };
+
+          this._objWithDataOnChange.degreesHours = degrees;
 
           if (minTime !== '' || maxTime !== '') {
             this._handlerMaxMinHoursOptions(
@@ -1558,6 +1583,7 @@ class Timepicker {
             this._handlerMaxMinHoursOptions(degrees, makeDegrees, maxHour, minHour);
           }
         }
+
         e.stopPropagation();
       }
     );
@@ -1590,6 +1616,8 @@ class Timepicker {
 
       this._toggleClassActive(this.hoursArray, this._hour, allTipsHours);
       this._toggleClassActive(this.innerHours, this._hour, allTipsInner);
+
+      this._objWithDataOnChange.hour = hour >= 10 || hour === '00' ? hour : `0${hour}`;
     }
   }
 
@@ -2185,8 +2213,14 @@ EventHandler.on(window, 'DOMContentLoaded', () => {
   SelectorEngine.find(`.${NAME}`).forEach((timepicker) => {
     let instance = Timepicker.getInstance(timepicker);
 
+    const { timepickerFormat24 } = timepicker.dataset;
+
     if (!instance) {
-      instance = new Timepicker(timepicker);
+      if (timepickerFormat24 === 'true') {
+        instance = new Timepicker(timepicker, { format24: true });
+      } else {
+        instance = new Timepicker(timepicker);
+      }
     }
   });
 });

@@ -3,7 +3,7 @@
   left: 0;
   transform: $sidenav-transform;
   position: fixed;
-  z-index: $sidenav-z-index;
+  z-index: $zindex-sidenav;
   background-color: $sidenav-background-color;
   overflow: hidden;
   width: $sidenav-width;
@@ -120,7 +120,7 @@
 }
 
 .sidenav-backdrop {
-  z-index: $sidenav-backdrop-z-index;
+  z-index: $zindex-sidenav-backdrop;
   top: 0;
   left: 0;
   background-color: $sidenav-backdrop-background-color;

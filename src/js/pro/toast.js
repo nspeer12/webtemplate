@@ -144,16 +144,10 @@ class Toast extends BSToast {
 
   _setupPosition() {
     if (this._options.container) {
-      Manipulator.style(this.parent, {
-        position: 'relative',
-      });
-      Manipulator.style(this._element, {
-        position: 'absolute',
-      });
+      Manipulator.addClass(this.parent, 'parent-toast-relative');
+      Manipulator.addClass(this._element, 'toast-absolute');
     } else {
-      Manipulator.style(this._element, {
-        position: 'fixed',
-      });
+      Manipulator.addClass(this._element, 'toast-fixed');
     }
   }
 

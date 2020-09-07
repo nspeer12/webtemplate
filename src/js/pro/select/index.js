@@ -56,8 +56,27 @@ const EVENT_OPEN = `open${EVENT_KEY}`;
 const EVENT_SELECT = `optionSelect${EVENT_KEY}`;
 const EVENT_DESELECT = `optionDeselect${EVENT_KEY}`;
 const EVENT_VALUE_CHANGE = `valueChange${EVENT_KEY}`;
+const EVENT_CHANGE = 'change';
 
 const SELECTOR_SELECT = '.select';
+const SELECTOR_LABEL = '.select-label';
+const SELECTOR_INPUT = '.select-input';
+const SELECTOR_FILTER_INPUT = '.select-filter-input';
+const SELECTOR_DROPDOWN = '.select-dropdown';
+const SELECTOR_OPTIONS_WRAPPER = '.select-options-wrapper';
+const SELECTOR_OPTIONS_LIST = '.select-options-list';
+const SELECTOR_OPTION = '.select-option';
+const SELECTOR_CLEAR_BUTTON = '.select-clear-btn';
+const SELECTOR_CUSTOM_CONTENT = '.select-custom-content';
+const SELECTOR_NO_RESULTS = '.select-no-results';
+const SELECTOR_FORM_OUTLINE = '.form-outline';
+
+const CLASS_NAME_INITIALIZED = 'select-initialized';
+const CLASS_NAME_OPEN = 'open';
+const CLASS_NAME_ACTIVE = 'active';
+const CLASS_NAME_FOCUSED = 'focused';
+const CLASS_NAME_OPTION_GROUP_LABEL = 'select-option-group-label';
+const CLASS_NAME_SELECT_ALL_OPTION = 'select-all-option';
 
 class Select {
   constructor(element, config) {
@@ -84,8 +103,8 @@ class Select {
 
     this._popper = null;
     this._input = null;
-    this._label = SelectorEngine.next(this._element, '.select-label')[0];
-    this._customContent = SelectorEngine.next(element, '.select-custom-content')[0];
+    this._label = SelectorEngine.next(this._element, SELECTOR_LABEL)[0];
+    this._customContent = SelectorEngine.next(element, SELECTOR_CUSTOM_CONTENT)[0];
 
     this._wrapper = null;
     this._inputEl = null;
@@ -110,23 +129,23 @@ class Select {
   }
 
   get filterInput() {
-    return SelectorEngine.findOne('.select-filter-input', this._dropdownContainer);
+    return SelectorEngine.findOne(SELECTOR_FILTER_INPUT, this._dropdownContainer);
   }
 
   get dropdown() {
-    return SelectorEngine.findOne('.select-dropdown', this._dropdownContainer);
+    return SelectorEngine.findOne(SELECTOR_DROPDOWN, this._dropdownContainer);
   }
 
   get optionsList() {
-    return SelectorEngine.findOne('.select-options-list', this._dropdownContainer);
+    return SelectorEngine.findOne(SELECTOR_OPTIONS_LIST, this._dropdownContainer);
   }
 
   get optionsWrapper() {
-    return SelectorEngine.findOne('.select-options-wrapper', this._dropdownContainer);
+    return SelectorEngine.findOne(SELECTOR_OPTIONS_WRAPPER, this._dropdownContainer);
   }
 
   get clearButton() {
-    return SelectorEngine.findOne('.select-clear-btn', this._wrapper);
+    return SelectorEngine.findOne(SELECTOR_CLEAR_BUTTON, this._wrapper);
   }
 
   get options() {
@@ -152,6 +171,10 @@ class Select {
 
     if (this._element.hasAttribute('multiple')) {
       config.multiple = true;
+    }
+
+    if (this._element.hasAttribute('disabled')) {
+      config.disabled = true;
     }
 
     typeCheckConfig(NAME, config, DefaultType);
@@ -242,7 +265,7 @@ class Select {
     this._renderMaterialWrapper();
 
     this._wrapper = SelectorEngine.findOne(`#${this._wrapperId}`);
-    this._input = SelectorEngine.findOne('.select-input', this._wrapper);
+    this._input = SelectorEngine.findOne(SELECTOR_INPUT, this._wrapper);
 
     this._initOutlineInput();
     this._setDefaultSelections();
@@ -272,19 +295,19 @@ class Select {
   _renderMaterialWrapper() {
     const template = getWrapperTemplate(this._wrapperId, this._config, this._label);
     this._element.parentNode.insertBefore(template, this._element);
-    this._element.classList.add('initialized');
+    Manipulator.addClass(this._element, CLASS_NAME_INITIALIZED);
     template.appendChild(this._element);
   }
 
   _initOutlineInput() {
-    const inputWrapper = SelectorEngine.findOne('.form-outline', this._wrapper);
+    const inputWrapper = SelectorEngine.findOne(SELECTOR_FORM_OUTLINE, this._wrapper);
     const outlineInput = new Input(inputWrapper);
     outlineInput.init();
   }
 
   _bindComponentEvents() {
     this._listenToComponentKeydown();
-    this._listenToInputClick();
+    this._listenToWrapperClick();
     this._listenToClearBtnClick();
     this._listenToClearBtnKeydown();
   }
@@ -519,14 +542,16 @@ class Select {
     this._activeOption = newActiveOption;
   }
 
-  _listenToInputClick() {
-    EventHandler.on(this._input, 'click', () => {
-      this.open();
+  _listenToWrapperClick() {
+    EventHandler.on(this._wrapper, 'click', () => {
+      this.toggle();
     });
   }
 
   _listenToClearBtnClick() {
-    EventHandler.on(this.clearButton, 'click', () => {
+    EventHandler.on(this.clearButton, 'click', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
       this._handleClear();
     });
   }
@@ -556,11 +581,12 @@ class Select {
     this._updateClearButtonVisibility();
 
     this._emitValueChangeEvent(null);
+    this._emitNativeChangeEvent();
   }
 
   _listenToOptionsClick() {
     EventHandler.on(this.optionsWrapper, 'click', (event) => {
-      const optionGroupLabel = event.target.classList.contains('select-option-group-label');
+      const optionGroupLabel = event.target.classList.contains(CLASS_NAME_OPTION_GROUP_LABEL);
 
       if (optionGroupLabel) {
         return;
@@ -569,8 +595,8 @@ class Select {
       const target =
         event.target.nodeName === 'DIV'
           ? event.target
-          : SelectorEngine.closest(event.target, '.select-option');
-      const selectAllOption = target.classList.contains('select-all-option');
+          : SelectorEngine.closest(event.target, SELECTOR_OPTION);
+      const selectAllOption = target.classList.contains(CLASS_NAME_SELECT_ALL_OPTION);
 
       if (selectAllOption) {
         this._handleSelectAll();
@@ -602,6 +628,7 @@ class Select {
     this._updateClearButtonVisibility();
 
     this._emitValueChangeEvent(this.value);
+    this._emitNativeChangeEvent();
   }
 
   _selectAllOptions(options) {
@@ -651,6 +678,7 @@ class Select {
       option.node.setAttribute('selected', true);
       EventHandler.trigger(this._element, EVENT_SELECT, { value: option.value });
       this._emitValueChangeEvent(this.value);
+      this._emitNativeChangeEvent();
     }
 
     this.close();
@@ -671,10 +699,15 @@ class Select {
     }
 
     this._emitValueChangeEvent(this.value);
+    this._emitNativeChangeEvent();
   }
 
   _emitValueChangeEvent(value) {
     EventHandler.trigger(this._element, EVENT_VALUE_CHANGE, { value });
+  }
+
+  _emitNativeChangeEvent() {
+    EventHandler.trigger(this._element, EVENT_CHANGE);
   }
 
   _updateInputValue() {
@@ -699,16 +732,16 @@ class Select {
   }
 
   _updateLabelPosition() {
-    const label = SelectorEngine.findOne('.select-label', this._wrapper);
+    const label = SelectorEngine.findOne(SELECTOR_LABEL, this._wrapper);
 
     if (!label) {
       return;
     }
 
     if (this._input.value !== '' || this._isOpen) {
-      label.classList.add('active');
+      Manipulator.addClass(label, CLASS_NAME_ACTIVE);
     } else {
-      label.classList.remove('active');
+      Manipulator.removeClass(label, CLASS_NAME_ACTIVE);
     }
   }
 
@@ -721,9 +754,9 @@ class Select {
       this._selectionModel.selection || this._selectionModel.selections.length > 0;
 
     if (hasSelection) {
-      this.clearButton.style.display = 'block';
+      Manipulator.addStyle(this.clearButton, { display: 'block' });
     } else {
-      this.clearButton.style.display = 'none';
+      Manipulator.addStyle(this.clearButton, { display: 'none' });
     }
   }
 
@@ -734,6 +767,14 @@ class Select {
       this._selectAllOption.deselect();
     } else if (allSelected && !selectAllSelected) {
       this._selectAllOption.select();
+    }
+  }
+
+  toggle() {
+    if (this._isOpen) {
+      this.close();
+    } else {
+      this.open();
     }
   }
 
@@ -804,13 +845,13 @@ class Select {
     // We need to add delay to wait for the popper initialization
     // and position update
     setTimeout(() => {
-      this.dropdown.classList.add('open');
+      Manipulator.addClass(this.dropdown, CLASS_NAME_OPEN);
     }, 0);
   }
 
   _updateDropdownWidth() {
     const inputWidth = this._input.offsetWidth;
-    this._dropdownContainer.style.width = `${inputWidth}px`;
+    Manipulator.addStyle(this._dropdownContainer, { width: `${inputWidth}px` });
   }
 
   _setFirstActiveOption() {
@@ -836,7 +877,7 @@ class Select {
   }
 
   _setInputActiveStyles() {
-    this._input.classList.add('focused');
+    Manipulator.addClass(this._input, CLASS_NAME_FOCUSED);
   }
 
   _listenToWindowResize() {
@@ -910,8 +951,7 @@ class Select {
 
   _updateOptionsListTemplate(optionsToRender) {
     const optionsWrapperContent =
-      SelectorEngine.findOne('.select-options-list') ||
-      SelectorEngine.findOne('.select-no-results');
+      SelectorEngine.findOne(SELECTOR_OPTIONS_LIST) || SelectorEngine.findOne(SELECTOR_NO_RESULTS);
 
     const optionsListTemplate = getOptionsListTemplate(
       optionsToRender,
@@ -964,15 +1004,15 @@ class Select {
 
     this._removeDropdownEvents();
 
-    this.dropdown.classList.remove('open');
+    Manipulator.removeClass(this.dropdown, CLASS_NAME_OPEN);
     document.body.removeChild(this._dropdownContainer);
     this._popper.destroy();
 
     this._isOpen = false;
 
     setTimeout(() => {
-      this._input.classList.remove('focused');
-      this._input.classList.remove('active');
+      Manipulator.removeClass(this._input, CLASS_NAME_FOCUSED);
+      Manipulator.removeClass(this._input, CLASS_NAME_ACTIVE);
       this._updateLabelPosition();
     }, 0);
   }
@@ -995,32 +1035,50 @@ class Select {
   _addMutationObserver() {
     this._mutationObserver = new MutationObserver(() => {
       if (this._wrapper) {
-        this._optionsToRender = this._getOptionsToRender(this._element);
-        this._plainOptions = this._getPlainOptions(this._optionsToRender);
-        this._setDefaultSelections();
-        this._updateInputValue();
-        this._updateLabelPosition();
-        this._updateClearButtonVisibility();
-
-        if (this.multiple) {
-          this._updateSelectAllState();
-        }
-
-        const hasFilterValue = this._config.filter && this.filterInput && this.filterInput.value;
-
-        if (this._isOpen && !hasFilterValue) {
-          this._updateOptionsListTemplate(this._optionsToRender);
-          this._setFirstActiveOption();
-        } else if (this._isOpen && hasFilterValue) {
-          this._filterOptions(this.filterInput.value);
-          this._setFirstActiveOption();
-        } else {
-          this._dropdownTemplateNeedsUpdate = true;
-        }
+        this._updateSelections();
+        this._updateDisabledState();
       }
     });
 
     this._observeMutationObserver();
+  }
+
+  _updateSelections() {
+    this._optionsToRender = this._getOptionsToRender(this._element);
+    this._plainOptions = this._getPlainOptions(this._optionsToRender);
+    this._selectionModel.clear();
+    this._setDefaultSelections();
+    this._updateInputValue();
+    this._updateLabelPosition();
+    this._updateClearButtonVisibility();
+
+    if (this.multiple) {
+      this._updateSelectAllState();
+    }
+
+    const hasFilterValue = this._config.filter && this.filterInput && this.filterInput.value;
+
+    if (this._isOpen && !hasFilterValue) {
+      this._updateOptionsListTemplate(this._optionsToRender);
+      this._setFirstActiveOption();
+    } else if (this._isOpen && hasFilterValue) {
+      this._filterOptions(this.filterInput.value);
+      this._setFirstActiveOption();
+    } else {
+      this._dropdownTemplateNeedsUpdate = true;
+    }
+  }
+
+  _updateDisabledState() {
+    const input = SelectorEngine.findOne(SELECTOR_INPUT, this._wrapper);
+
+    if (this._element.hasAttribute('disabled')) {
+      this._config.disabled = true;
+      input.setAttribute('disabled', '');
+    } else {
+      this._config.disabled = false;
+      input.removeAttribute('disabled');
+    }
   }
 
   _observeMutationObserver() {
@@ -1032,6 +1090,7 @@ class Select {
       attributes: true,
       childList: true,
       characterData: true,
+      subtree: true,
     });
   }
 
@@ -1096,8 +1155,29 @@ class Select {
   _destroyMaterialTemplate() {
     const wrapperParent = this._wrapper.parentNode;
     wrapperParent.appendChild(this._element);
-    this._element.classList.remove('initialized');
+    Manipulator.removeClass(this._element, CLASS_NAME_INITIALIZED);
     wrapperParent.removeChild(this._wrapper);
+  }
+
+  setValue(value) {
+    this.options
+      .filter((option) => option.selected)
+      .forEach((selection) => (selection.nativeOption.selected = false));
+
+    const isMultipleValue = Array.isArray(value);
+
+    if (isMultipleValue) {
+      value.forEach((selectionValue) => this._selectByValue(selectionValue));
+    } else {
+      this._selectByValue(value);
+    }
+
+    this._updateSelections();
+  }
+
+  _selectByValue(value) {
+    const correspondingOption = this.options.find((option) => option.value === value);
+    correspondingOption.nativeOption.selected = true;
   }
 
   static jQueryInterface(config, options) {

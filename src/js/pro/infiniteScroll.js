@@ -53,7 +53,7 @@ class InfiniteScroll {
       return window.scrollY + window.innerHeight === document.documentElement.scrollHeight;
     }
     if (this._options.infiniteDirection === 'x') {
-      return this.rect.width + this._element.scrollLeft >= this._element.scrollWidth;
+      return this.rect.width + this._element.scrollLeft + 10 >= this._element.scrollWidth;
     }
     return this.rect.height + this._element.scrollTop >= this._element.scrollHeight;
   }

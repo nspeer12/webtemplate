@@ -6,6 +6,7 @@ import Manipulator from '../../mdb/dom/manipulator';
 import SelectorEngine from '../../mdb/dom/selector-engine';
 import tableTemplate from './html/table'; //eslint-disable-line
 import { search, sort, paginate } from './util';
+import Select from '../select';
 
 /**
  * ------------------------------------------------------------------------
@@ -135,6 +136,7 @@ class Datatable {
     this._paginationStart = null;
     this._paginationEnd = null;
     this._select = null;
+    this._selectInstance = null;
 
     this._selected = [];
     this._checkboxes = null;
@@ -288,6 +290,10 @@ class Datatable {
   }
 
   dispose() {
+    if (this._selectInstance) {
+      this._selectInstance.dispose();
+    }
+
     Data.removeData(this._element, DATA_KEY);
 
     this._removeEventListeners();
@@ -515,8 +521,10 @@ class Datatable {
   _setupSort() {
     SelectorEngine.find(SELECTOR_SORT_ICON, this._element).forEach((icon) => {
       const field = Manipulator.getDataAttribute(icon, 'sort');
+      const [header] = SelectorEngine.parents(icon, 'th');
+      Manipulator.style(header, { cursor: 'pointer' });
 
-      EventHandler.on(icon, 'click', () => {
+      EventHandler.on(header, 'click', () => {
         if (this._sortField === field && this._sortOrder === 'asc') {
           this._sortOrder = 'desc';
         } else if (this._sortField === field && this._sortOrder === 'desc') {
@@ -557,8 +565,6 @@ class Datatable {
 
     this._paginationLeft = SelectorEngine.findOne(SELECTOR_PAGINATION_LEFT, this._element);
 
-    this._select = SelectorEngine.findOne(SELECTOR_SELECT, this._element);
-
     EventHandler.on(this._paginationRight, 'click', () =>
       this._changeActivePage(this._activePage + 1)
     );
@@ -579,7 +585,19 @@ class Datatable {
 
     this._toggleDisableState();
 
-    EventHandler.on(this._select, 'change', (e) => this._setEntries(e));
+    this._setupPaginationSelect();
+  }
+
+  _setupPaginationSelect() {
+    this._select = SelectorEngine.findOne(SELECTOR_SELECT, this._element);
+
+    if (this._selectInstance) {
+      this._selectInstance.dispose();
+    }
+
+    this._selectInstance = new Select(this._select);
+
+    EventHandler.on(this._select, 'valueChange.mdb.select', (e) => this._setEntries(e));
   }
 
   _removeEventListeners() {
@@ -588,7 +606,7 @@ class Datatable {
 
       EventHandler.off(this._paginationLeft, 'click');
 
-      EventHandler.off(this._select, 'change');
+      EventHandler.off(this._select, 'valueChange.mdb.select');
 
       if (this._options.fullPagination) {
         EventHandler.off(this._paginationStart, 'click');
@@ -604,7 +622,9 @@ class Datatable {
     }
 
     SelectorEngine.find(SELECTOR_SORT_ICON, this._element).forEach((icon) => {
-      EventHandler.off(icon, 'click');
+      const [header] = SelectorEngine.parents(icon, 'th');
+
+      EventHandler.off(header, 'click');
     });
 
     if (this._options.selectable) {

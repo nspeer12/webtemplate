@@ -1,8 +1,11 @@
 import { Chart as Chartjs } from 'chart.js';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { getjQuery } from '../mdb/util/index';
 import Data from '../mdb/dom/data';
 import Manipulator from '../mdb/dom/manipulator';
 import SelectorEngine from '../mdb/dom/selector-engine';
+
+Chartjs.plugins.unregister(ChartDataLabels);
 
 /**
  * ------------------------------------------------------------------------
@@ -16,88 +19,22 @@ const NAME = 'chart';
 const DATA_KEY = 'mdb.chart';
 const CLASSNAME_CHARTS = 'chart';
 
-//  Default data
-const DEFAULT_DATA = {
-  line: {
-    data: {
-      datasets: [
-        {
-          backgroundColor: 'rgba(66, 133, 244, 0.0)',
-          borderColor: 'rgb(66, 133, 244)',
-          borderWidth: 2,
-          pointBorderColor: 'rgb(66, 133, 244)',
-          pointBackgroundColor: 'rgb(66, 133, 244)',
-          lineTension: 0.0,
-        },
-      ],
-    },
-  },
-  bar: {
-    data: {
-      datasets: [
-        {
-          backgroundColor: 'rgb(66, 133, 244)',
-          borderWidth: 0,
-        },
-      ],
-    },
-  },
-  horizontalBar: {
-    data: {
-      datasets: [
-        {
-          backgroundColor: 'rgb(66, 133, 244)',
-          borderWidth: 0,
-        },
-      ],
-    },
-  },
-  pie: {
-    data: {
-      datasets: [
-        {
-          backgroundColor: 'rgb(66, 133, 244)',
-        },
-      ],
-    },
-  },
-  doughnut: {
-    data: {
-      datasets: [
-        {
-          backgroundColor: 'rgb(66, 133, 244)',
-        },
-      ],
-    },
-  },
-  polarArea: {
-    data: {
-      datasets: [
-        {
-          backgroundColor: 'rgb(66, 133, 244, 0.5)',
-        },
-      ],
-    },
-  },
-  radar: {
-    data: {
-      datasets: [
-        {
-          backgroundColor: 'rgba(66, 133, 244, 0.5)',
-          borderColor: 'rgb(66, 133, 244)',
-          borderWidth: 2,
-          pointBorderColor: 'rgb(66, 133, 244)',
-          pointBackgroundColor: 'rgb(66, 133, 244)',
-        },
-      ],
-    },
-  },
-};
-
 // Default options
 const DEFAULT_OPTIONS = {
   line: {
     options: {
+      elements: {
+        line: {
+          backgroundColor: 'rgba(66, 133, 244, 0.0)',
+          borderColor: 'rgb(66, 133, 244)',
+          borderWidth: 2,
+          tension: 0.0,
+        },
+        point: {
+          borderColor: 'rgb(66, 133, 244)',
+          backgroundColor: 'rgb(66, 133, 244)',
+        },
+      },
       responsive: true,
       legend: {
         display: true,
@@ -105,6 +42,9 @@ const DEFAULT_OPTIONS = {
       tooltips: {
         intersect: false,
         mode: 'index',
+      },
+      datasets: {
+        borderColor: 'red',
       },
       scales: {
         xAxes: [
@@ -120,7 +60,7 @@ const DEFAULT_OPTIONS = {
         ],
         yAxes: [
           {
-            stacked: true,
+            stacked: false,
             gridLines: {
               borderDash: [2],
               drawBorder: false,
@@ -138,6 +78,16 @@ const DEFAULT_OPTIONS = {
   },
   bar: {
     options: {
+      elements: {
+        line: {
+          backgroundColor: 'rgb(66, 133, 244)',
+          borderWidth: 0,
+        },
+        rectangle: {
+          backgroundColor: 'rgb(66, 133, 244)',
+          borderWidth: 0,
+        },
+      },
       responsive: true,
       legend: {
         display: true,
@@ -178,6 +128,12 @@ const DEFAULT_OPTIONS = {
   },
   horizontalBar: {
     options: {
+      elements: {
+        rectangle: {
+          backgroundColor: 'rgb(66, 133, 244)',
+          borderWidth: 0,
+        },
+      },
       responsive: true,
       legend: {
         display: true,
@@ -219,6 +175,9 @@ const DEFAULT_OPTIONS = {
   },
   pie: {
     options: {
+      elements: {
+        arc: { backgroundColor: 'rgb(66, 133, 244)' },
+      },
       responsive: true,
       legend: {
         display: true,
@@ -227,6 +186,9 @@ const DEFAULT_OPTIONS = {
   },
   doughnut: {
     options: {
+      elements: {
+        arc: { backgroundColor: 'rgb(66, 133, 244)' },
+      },
       responsive: true,
       legend: {
         display: true,
@@ -235,6 +197,9 @@ const DEFAULT_OPTIONS = {
   },
   polarArea: {
     options: {
+      elements: {
+        arc: { backgroundColor: 'rgba(66, 133, 244, 0.5)' },
+      },
       responsive: true,
       legend: {
         display: true,
@@ -243,9 +208,115 @@ const DEFAULT_OPTIONS = {
   },
   radar: {
     options: {
+      elements: {
+        line: {
+          backgroundColor: 'rgba(66, 133, 244, 0.5)',
+          borderColor: 'rgb(66, 133, 244)',
+          borderWidth: 2,
+        },
+        point: {
+          borderColor: 'rgb(66, 133, 244)',
+          backgroundColor: 'rgb(66, 133, 244)',
+        },
+      },
       responsive: true,
       legend: {
         display: true,
+      },
+    },
+  },
+  scatter: {
+    options: {
+      elements: {
+        line: {
+          backgroundColor: 'rgba(66, 133, 244, 0.5)',
+          borderColor: 'rgb(66, 133, 244)',
+          borderWidth: 2,
+          tension: 0.0,
+        },
+        point: {
+          borderColor: 'rgb(66, 133, 244)',
+          backgroundColor: 'rgba(66, 133, 244, 0.5)',
+        },
+      },
+      responsive: true,
+      legend: {
+        display: true,
+      },
+      tooltips: {
+        intersect: false,
+        mode: 'index',
+      },
+      datasets: {
+        borderColor: 'red',
+      },
+      scales: {
+        xAxes: [
+          {
+            stacked: true,
+            gridLines: {
+              display: false,
+            },
+            ticks: {
+              fontColor: 'rgba(0,0,0, 0.5)',
+            },
+          },
+        ],
+        yAxes: [
+          {
+            stacked: false,
+            gridLines: {
+              borderDash: [2],
+              drawBorder: false,
+              zeroLineColor: 'rgba(0,0,0,0)',
+              zeroLineBorderDash: [2],
+              zeroLineBorderDashOffset: [2],
+            },
+            ticks: {
+              fontColor: 'rgba(0,0,0, 0.5)',
+            },
+          },
+        ],
+      },
+    },
+  },
+  bubble: {
+    options: {
+      elements: {
+        point: {
+          borderColor: 'rgb(66, 133, 244)',
+          backgroundColor: 'rgba(66, 133, 244, 0.5)',
+        },
+      },
+      responsive: true,
+      legend: {
+        display: true,
+      },
+      scales: {
+        xAxes: [
+          {
+            gridLines: {
+              display: false,
+            },
+            ticks: {
+              fontColor: 'rgba(0,0,0, 0.5)',
+            },
+          },
+        ],
+        yAxes: [
+          {
+            gridLines: {
+              borderDash: [2],
+              drawBorder: false,
+              zeroLineColor: 'rgba(0,0,0,0)',
+              zeroLineBorderDash: [2],
+              zeroLineBorderDashOffset: [2],
+            },
+            ticks: {
+              fontColor: 'rgba(0,0,0, 0.5)',
+            },
+          },
+        ],
       },
     },
   },
@@ -313,9 +384,15 @@ class Chart {
   _chartConstructor() {
     if (this._data) {
       this._createCanvas();
+
+      const options = GENERATE_DATA(this._options, this._type, DEFAULT_OPTIONS);
+      if (options.dataLabelsPlugin) {
+        options.plugins = ChartDataLabels;
+      }
+
       this._chart = new Chartjs(this._canvas, {
-        ...GENERATE_DATA(this._data, this._type, DEFAULT_DATA),
-        ...GENERATE_DATA(this._options, this._type, DEFAULT_OPTIONS),
+        ...this._data,
+        ...options,
       });
     }
   }
@@ -340,7 +417,7 @@ class Chart {
           : DEFAULT_OPTIONS[type];
 
         chartData = new Chart(this, {
-          ...GENERATE_DATA(data, type, DEFAULT_DATA),
+          ...data,
           ...chartOptions,
         });
       }
@@ -411,7 +488,7 @@ SelectorEngine.find('[data-chart]').forEach((el) => {
       dataAttr.data.labels = JSON.parse(dataSet.labels.replace(/'/g, '"'));
     }
     return new Chart(el, {
-      ...GENERATE_DATA(dataAttr, dataAttr.type, DEFAULT_DATA),
+      ...dataAttr,
       ...DEFAULT_OPTIONS[dataAttr.type],
     });
   }

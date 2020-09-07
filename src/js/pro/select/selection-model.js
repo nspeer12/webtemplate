@@ -34,7 +34,7 @@ class SelectionModel {
   }
 
   get label() {
-    return this._selections[0] && this._selections[0].label;
+    return this._selections[0] && this.selection.label;
   }
 
   get labels() {
@@ -42,7 +42,7 @@ class SelectionModel {
   }
 
   get value() {
-    return this.selections[0] && this._selections[0].value;
+    return this.selections[0] && this.selection.value;
   }
 
   get values() {

@@ -174,39 +174,15 @@
     align-items: center;
     font-size: $datatable-select-wrapper-font-size;
     font-weight: $datatable-select-wrapper-font-weight;
+    padding: 0 1rem;
+
+    .select-input {
+      max-width: 70px;
+    }
   }
 
   &-select-text {
-    margin: 0;
-  }
-
-  &-select {
-    font-size: $datatable-select-font-size;
-    color: var(--datatable-color);
-    line-height: $datatable-select-line-height;
-    padding: $datatable-select-padding-top $datatable-select-padding-right
-      $datatable-select-padding-bottom $datatable-select-padding-left;
-    box-sizing: border-box;
-    margin: 0 $datatable-select-margin-right 0 $datatable-select-margin-left;
-    border: none;
-    -moz-appearance: none;
-    -webkit-appearance: none;
-    appearance: none;
-    background-color: transparent;
-    cursor: pointer;
-    background: $datatable-select-background;
-    background-position: $datatable-select-background-position;
-    background-repeat: no-repeat;
-    background-size: $datatable-select-background-size;
-
-    &:focus {
-      outline: none;
-      font-weight: $datatable-select-focus-font-weight;
-    }
-
-    option {
-      color: $datatable-select-option-color;
-    }
+    margin: 0 1rem;
   }
 
   &.datatable-sm {
@@ -264,11 +240,25 @@
     --datatable-border-color: #{#fff};
     --datatable-active-color: #{rgba(255, 255, 255, 0.2)};
 
-    .datatable-select {
-      background: $datatable-dark-select-background;
-      background-position: $datatable-select-background-position;
-      background-repeat: no-repeat;
-      background-size: $datatable-select-background-size;
+    .select-wrapper {
+      .select-arrow,
+      input {
+        color: white;
+      }
+
+      .form-outline .form-control:focus ~ .form-notch .form-notch-leading,
+      .form-notch-trailing {
+        border-color: rgb(251, 251, 251) !important;
+      }
+      .form-notch-leading,
+      .form-noth-middle,
+      .form-notch-trailing {
+        border-color: rgb(251, 251, 251) !important;
+      }
+
+      .form-outline .form-control:focus ~ .form-notch .form-notch-leading {
+        border-color: rgb(251, 251, 251) !important;
+      }
     }
 
     .form-check-input[type='checkbox']:checked {
@@ -310,15 +300,6 @@
 
     .datatable-sort-icon {
       display: none;
-    }
-
-    .datatable-select {
-      color: var(--datatable-muted-color);
-      background: $datatable-loading-select-background;
-      background-position: $datatable-select-background-position;
-      background-repeat: no-repeat;
-      background-size: $datatable-select-background-size;
-      cursor: unset;
     }
   }
 }

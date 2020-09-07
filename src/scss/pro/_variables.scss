@@ -1,9 +1,20 @@
 // Variables pro
 
+// scss-docs-start zindex-stack pro
+$zindex-sidenav: 1035;
+$zindex-sidenav-backdrop: 900;
+$zindex-timepicker: 1055;
+$zindex-datepicker: 1055;
+$zindex-datepicker-container: 1056;
+$zindex-lightbox: 1100;
+$zindex-lightbox-toolbar: 1110;
+$zindex-popconfirm: 1080;
+$zindex-popconfirm-backdrop: 1070;
+// scss-docs-end zindex-stack pro
+
 // Sidenav
 
 $sidenav-transform: translateX(-100%);
-$sidenav-z-index: 1031;
 $sidenav-background-color: $white;
 $sidenav-width: 240px;
 $sidenav-height: 100vh;
@@ -37,7 +48,6 @@ $sidenav-link-active-color: $sidenav-link-hover-color;
 $sidenav-rotate-icon-margin-right: 0.8rem;
 $sidenav-rotate-icon-transition: transform 0.3s;
 
-$sidenav-backdrop-z-index: 899;
 $sidenav-backdrop-background-color: rgba(0, 0, 0, 0.1);
 
 $sidenav-light-color: $sidenav-data-color-light-color;
@@ -48,7 +58,7 @@ $rating-icon-padding: 0.25rem;
 
 // Timepicker
 
-$timepicker-wrapper-z-index: 1071;
+// $timepicker-wrapper-z-index: 1071;
 $timepicker-wrapper-background-color: rgba(0, 0, 0, 0.4);
 
 $timepicker-wrapper-inline-border-radius: 4px;
@@ -56,7 +66,6 @@ $timepicker-wrapper-inline-border-radius: 4px;
 $timepicker-elements-min-width: 310px;
 $timepicker-elements-min-height: 325px;
 $timepicker-elements-background: $white;
-$timepicker-elements-z-index: 1000;
 $timepicker-elements-border-top-right-radius: 7px;
 $timepicker-elements-border-top-left-radius: 7px;
 $timepicker-elements-media-border-bottom-left-radius: 4px;
@@ -141,7 +150,6 @@ $timepicker-item-width: 20px;
 $timepicker-item-height: 20px;
 $timepicker-item-padding: 10px;
 $timepicker-item-font-size: 1.1em;
-$timepicker-item-z-index: 3;
 
 $timepicker-item-middle-dot-top: 50%;
 $timepicker-item-middle-dot-left: 50%;
@@ -207,12 +215,10 @@ $timepicker-btn-icon-focus-color: $blue-accent-400;
 
 // Lightbox
 
-$lightbox-gallery-z-index: 10000;
 $lightbox-gallery-background-color: rgba(0, 0, 0, 0.9);
 $lightbox-gallery-transition: all 0.3s ease-out;
 
 $lightbox-gallery-toolbar-height: 50px;
-$lightbox-gallery-toolbar-z-index: 10001;
 $lightbox-gallery-toolbar-transition: opacity 0.4s;
 
 $lightbox-gallery-counter-color: #b3b3b3;
@@ -255,7 +261,6 @@ $lightbox-gallery-caption-wrapper-height: 50px;
 $lightbox-gallery-caption-color: $white;
 $lightbox-gallery-caption-margin-x: 10px;
 
-$lightbox-gallery-loader-z-index: 2;
 $lightbox-gallery-loader-transition: opacity 1s;
 
 $lightbox-gallery-button-focus-color: $white;
@@ -268,7 +273,6 @@ $datepicker-toggle-top: 5px;
 $datepicker-toggle-focus-color: $blue-accent-400;
 
 $datepicker-backdrop-background-color: rgba(0, 0, 0, 0.4);
-$datepicker-backdrop-z-index: 1071;
 
 $datepicker-dropdown-container-width: 328px;
 $datepicker-dropdown-container-height: 380px;
@@ -283,7 +287,7 @@ $datepicker-modal-container-height: 512px;
 $datepicker-modal-container-background-color: $white;
 $datepicker-modal-container-border-radius: 7px 7px 4px 4px;
 $datepicker-modal-container-box-shadow: $datepicker-dropdown-container-box-shadow;
-$datepicker-modal-container-z-index: 1072;
+// $datepicker-modal-container-z-index: 1072;
 $datepicker-modal-container-date-media-margin-top: 100px;
 $datepicker-modal-container-day-cell-media-width: 32x;
 $datepicker-modal-container-day-cell-media-height: $datepicker-modal-container-day-cell-media-width;
@@ -410,16 +414,10 @@ $popconfirm-padding: 1rem;
 $popconfirm-background-color: $white;
 $popconfirm-border-radius: 0.25rem;
 
-$popconfirm-popover-z-index: 1050;
 $popconfirm-popover-width: 300px;
 $popconfirm-popover-margin: 5px;
-
-$popconfirm-modal-z-index: $popconfirm-popover-z-index;
 $popconfirm-modal-width: $popconfirm-popover-width;
-
 $popconfirm-buttons-container-btn-ml: 0.75rem;
-
-$popconfirm-backdrop-z-index: 1040;
 $popconfirm-backdrop-background-color: rgba(0, 0, 0, 0.4);
 
 // Datatable
@@ -482,3 +480,24 @@ $datatable-dark-datatable-progress-opacity: 0.8;
 $datatable-hover-tbody-tr-transition: background-color 0.2s ease-in;
 $datatable-bordered-th-td-border-width: 1px;
 $datatable-loading-select-background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' fill='grey'><polygon points='0,0 100,0 50,50'/></svg>");
+
+// Perfect scrollbar
+
+$perfectScrollbar-ps-ps__rail-x-y-bg-color: #eee;
+$perfectScrollbar-ps-ps__rail-x-y-opacity: 0.6;
+$perfectScrollbar-ps-ps__rail-x-y-hover-opacity: 0.9;
+$perfectScrollbar-ps-ps__rail-x-y-transition-opacity-bg: background-color 0.2s linear,
+  opacity 0.2s linear;
+$perfectScrollbar-ps-ps__rail-x-transition-height-bg: background-color 0.2s linear,
+  height 0.2s ease-in-out;
+$perfectScrollbar-ps-ps__rail-y-transition-width-bg: background-color 0.2s linear,
+  width 0.2s ease-in-out;
+
+$perfectScrollbar-ps-z-index: 1035;
+$perfectScrollbar-ps-ps__rail-x-y-clicking: #999;
+$perfectScrollbar-ps-ps__rail-x-y-clicking-length: 0.6875rem;
+$perfectScrollbar-ps-ps__rail-x-y-length: 0.9375rem;
+$perfectScrollbar-ps-ps__thumb-x-y-length: 0.375rem;
+$perfectScrollbar-ps-ps__thumb-x-y-border-radius: $perfectScrollbar-ps-ps__thumb-x-y-length;
+$perfectScrollbar-ps-ps__thumb-x-y-position-length: 0.125rem;
+$perfectScrollbar-ps-ps__thumb-x-y-color: #aaa;

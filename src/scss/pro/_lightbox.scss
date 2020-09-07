@@ -11,7 +11,7 @@
   top: 0;
   width: 100%;
   height: 100%;
-  z-index: $lightbox-gallery-z-index;
+  z-index: $zindex-lightbox;
   background-color: $lightbox-gallery-background-color;
   opacity: 0;
   pointer-events: none;
@@ -22,7 +22,7 @@
     left: 0;
     width: 100%;
     height: $lightbox-gallery-toolbar-height;
-    z-index: $lightbox-gallery-toolbar-z-index;
+    z-index: $zindex-lightbox-toolbar;
     transition: $lightbox-gallery-toolbar-transition;
     .lightbox-gallery-left-tools {
       float: left;
@@ -181,7 +181,7 @@
     position: fixed;
     left: 0;
     top: 0;
-    z-index: $lightbox-gallery-loader-z-index;
+    z-index: 2;
     width: 100%;
     height: 100%;
     opacity: 1;

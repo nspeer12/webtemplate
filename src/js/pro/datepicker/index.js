@@ -414,7 +414,8 @@ class Datepicker {
   }
 
   _listenToToggleClick() {
-    EventHandler.on(this._element, EVENT_CLICK_DATA_API, SELECTOR_DATA_TOGGLE, () => {
+    EventHandler.on(this._element, EVENT_CLICK_DATA_API, SELECTOR_DATA_TOGGLE, (event) => {
+      event.preventDefault();
       this.open();
     });
   }

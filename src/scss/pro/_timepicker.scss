@@ -1,6 +1,6 @@
 .timepicker {
   &-wrapper {
-    z-index: $timepicker-wrapper-z-index;
+    z-index: $zindex-timepicker;
     opacity: 0;
     right: 0;
     bottom: 0;
@@ -17,7 +17,6 @@
     min-width: $timepicker-elements-min-width;
     min-height: $timepicker-elements-min-height;
     background: $timepicker-elements-background;
-    z-index: $timepicker-elements-z-index;
     border-top-right-radius: $timepicker-elements-border-top-right-radius;
     border-top-left-radius: $timepicker-elements-border-top-left-radius;
 
@@ -232,7 +231,7 @@
     user-select: none;
     cursor: default;
     font-size: $timepicker-item-font-size;
-    z-index: $timepicker-item-z-index;
+    z-index: 3;
   }
 
   &-middle-dot {

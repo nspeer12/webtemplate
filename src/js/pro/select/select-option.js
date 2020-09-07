@@ -1,4 +1,10 @@
 import SelectorEngine from '../../mdb/dom/selector-engine';
+import Manipulator from '../../mdb/dom/manipulator';
+
+const SELECTOR_FORM_CHECK_INPUT = '.form-check-input';
+
+const CLASS_NAME_SELECTED = 'selected';
+const CLASS_NAME_ACITVE = 'active';
 
 class SelectOption {
   constructor(
@@ -37,7 +43,7 @@ class SelectOption {
 
   _selectSingle() {
     if (!this.selected) {
-      this.node.classList.add('selected');
+      Manipulator.addClass(this.node, CLASS_NAME_SELECTED);
       this.node.setAttribute('aria-selected', true);
       this.selected = true;
 
@@ -49,9 +55,9 @@ class SelectOption {
 
   _selectMultiple() {
     if (!this.selected) {
-      const checkbox = SelectorEngine.findOne('.form-check-input', this.node);
+      const checkbox = SelectorEngine.findOne(SELECTOR_FORM_CHECK_INPUT, this.node);
       checkbox.checked = true;
-      this.node.classList.add('selected');
+      Manipulator.addClass(this.node, CLASS_NAME_SELECTED);
       this.node.setAttribute('aria-selected', true);
       this.selected = true;
 
@@ -71,7 +77,7 @@ class SelectOption {
 
   _deselectSingle() {
     if (this.selected) {
-      this.node.classList.remove('selected');
+      Manipulator.removeClass(this.node, CLASS_NAME_SELECTED);
       this.node.setAttribute('aria-selected', false);
       this.selected = false;
 
@@ -83,9 +89,9 @@ class SelectOption {
 
   _deselectMultiple() {
     if (this.selected) {
-      const checkbox = SelectorEngine.findOne('.form-check-input', this.node);
+      const checkbox = SelectorEngine.findOne(SELECTOR_FORM_CHECK_INPUT, this.node);
       checkbox.checked = false;
-      this.node.classList.remove('selected');
+      Manipulator.removeClass(this.node, CLASS_NAME_SELECTED);
       this.node.setAttribute('aria-selected', false);
       this.selected = false;
 
@@ -102,14 +108,14 @@ class SelectOption {
   setActiveStyles() {
     if (!this.active) {
       this.active = true;
-      this.node.classList.add('active');
+      Manipulator.addClass(this.node, CLASS_NAME_ACITVE);
     }
   }
 
   removeActiveStyles() {
     if (this.active) {
       this.active = false;
-      this.node.classList.remove('active');
+      Manipulator.removeClass(this.node, CLASS_NAME_ACITVE);
     }
   }
 }
