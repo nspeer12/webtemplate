@@ -14,7 +14,7 @@ select.select-initialized {
   font-size: 0.8rem;
   position: absolute;
   right: 12px;
-  top: 10px;
+  top: 9px;
 
   &:before {
     content: '\25BC';
@@ -33,7 +33,7 @@ select.select-initialized {
   color: black;
   font-size: 1rem;
   position: absolute;
-  top: 8px;
+  top: 7px;
   right: 30px;
   cursor: pointer;
 
@@ -41,6 +41,15 @@ select.select-initialized {
     color: $blue-accent-400;
     outline: none;
   }
+}
+
+.form-control-sm ~ .select-clear-btn {
+  font-size: 0.8rem;
+  top: 4px;
+}
+
+.form-control-lg ~ .select-clear-btn {
+  top: 11px;
 }
 
 .select-dropdown-container {
@@ -76,6 +85,14 @@ select.select-initialized {
   &.active {
     transform: translateY(-1rem) translateY(0.1rem) scale(0.8);
   }
+}
+
+.form-control-lg ~ .select-label.active {
+  transform: translateY(-1.25rem) translateY(0.1rem) scale(0.8);
+}
+
+.form-control-sm ~ .select-label.active {
+  transform: translateY(-0.83rem) translateY(0.1rem) scale(0.8);
 }
 
 .form-outline .select-label.active ~ .form-notch .form-notch-middle {
@@ -130,8 +147,27 @@ select.select-initialized {
   color: #4285f4;
 }
 
+.form-white .select-input:focus ~ .select-arrow {
+  color: #fff;
+}
+
+.form-white .select-arrow {
+  color: #fff;
+}
+
+.form-white .select-clear-btn {
+  color: #fff;
+}
+
+.form-control-sm ~ .select-arrow {
+  top: 3px;
+}
+
+.form-control-lg ~ .select-arrow {
+  top: 13px;
+}
+
 .select-options-wrapper {
-  max-height: 240px;
   overflow-y: auto;
 
   &::-webkit-scrollbar {
@@ -170,7 +206,6 @@ select.select-initialized {
 
 .select-option-group-label {
   width: 100%;
-  height: 48px;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
@@ -192,7 +227,6 @@ select.select-initialized {
 
 .select-option {
   width: 100%;
-  height: 48px;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
@@ -247,11 +281,12 @@ select.select-initialized {
   font-size: 0.8rem;
   color: #6c757d;
   display: block;
+  line-height: normal;
 }
 
 .select-option-icon {
-  width: 34px;
-  height: 34px;
+  width: 28px;
+  height: 28px;
 }
 
 .select-custom-content {
@@ -259,7 +294,6 @@ select.select-initialized {
 }
 
 .select-no-results {
-  height: 48px;
   padding-left: 16px;
   padding-right: 16px;
   display: flex;

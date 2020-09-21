@@ -29,15 +29,18 @@ const CLASSNAME_ARROW_RIGHT = 'lightbox-gallery-arrow-right';
 const CLASSNAME_CAPTION_WRAPPER = 'lightbox-gallery-caption-wrapper';
 const CLASSNAME_CAPTION = 'lightbox-gallery-caption';
 const CLASSNAME_IMG = 'lightbox-gallery-image';
+const CLASSNAME_FA_PRO = 'fontawesome-pro';
 
 const SELECTOR_TOGGLE = `.${CLASSNAME_LIGHTBOX} img:not(.lightbox-disabled)`;
 
 const OPTIONS_TYPE = {
   zoomLevel: '(number|string)',
+  fontAwesome: 'string',
 };
 
 const DEFAULT_OPTIONS = {
   zoomLevel: 1,
+  fontAwesome: 'free',
 };
 
 /**
@@ -78,9 +81,11 @@ class Lightbox {
     this._rightArrow = null;
     this._leftArrowWrapper = null;
     this._rightArrowWrapper = null;
+    this._initiated = false;
 
     if (this._element) {
       Data.setData(element, DATA_KEY, this);
+      this.init();
     }
   }
 
@@ -111,7 +116,12 @@ class Lightbox {
 
   // Public
   init() {
+    if (this._initiated) {
+      return;
+    }
+
     this._appendTemplate();
+    this._initiated = true;
   }
 
   open(target = 0) {
@@ -245,6 +255,12 @@ class Lightbox {
     Manipulator.addClass(rightTools, CLASSNAME_RIGHT_TOOLS);
     Manipulator.addClass(closeBtn, CLASSNAME_CLOSE_BTN);
 
+    if (this.options.fontAwesome === 'pro') {
+      Manipulator.addClass(this._fullscreenBtn, CLASSNAME_FA_PRO);
+      Manipulator.addClass(this._zoomBtn, CLASSNAME_FA_PRO);
+      Manipulator.addClass(closeBtn, CLASSNAME_FA_PRO);
+    }
+
     this._fullscreenBtn.setAttribute('aria-label', 'Toggle fullscreen');
     this._zoomBtn.setAttribute('aria-label', 'Zoom in');
     closeBtn.setAttribute('aria-label', 'Close');
@@ -301,6 +317,11 @@ class Lightbox {
     this._rightArrow.setAttribute('aria-label', 'Next');
     EventHandler.on(this._rightArrow, 'click', () => this.slide());
     this._rightArrowWrapper.append(this._rightArrow);
+
+    if (this.options.fontAwesome === 'pro') {
+      Manipulator.addClass(leftArrow, CLASSNAME_FA_PRO);
+      Manipulator.addClass(this._rightArrow, CLASSNAME_FA_PRO);
+    }
 
     this._getImages();
     if (this._images.length <= 1) return;
@@ -967,7 +988,7 @@ class Lightbox {
  * ------------------------------------------------------------------------
  */
 
-SelectorEngine.find(`.${CLASSNAME_LIGHTBOX}`).forEach((el) => new Lightbox(el).init());
+SelectorEngine.find(`.${CLASSNAME_LIGHTBOX}`).forEach((el) => new Lightbox(el));
 EventHandler.on(document, 'click', SELECTOR_TOGGLE, Lightbox.toggle());
 
 /**

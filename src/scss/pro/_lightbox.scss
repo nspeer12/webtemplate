@@ -54,6 +54,9 @@
         font-family: 'Font Awesome 5 Free';
         font-weight: $lightbox-gallery-toolbar-button-before-font-weight;
       }
+      &.fontawesome-pro:before {
+        font-family: 'Font Awesome 5 Pro';
+      }
       &.lightbox-gallery-fullscreen-btn:before {
         content: '\f065';
       }
@@ -130,6 +133,9 @@
         font-weight: $lightbox-gallery-arrow-right-button-before-font-weight;
         content: '\f061';
       }
+      &.fontawesome-pro:before {
+        font-family: 'Font Awesome 5 Pro';
+      }
     }
   }
   .lightbox-gallery-arrow-left {
@@ -156,6 +162,9 @@
         font-family: 'Font Awesome 5 Free';
         font-weight: $lightbox-gallery-arrow-left-button-before-font-weight;
         content: '\f060';
+      }
+      &.fontawesome-pro:before {
+        font-family: 'Font Awesome 5 Pro';
       }
     }
   }

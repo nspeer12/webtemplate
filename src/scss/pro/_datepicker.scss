@@ -5,6 +5,7 @@
   background-color: transparent;
   right: $datepicker-toggle-right;
   top: $datepicker-toggle-top;
+  transform: translate(-50%, -50%);
 
   &:focus {
     color: $datepicker-toggle-focus-color;
@@ -33,6 +34,7 @@
   background-color: $datepicker-dropdown-container-background-color;
   border-radius: $datepicker-dropdown-container-border-radius;
   box-shadow: $datepicker-dropdown-container-box-shadow;
+  z-index: $zindex-datepicker-container;
 }
 
 .datepicker-modal-container {

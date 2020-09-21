@@ -10,12 +10,25 @@ export function getWrapperTemplate(id, config, label) {
   const formOutline = element('div');
   Manipulator.addClass(formOutline, 'form-outline');
 
+  if (config.formWhite) {
+    Manipulator.addClass(formOutline, 'form-white');
+  }
+
   const input = element('input');
   const role = config.filter ? 'combobox' : 'listbox';
   const multiselectable = config.multiple ? 'true' : 'false';
   const disabled = config.disabled ? 'true' : 'false';
   Manipulator.addClass(input, 'form-control');
   Manipulator.addClass(input, 'select-input');
+
+  if (config.size === 'sm') {
+    Manipulator.addClass(input, 'form-control-sm');
+  }
+
+  if (config.size === 'lg') {
+    Manipulator.addClass(input, 'form-control-lg');
+  }
+
   input.setAttribute('type', 'text');
   input.setAttribute('role', role);
   input.setAttribute('aria-multiselectable', multiselectable);
@@ -190,6 +203,7 @@ function createSelectAllNode(option, options, config) {
   const optionNode = element('div');
   Manipulator.addClass(optionNode, 'select-option');
   Manipulator.addClass(optionNode, 'select-all-option');
+  Manipulator.addStyle(optionNode, { height: `${config.optionHeight}px` });
   optionNode.setAttribute('role', 'option');
   optionNode.setAttribute('aria-selected', isSelected);
 
@@ -210,6 +224,7 @@ function createOptionTemplate(option, config) {
 
   const optionNode = element('div');
   Manipulator.addClass(optionNode, 'select-option');
+  Manipulator.addStyle(optionNode, { height: `${config.optionHeight}px` });
   Manipulator.setDataAttribute(optionNode, 'id', option.id);
   optionNode.setAttribute('role', 'option');
   optionNode.setAttribute('aria-selected', option.selected);
@@ -300,6 +315,7 @@ function createOptionGroupTemplate(optionGroup, config) {
 
   const label = element('label');
   Manipulator.addClass(label, 'select-option-group-label');
+  Manipulator.addStyle(label, { height: `${config.optionHeight}px` });
   label.setAttribute('for', optionGroup.id);
   label.textContent = optionGroup.label;
 

@@ -315,6 +315,26 @@ class Datatable {
     this._renderRows();
   }
 
+  sort(column, order = 'asc') {
+    this._sortOrder = order;
+
+    if (typeof column === 'string') {
+      this._sortField = this.columns.find((header) => header.label === column).field;
+    } else {
+      this._sortField = column.field;
+    }
+
+    const icon = SelectorEngine.findOne(`i[data-sort="${this._sortField}"]`, this._element);
+
+    this._activePage = 0;
+
+    this._toggleDisableState();
+
+    this._renderRows();
+
+    this._setActiveSortIcon(icon);
+  }
+
   // Private
 
   _changeActivePage(index) {

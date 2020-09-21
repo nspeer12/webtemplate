@@ -425,6 +425,8 @@
 }
 
 .timepicker-modal {
+  z-index: $zindex-timepicker;
+
   .fade {
     &.show {
       opacity: 1;

@@ -389,7 +389,7 @@ class Sidenav {
     if (this.options.backdrop) {
       this._setupBackdrop();
 
-      if (!this.options.hidden) {
+      if (!this.options.hidden && this.options.mode === 'over') {
         this._appendBackdrop();
       }
     }

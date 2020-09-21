@@ -15,10 +15,12 @@ const Default = {
   clearButton: false,
   disabled: false,
   displayedLabels: 5,
+  formWhite: false,
   multiple: false,
   optionsSelectedLabel: 'options selected',
-  optionHeight: 48,
+  optionHeight: 38,
   selectAllLabel: 'Select all',
+  size: 'default',
   visibleOptions: 5,
   filter: false,
   filterDebounce: 300,
@@ -33,10 +35,12 @@ const DefaultType = {
   clearButton: 'boolean',
   disabled: 'boolean',
   displayedLabels: 'number',
+  formWhite: 'boolean',
   multiple: 'boolean',
   optionsSelectedLabel: 'string',
   optionHeight: 'number',
   selectAllLabel: 'string',
+  size: 'string',
   visibleOptions: 'number',
   filter: 'boolean',
   filterDebounce: 'number',
@@ -114,7 +118,6 @@ class Select {
     this._init();
 
     this._mutationObserver = null;
-    this._dropdownTemplateNeedsUpdate = false;
     this._isOpen = false;
 
     this._addMutationObserver();
@@ -819,28 +822,10 @@ class Select {
   }
 
   _openDropdown() {
-    let template;
-
-    if (this._dropdownTemplateNeedsUpdate) {
-      template = getDropdownTemplate(
-        this._dropdownContainerId,
-        this._config,
-        this._input.offsetWidth,
-        this._dropdownHeight,
-        this._selectAllOption,
-        this.options,
-        this._customContent
-      );
-      this._dropdownContainer = template;
-      this._dropdownTemplateNeedsUpdate = false;
-    } else {
-      template = this._dropdownContainer;
-    }
-
-    this._popper = new Popper(this._input, template, {
+    this._popper = new Popper(this._input, this._dropdownContainer, {
       placement: 'bottom-start',
     });
-    document.body.appendChild(template);
+    document.body.appendChild(this._dropdownContainer);
 
     // We need to add delay to wait for the popper initialization
     // and position update
@@ -963,7 +948,7 @@ class Select {
   }
 
   _getNoResultTemplate() {
-    return `<div class="select-no-results">${this._config.noResultText}</div>`;
+    return `<div class="select-no-results" style="height: ${this._config.optionHeight}px">${this._config.noResultText}</div>`;
   }
 
   _filter(value, options) {
@@ -1065,7 +1050,15 @@ class Select {
       this._filterOptions(this.filterInput.value);
       this._setFirstActiveOption();
     } else {
-      this._dropdownTemplateNeedsUpdate = true;
+      this._dropdownContainer = getDropdownTemplate(
+        this._dropdownContainerId,
+        this._config,
+        this._input.offsetWidth,
+        this._dropdownHeight,
+        this._selectAllOption,
+        this._optionsToRender,
+        this._customContent
+      );
     }
   }
 
