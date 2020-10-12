@@ -13,7 +13,7 @@ select.select-initialized {
   text-align: center;
   font-size: 0.8rem;
   position: absolute;
-  right: 12px;
+  right: 9px;
   top: 9px;
 
   &:before {
@@ -34,7 +34,7 @@ select.select-initialized {
   font-size: 1rem;
   position: absolute;
   top: 7px;
-  right: 30px;
+  right: 27px;
   cursor: pointer;
 
   &:focus {
@@ -63,9 +63,9 @@ select.select-initialized {
   min-width: 100px;
   outline: 0;
   position: relative;
-  transform: scaleY(0.9);
+  transform: scaleY(0.8);
   opacity: 0;
-  transition: all 0.3s;
+  transition: all 0.2s;
 
   &.open {
     transform: scaleY(1);

@@ -15,6 +15,7 @@ class SelectOption {
     label,
     selected,
     disabled,
+    hidden,
     secondaryText,
     groupId,
     icon
@@ -26,6 +27,7 @@ class SelectOption {
     this.label = label;
     this.selected = selected;
     this.disabled = disabled;
+    this.hidden = hidden;
     this.secondaryText = secondaryText;
     this.groupId = groupId;
     this.icon = icon;

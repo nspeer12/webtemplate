@@ -35,6 +35,7 @@ import Touch from './pro/touch';
 import SmoothScroll from './pro/smooth-scroll';
 import PerfectScrollbar from './pro/perfectScrollbar';
 import Loading from './pro/loading-management/index';
+import Autocomplete from './pro/autocomplete';
 
 // AUTO INIT
 [...document.querySelectorAll('[data-toggle="tooltip"]')].map((tooltip) => new Tooltip(tooltip));
@@ -75,4 +76,5 @@ export {
   Touch,
   PerfectScrollbar,
   Loading,
+  Autocomplete,
 };

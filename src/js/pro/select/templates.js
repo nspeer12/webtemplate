@@ -176,9 +176,13 @@ function getSingleOptionsNodes(options, config) {
 }
 
 function getMultipleOptionsNodes(options, selectAllOption, config) {
-  const selectAllNode = createSelectAllNode(selectAllOption, options, config);
+  let selectAllNode = null;
+
+  if (config.selectAll) {
+    selectAllNode = createSelectAllNode(selectAllOption, options, config);
+  }
   const optionsNodes = getOptionsNodes(options, config);
-  const nodes = [selectAllNode, ...optionsNodes];
+  const nodes = selectAllNode ? [selectAllNode, ...optionsNodes] : optionsNodes;
   return nodes;
 }
 
@@ -236,6 +240,10 @@ function createOptionTemplate(option, config) {
 
   if (option.disabled) {
     Manipulator.addClass(optionNode, 'disabled');
+  }
+
+  if (option.hidden) {
+    Manipulator.addClass(optionNode, 'd-none');
   }
 
   optionNode.appendChild(getOptionContentTemplate(option, config));
@@ -312,6 +320,10 @@ function createOptionGroupTemplate(optionGroup, config) {
   Manipulator.addClass(group, 'select-option-group');
   group.setAttribute('role', 'group');
   group.setAttribute('id', optionGroup.id);
+
+  if (optionGroup.hidden) {
+    Manipulator.addClass(group, 'd-none');
+  }
 
   const label = element('label');
   Manipulator.addClass(label, 'select-option-group-label');

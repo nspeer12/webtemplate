@@ -12,6 +12,7 @@ import allOptionsSelected from './util';
 import { getWrapperTemplate, getDropdownTemplate, getOptionsListTemplate } from './templates';
 
 const Default = {
+  container: 'body',
   clearButton: false,
   disabled: false,
   displayedLabels: 5,
@@ -19,6 +20,7 @@ const Default = {
   multiple: false,
   optionsSelectedLabel: 'options selected',
   optionHeight: 38,
+  selectAll: true,
   selectAllLabel: 'Select all',
   size: 'default',
   visibleOptions: 5,
@@ -32,6 +34,7 @@ const Default = {
 };
 
 const DefaultType = {
+  container: 'string',
   clearButton: 'boolean',
   disabled: 'boolean',
   displayedLabels: 'number',
@@ -39,6 +42,7 @@ const DefaultType = {
   multiple: 'boolean',
   optionsSelectedLabel: 'string',
   optionHeight: 'number',
+  selectAll: 'boolean',
   selectAllLabel: 'string',
   size: 'string',
   visibleOptions: 'number',
@@ -82,6 +86,8 @@ const CLASS_NAME_FOCUSED = 'focused';
 const CLASS_NAME_OPTION_GROUP_LABEL = 'select-option-group-label';
 const CLASS_NAME_SELECT_ALL_OPTION = 'select-all-option';
 
+const ANIMATION_TRANSITION_TIME = 200;
+
 class Select {
   constructor(element, config) {
     this._element = element;
@@ -113,6 +119,7 @@ class Select {
     this._wrapper = null;
     this._inputEl = null;
     this._dropdownContainer = null;
+    this._container = null;
     this._selectAllOption = null;
 
     this._init();
@@ -163,6 +170,10 @@ class Select {
     return this._config.multiple;
   }
 
+  get hasSelectAll() {
+    return this.multiple && this._config.selectAll;
+  }
+
   _getConfig(config) {
     const dataAttributes = Manipulator.getDataAttributes(this._element);
 
@@ -196,6 +207,7 @@ class Select {
           id: getUID('group-'),
           label: node.label,
           disabled: node.hasAttribute('disabled'),
+          hidden: node.hasAttribute('hidden'),
           options: [],
         };
         const groupOptions = node.childNodes;
@@ -241,6 +253,7 @@ class Select {
     const groupDisabled = group.disabled ? group.disabled : false;
     const selected = nativeOption.selected || nativeOption.hasAttribute('selected');
     const disabled = nativeOption.hasAttribute('disabled') || groupDisabled;
+    const hidden = nativeOption.hasAttribute('hidden') || (group && group.hidden);
     const multiple = this.multiple;
     const value = nativeOption.value;
     const label = nativeOption.label;
@@ -254,6 +267,7 @@ class Select {
       label,
       selected,
       disabled,
+      hidden,
       secondaryText,
       groupId,
       icon
@@ -261,7 +275,9 @@ class Select {
   }
 
   _getNavigationOptions() {
-    return this.multiple ? [this._selectAllOption, ...this.options] : this.options;
+    const availableOptions = this.options.filter((option) => !option.hidden);
+
+    return this.hasSelectAll ? [this._selectAllOption, ...availableOptions] : availableOptions;
   }
 
   _init() {
@@ -269,6 +285,14 @@ class Select {
 
     this._wrapper = SelectorEngine.findOne(`#${this._wrapperId}`);
     this._input = SelectorEngine.findOne(SELECTOR_INPUT, this._wrapper);
+
+    const containerSelector = this._config.container;
+
+    if (containerSelector === 'body') {
+      this._container = document.body;
+    } else {
+      this._container = SelectorEngine.findOne(containerSelector);
+    }
 
     this._initOutlineInput();
     this._setDefaultSelections();
@@ -278,7 +302,7 @@ class Select {
 
     this._bindComponentEvents();
 
-    if (this.multiple) {
+    if (this.hasSelectAll) {
       this._selectAllOption = this._createSelectAllOption();
     }
 
@@ -363,10 +387,12 @@ class Select {
         this._scrollToOption(this._activeOption);
         break;
       case ENTER:
-        if (this.multiple && this._activeOptionIndex === 0) {
-          this._handleSelectAll();
-        } else {
-          this._handleSelection(this._activeOption);
+        if (this._activeOption) {
+          if (this.hasSelectAll && this._activeOptionIndex === 0) {
+            this._handleSelectAll();
+          } else {
+            this._handleSelection(this._activeOption);
+          }
         }
         return;
       default:
@@ -431,10 +457,12 @@ class Select {
 
     let optionIndex;
 
-    if (this.multiple) {
-      optionIndex = this.options.indexOf(option) + 1;
+    const visibleOptions = this.options.filter((option) => !option.hidden);
+
+    if (this.hasSelectAll) {
+      optionIndex = visibleOptions.indexOf(option) + 1;
     } else {
-      optionIndex = this.options.indexOf(option);
+      optionIndex = visibleOptions.indexOf(option);
     }
 
     const groupsNumber = this._getNumberOfGroupsBeforeOption(optionIndex);
@@ -462,9 +490,9 @@ class Select {
   }
 
   _getNumberOfGroupsBeforeOption(optionIndex) {
-    const optionsList = this.options;
-    const groupsList = this._optionsToRender;
-    const index = this.multiple ? optionIndex - 1 : optionIndex;
+    const optionsList = this.options.filter((option) => !option.hidden);
+    const groupsList = this._optionsToRender.filter((group) => !group.hidden);
+    const index = this.hasSelectAll ? optionIndex - 1 : optionIndex;
     let groupsNumber = 0;
 
     for (let i = 0; i <= index; i++) {
@@ -573,7 +601,10 @@ class Select {
     if (this.multiple) {
       this._selectionModel.clear();
       this._deselectAllOptions(this.options);
-      this._updateSelectAllState();
+
+      if (this.hasSelectAll) {
+        this._updateSelectAllState();
+      }
     } else {
       const selected = this._selectionModel.selection;
       this._selectionModel.clear();
@@ -655,7 +686,10 @@ class Select {
   _handleSelection(option) {
     if (this.multiple) {
       this._handleMultiSelection(option);
-      this._updateSelectAllState();
+
+      if (this.hasSelectAll) {
+        this._updateSelectAllState();
+      }
     } else {
       this._handleSingleSelection(option);
     }
@@ -825,7 +859,7 @@ class Select {
     this._popper = new Popper(this._input, this._dropdownContainer, {
       placement: 'bottom-start',
     });
-    document.body.appendChild(this._dropdownContainer);
+    this._container.appendChild(this._dropdownContainer);
 
     // We need to add delay to wait for the popper initialization
     // and position update
@@ -921,9 +955,10 @@ class Select {
 
     if (hasFilteredOptions) {
       this._updateOptionsListTemplate(filtered);
+      this._popper.scheduleUpdate();
       this._filteredOptionsList = this._getPlainOptions(filtered);
 
-      if (this.multiple) {
+      if (this.hasSelectAll) {
         this._updateSelectAllState();
       }
 
@@ -936,7 +971,8 @@ class Select {
 
   _updateOptionsListTemplate(optionsToRender) {
     const optionsWrapperContent =
-      SelectorEngine.findOne(SELECTOR_OPTIONS_LIST) || SelectorEngine.findOne(SELECTOR_NO_RESULTS);
+      SelectorEngine.findOne(SELECTOR_OPTIONS_LIST, this._dropdownContainer) ||
+      SelectorEngine.findOne(SELECTOR_NO_RESULTS, this._dropdownContainer);
 
     const optionsListTemplate = getOptionsListTemplate(
       optionsToRender,
@@ -990,16 +1026,21 @@ class Select {
     this._removeDropdownEvents();
 
     Manipulator.removeClass(this.dropdown, CLASS_NAME_OPEN);
-    document.body.removeChild(this._dropdownContainer);
-    this._popper.destroy();
-
-    this._isOpen = false;
 
     setTimeout(() => {
       Manipulator.removeClass(this._input, CLASS_NAME_FOCUSED);
       Manipulator.removeClass(this._input, CLASS_NAME_ACTIVE);
       this._updateLabelPosition();
     }, 0);
+
+    setTimeout(() => {
+      if (this._container && this._dropdownContainer.parentNode === this._container) {
+        this._container.removeChild(this._dropdownContainer);
+      }
+      this._popper.destroy();
+      this._isOpen = false;
+      EventHandler.off(this.dropdown, 'transitionend');
+    }, ANIMATION_TRANSITION_TIME);
   }
 
   _resetFilterState() {
@@ -1008,7 +1049,7 @@ class Select {
   }
 
   _removeDropdownEvents() {
-    EventHandler.off(document, 'click', this._handleOutSideClick.bind(this));
+    EventHandler.off(document, 'click');
 
     if (this._config.filter) {
       EventHandler.off(this.dropdown, 'keydown');
@@ -1037,7 +1078,7 @@ class Select {
     this._updateLabelPosition();
     this._updateClearButtonVisibility();
 
-    if (this.multiple) {
+    if (this.hasSelectAll) {
       this._updateSelectAllState();
     }
 
@@ -1102,6 +1143,7 @@ class Select {
     const label = this._config.selectAllLabel;
     const selected = allOptionsSelected(this.options);
     const disabled = false;
+    const hidden = false;
     const secondaryText = null;
     const groupId = null;
     const icon = null;
@@ -1114,6 +1156,7 @@ class Select {
       label,
       selected,
       disabled,
+      hidden,
       secondaryText,
       groupId,
       icon
@@ -1121,7 +1164,6 @@ class Select {
   }
 
   dispose() {
-    this._disconnectMutationObserver();
     this._removeComponentEvents();
 
     this._destroyMaterialSelect();

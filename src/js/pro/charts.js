@@ -1,6 +1,6 @@
 import { Chart as Chartjs } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import { getjQuery } from '../mdb/util/index';
+import { element, getjQuery } from '../mdb/util/index';
 import Data from '../mdb/dom/data';
 import Manipulator from '../mdb/dom/manipulator';
 import SelectorEngine from '../mdb/dom/selector-engine';
@@ -356,6 +356,7 @@ class Chart {
     this._type = data.type;
     this._canvas = null;
     this._chart = null;
+
     if (this._element) {
       Data.setData(element, DATA_KEY, this);
       Manipulator.addClass(this._element, CLASSNAME_CHARTS);
@@ -399,8 +400,12 @@ class Chart {
 
   _createCanvas() {
     if (this._canvas) return;
-    this._canvas = document.createElement('canvas');
-    this._element.appendChild(this._canvas);
+    if (this._element.nodeName === 'CANVAS') {
+      this._canvas = this._element;
+    } else {
+      this._canvas = element('canvas');
+      this._element.appendChild(this._canvas);
+    }
   }
 
   static jQueryInterface(data, options, type) {
