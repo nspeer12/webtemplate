@@ -110,6 +110,10 @@ class Autocomplete {
     return SelectorEngine.findOne(SELECTOR_ITEMS_LIST, this._dropdownContainer);
   }
 
+  initSearch(value) {
+    this._filterResults(value);
+  }
+
   _getConfig(config) {
     const dataAttributes = Manipulator.getDataAttributes(this._element);
 

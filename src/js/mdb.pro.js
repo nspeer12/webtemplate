@@ -2,7 +2,6 @@
 import Button from './bootstrap/src/button';
 import Carousel from './bootstrap/src/carousel';
 import Collapse from './bootstrap/src/collapse';
-import Modal from './bootstrap/src/modal';
 import Popover from './bootstrap/src/popover';
 import ScrollSpy from './bootstrap/src/scrollspy';
 import Tab from './bootstrap/src/tab';
@@ -36,6 +35,9 @@ import SmoothScroll from './pro/smooth-scroll';
 import PerfectScrollbar from './pro/perfectScrollbar';
 import Loading from './pro/loading-management/index';
 import Autocomplete from './pro/autocomplete';
+import Modal from './pro/modal';
+import Clipboard from './pro/clipboard';
+import ChipsInput from './pro/chips/index';
 
 // AUTO INIT
 [...document.querySelectorAll('[data-toggle="tooltip"]')].map((tooltip) => new Tooltip(tooltip));
@@ -77,4 +79,6 @@ export {
   PerfectScrollbar,
   Loading,
   Autocomplete,
+  Clipboard,
+  ChipsInput,
 };

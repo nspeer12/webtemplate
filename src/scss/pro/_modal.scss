@@ -71,3 +71,56 @@
     }
   }
 }
+
+.modal-non-invasive-open {
+  overflow-y: auto;
+  .modal.modal-non-invasive-show {
+    display: table;
+    @media (min-width: 992px) {
+      .modal-dialog.modal-bottom-right {
+        bottom: 0;
+      }
+      .modal-dialog.modal-bottom-left {
+        bottom: 0;
+      }
+      .modal-side {
+        bottom: 0;
+      }
+      &.modal.frame {
+        &.bottom {
+          box-shadow: $box-shadow-3-top;
+          .modal-content {
+            box-shadow: $box-shadow-3-top;
+          }
+        }
+        &.top {
+          box-shadow: $box-shadow-3;
+        }
+      }
+      .modal-side {
+        &.modal-bottom-right {
+          .modal-content {
+            box-shadow: $box-shadow-3-top;
+          }
+        }
+        &.modal-bottom-left {
+          .modal-content {
+            box-shadow: $box-shadow-3-top;
+          }
+        }
+      }
+    }
+    .modal-dialog.modal-bottom-right {
+      right: 0;
+    }
+    .modal-dialog.modal-bottom-left {
+      left: 0;
+    }
+    .modal-dialog.modal-top-left {
+      left: 0;
+    }
+    .modal-side {
+      right: 0;
+    }
+  }
+}

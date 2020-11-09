@@ -15,6 +15,7 @@ import { ESCAPE } from '../mdb/util/keycodes';
 const NAME = 'popconfirm';
 const DATA_KEY = 'mdb.popconfirm';
 const SELECTOR_POPCONFIRM = '.popconfirm-toggle';
+const SELECTOR_POPCONFIRM_BODY = '.popconfirm';
 const EVENT_KEY = `.${DATA_KEY}`;
 const EVENT_CANCEL = `cancel${EVENT_KEY}`;
 const EVENT_CONFIRM = `confirm${EVENT_KEY}`;
@@ -76,6 +77,10 @@ class Popconfirm {
     return SelectorEngine.findOne(`#${this._uid}`);
   }
 
+  get popconfirmBody() {
+    return SelectorEngine.findOne(SELECTOR_POPCONFIRM_BODY, this.container);
+  }
+
   // Public
 
   dispose() {
@@ -99,7 +104,6 @@ class Popconfirm {
     this._handleCancelButtonClick();
     this._handleConfirmButtonClick();
     this._listenToEscapeKey();
-    this._isOpen = true;
     this._listenToOutsideClick();
   }
 
@@ -107,18 +111,32 @@ class Popconfirm {
     if (!this._isOpen) {
       return;
     }
+
     if (this._popper !== null || SelectorEngine.findOne('.popconfirm-popover') !== null) {
-      this._popper.destroy();
-      this._popper = null;
-      document.body.removeChild(this.container);
+      EventHandler.on(
+        this.popconfirmBody,
+        'transitionend',
+        this._handlePopconfirmTransitionEnd.bind(this)
+      );
+      Manipulator.removeClass(this.popconfirmBody, 'show');
     } else {
       const tempElement = SelectorEngine.findOne('.popconfirm-backdrop');
+      Manipulator.removeClass(this.popconfirmBody, 'show');
       document.body.removeChild(tempElement);
+      this._isOpen = false;
     }
 
     EventHandler.off(document, 'click', this._handleOutsideClick.bind(this));
     EventHandler.off(document, 'keydown', this._handleEscapeKey.bind(this));
-    this._isOpen = false;
+  }
+
+  _handlePopconfirmTransitionEnd(event) {
+    EventHandler.off(this.popconfirmBody, 'transitionend');
+
+    if (this._isOpen && event && event.propertyName === 'opacity') {
+      this._popper.destroy();
+      this._isOpen = false;
+    }
   }
 
   // Private
@@ -151,7 +169,7 @@ class Popconfirm {
       </p>
       <div class="popconfirm-buttons-container">
       ${this._cancelButtonTemplate}
-      <button type="button" id="popconfirm-button-confirm" 
+      <button type="button" id="popconfirm-button-confirm"
       aria-label="${this._options.confirmLabel}"
       class="btn ${this._options.okClass} btn-sm">${this._options.okText}</button>
       </div>
@@ -172,7 +190,7 @@ class Popconfirm {
     if (this._options.cancelText === '' || this._options.cancelText === ' ') {
       return '';
     }
-    return `<button type="button" id="popconfirm-button-cancel" aria-label="${this._options.cancelLabel}" 
+    return `<button type="button" id="popconfirm-button-cancel" aria-label="${this._options.cancelLabel}"
     class="btn btn-flat btn-sm">${this._options.cancelText}</button>`;
   }
 
@@ -186,8 +204,15 @@ class Popconfirm {
   _openPopover(template) {
     this._popper = new Popper(this._element, template, {
       placement: this._translatePositionValue(),
+      removeOnDestroy: true,
     });
     document.body.appendChild(template);
+
+    setTimeout(() => {
+      Manipulator.addClass(this.popconfirmBody, 'fade');
+      Manipulator.addClass(this.popconfirmBody, 'show');
+      this._isOpen = true;
+    }, 0);
   }
 
   _openModal(template) {
@@ -195,6 +220,8 @@ class Popconfirm {
     Manipulator.addClass(backdrop, 'popconfirm-backdrop');
     document.body.appendChild(backdrop);
     backdrop.appendChild(template);
+    Manipulator.addClass(this.popconfirmBody, 'show');
+    this._isOpen = true;
   }
 
   _handleCancelButtonClick() {

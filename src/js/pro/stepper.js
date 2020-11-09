@@ -127,6 +127,7 @@ class Stepper {
     this._steps = SelectorEngine.find(`.${STEP_CLASS}`, this._element);
     this._currentView = '';
     this._activeStepIndex = 0;
+    this._verticalStepperStyles = [];
 
     if (this._element) {
       Data.setData(element, DATA_KEY, this);
@@ -202,12 +203,14 @@ class Stepper {
     }
 
     if (this._options.stepperVerticalBreakpoint || this._options.stepperMobileBreakpoint) {
-      this._bindResize();
+      this._toggleStepperView();
     }
 
     if (this._options.stepperLinear) {
       this._setValidation();
     }
+
+    this._bindResize();
   }
 
   _getConfig(config) {
@@ -240,29 +243,43 @@ class Stepper {
 
   _bindResize() {
     EventHandler.on(window, EVENT_RESIZE, () => {
-      const shouldBeHorizontal = this._options.stepperVerticalBreakpoint < window.innerWidth;
-      const shouldBeVertical = this._options.stepperVerticalBreakpoint > window.innerWidth;
-      const shouldBeMobile = this._options.stepperMobileBreakpoint > window.innerWidth;
-
-      if (shouldBeHorizontal && this._currentView !== STEPPER_HORIZONTAL) {
-        this._toggleHorizontal();
+      if (this._currentView === STEPPER_VERTICAL) {
+        this._setSingleStepHeight(this.activeStep);
       }
 
-      if (shouldBeVertical && !shouldBeMobile && this._currentView !== STEPPER_VERTICAL) {
-        this._steps.forEach((el) => {
-          const stepContent = SelectorEngine.findOne(`.${CONTENT_CLASS}`, el);
-
-          this._resetStepperHeight();
-          this._showElement(stepContent);
-        });
-
-        this._toggleVertical();
+      if (this._currentView === STEPPER_HORIZONTAL) {
+        this._setHeight();
       }
 
-      if (shouldBeMobile && this._currentView !== STEPPER_MOBILE) {
-        this._toggleMobile();
+      if (this._options.stepperVerticalBreakpoint || this._options.stepperMobileBreakpoint) {
+        this._toggleStepperView();
       }
     });
+  }
+
+  _toggleStepperView() {
+    const shouldBeHorizontal = this._options.stepperVerticalBreakpoint < window.innerWidth;
+    const shouldBeVertical = this._options.stepperVerticalBreakpoint > window.innerWidth;
+    const shouldBeMobile = this._options.stepperMobileBreakpoint > window.innerWidth;
+
+    if (shouldBeHorizontal && this._currentView !== STEPPER_HORIZONTAL) {
+      this._toggleHorizontal();
+    }
+
+    if (shouldBeVertical && !shouldBeMobile && this._currentView !== STEPPER_VERTICAL) {
+      this._steps.forEach((el) => {
+        const stepContent = SelectorEngine.findOne(`.${CONTENT_CLASS}`, el);
+
+        this._resetStepperHeight();
+        this._showElement(stepContent);
+      });
+
+      this._toggleVertical();
+    }
+
+    if (shouldBeMobile && this._currentView !== STEPPER_MOBILE) {
+      this._toggleMobile();
+    }
   }
 
   _toggleStep(index) {
@@ -293,6 +310,7 @@ class Stepper {
       this._animateHorizontalStep(index);
     } else {
       this._animateVerticalStep(index);
+      this._setSingleStepHeight(this._steps[index]);
     }
 
     this._toggleStepTabIndex(
@@ -328,10 +346,33 @@ class Stepper {
   _setStepsHeight() {
     this._steps.forEach((el) => {
       const stepContent = SelectorEngine.findOne(`.${CONTENT_CLASS}`, el);
+      const stepComputed = window.getComputedStyle(stepContent);
+      this._verticalStepperStyles.push({
+        paddingTop: parseFloat(stepComputed.paddingTop),
+        paddingBottom: parseFloat(stepComputed.paddingBottom),
+      });
       const stepHeight = stepContent.scrollHeight;
-
       stepContent.style.height = `${stepHeight}px`;
     });
+  }
+
+  _setSingleStepHeight(step) {
+    const stepContent = SelectorEngine.findOne(`.${CONTENT_CLASS}`, step);
+    const isActiveStep = this.activeStep === step;
+    const stepIndex = this._steps.indexOf(step);
+    let stepContentHeight;
+
+    if (!isActiveStep) {
+      stepContentHeight =
+        stepContent.scrollHeight +
+        this._verticalStepperStyles[stepIndex].paddingTop +
+        this._verticalStepperStyles[stepIndex].paddingBottom;
+    } else {
+      stepContent.style.height = '';
+      stepContentHeight = stepContent.scrollHeight;
+    }
+
+    stepContent.style.height = `${stepContentHeight}px`;
   }
 
   _createMobileElements() {
@@ -593,9 +634,16 @@ class Stepper {
           EventHandler.trigger(this.activeStep, EVENT_INVALID);
           // wait for other elements transition end
           // the input transition takes 200ms. + 10ms is added, because without it it would not expand to the correct height
-          setTimeout(() => {
-            this._setHeight(this.activeStep);
-          }, 210);
+
+          if (!this._currentView === STEPPER_VERTICAL) {
+            setTimeout(() => {
+              this._setHeight(this.activeStep);
+            }, 210);
+          } else {
+            setTimeout(() => {
+              this._setSingleStepHeight(this.activeStep);
+            }, 210);
+          }
 
           result = false;
         }
@@ -716,7 +764,6 @@ class Stepper {
     }
 
     const headStyle = getComputedStyle(stepHead);
-
     const stepContentHeight =
       stepContent.offsetHeight +
       parseFloat(contentStyle.marginTop) +

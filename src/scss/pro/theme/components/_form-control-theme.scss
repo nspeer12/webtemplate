@@ -1,0 +1,73 @@
+@mixin mdb-form-control-theme($theme) {
+  $primary: map-get($theme, primary);
+  $secondary: map-get($theme, secondary);
+  $surface: map-get($theme, surface);
+  $onSurface: map-get($theme, onSurface);
+  $onPrimary: map-get($theme, onPrimary);
+  $onSecondary: map-get($theme, onSecondary);
+  $error: map-get($theme, error);
+  $onError: map-get($theme, onError);
+  $success: map-get($theme, success);
+  $onSuccess: map-get($theme, onSuccess);
+  $surfaceHover: map-get($theme, surfaceHover);
+  $pickerHeader: map-get($theme, pickerHeader);
+
+  .form-label {
+    color: rgba($onSurface, 0.7);
+  }
+
+  .form-control {
+    background-color: transparent;
+    &:focus {
+      background-color: transparent;
+      color: rgba($onSurface, 0.7);
+    }
+  }
+
+  .form-control::placeholder {
+    color: rgba($onSurface, 0.7);
+  }
+
+  .form-control {
+    color: rgba($onSurface, 0.7);
+    &:focus {
+      border-color: $primary;
+      box-shadow: inset 0px 0px 0px 1px $primary;
+    }
+  }
+
+  .form-outline {
+    .form-control {
+      background: transparent;
+      color: rgba($onSurface, 0.7);
+      ~ .form-label {
+        color: rgba($onSurface, 0.7);
+      }
+      ~ .form-notch {
+        div {
+          border-color: rgba($onSurface, 0.7);
+          background: transparent;
+        }
+      }
+      &:focus ~ .form-label {
+        color: $primary;
+      }
+      &:focus ~ .form-notch .form-notch-middle {
+        border-color: $primary;
+      }
+      &:focus ~ .form-notch .form-notch-leading {
+        border-top-color: $primary;
+        border-bottom-color: $primary;
+        border-left-color: $primary;
+      }
+      &:focus ~ .form-notch .form-notch-trailing {
+        border-color: $primary;
+      }
+      &:disabled,
+      &.disabled,
+      &[readonly] {
+        background-color: rgba($onSurface, 0.2);
+      }
+    }
+  }
+}

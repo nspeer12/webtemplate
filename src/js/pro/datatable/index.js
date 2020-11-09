@@ -528,10 +528,16 @@ class Datatable {
     Manipulator.style(datatableBody, style);
 
     if (this._options.fixedHeader) {
-      SelectorEngine.find(SELECTOR_HEADER, this._element).forEach((header) => {
+      SelectorEngine.find(SELECTOR_HEADER, this._element).forEach((header, i) => {
         Manipulator.addClass(header, CLASS_FIXED_CELL);
 
-        Manipulator.addClass(header, this._options.color);
+        if (this.columns[i].fixed) {
+          Manipulator.addStyle(header, { zIndex: 4 });
+        }
+
+        if (this._options.color) {
+          Manipulator.addClass(header, this._options.color);
+        }
       });
     }
 

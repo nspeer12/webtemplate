@@ -122,7 +122,7 @@ export function getDropdownTemplate(
   optionsWrapper.appendChild(optionsList);
 
   if (config.filter) {
-    dropdown.appendChild(getFilterTemplate());
+    dropdown.appendChild(getFilterTemplate(config.searchPlaceholder));
   }
 
   dropdown.appendChild(optionsWrapper);
@@ -155,13 +155,13 @@ export function getOptionsListTemplate(options, selectAllOption, config) {
   return optionsList;
 }
 
-export function getFilterTemplate() {
+export function getFilterTemplate(placeholder) {
   const inputGroup = element('div');
   Manipulator.addClass(inputGroup, 'input-group');
   const input = element('input');
   Manipulator.addClass(input, 'form-control');
   Manipulator.addClass(input, 'select-filter-input');
-  input.placeholder = 'Search...';
+  input.placeholder = placeholder;
   input.setAttribute('role', 'searchbox');
   input.setAttribute('type', 'text');
 

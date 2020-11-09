@@ -118,6 +118,7 @@ const Default = {
   switchToDayViewLabel: 'Choose date',
 
   startDate: null,
+  startDay: 0,
   format: 'dd/mm/yyyy',
   view: 'days',
 
@@ -156,6 +157,7 @@ const DefaultType = {
   switchToDayViewLabel: 'string',
 
   startDate: '(null|date)',
+  startDay: 'number',
   format: 'string',
   view: 'string',
 
@@ -311,7 +313,21 @@ class Datepicker {
       config.min = convertStringToDate(config.min);
     }
 
+    if (config.startDay && config.startDay !== 0) {
+      const sortedWeekdaysNarrow = this._getNewDaysOrderArray(config);
+      config.weekdaysNarrow = sortedWeekdaysNarrow;
+    }
+
     return config;
+  }
+
+  _getNewDaysOrderArray(config) {
+    const index = config.startDay;
+
+    const weekdaysNarrow = config.weekdaysNarrow;
+    const sortedWeekdays = weekdaysNarrow.slice(index).concat(weekdaysNarrow.slice(0, index));
+
+    return sortedWeekdays;
   }
 
   _init() {

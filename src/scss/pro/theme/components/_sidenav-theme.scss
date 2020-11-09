@@ -1,0 +1,86 @@
+@mixin mdb-sidenav-theme($theme) {
+  $primary: map-get($theme, primary);
+  $secondary: map-get($theme, secondary);
+  $surface: map-get($theme, surface);
+  $onSurface: map-get($theme, onSurface);
+  $onPrimary: map-get($theme, onPrimary);
+  $onSecondary: map-get($theme, onSecondary);
+  $error: map-get($theme, error);
+  $onError: map-get($theme, onError);
+  $success: map-get($theme, success);
+  $onSuccess: map-get($theme, onSuccess);
+  $surfaceHover: map-get($theme, surfaceHover);
+  $pickerHeader: map-get($theme, pickerHeader);
+
+  .sidenav {
+    background-color: $surface;
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.25), 0 2px 10px 0 rgba(0, 0, 0, 0.25);
+  }
+
+  .sidenav-item {
+    .sidenav-link {
+      &:hover {
+        color: lighten($primary, 25%);
+        background-color: rgba($primary, 0.15);
+      }
+    }
+  }
+
+  .sidenav-link {
+    &:active,
+    &:focus {
+      color: lighten($primary, 25%);
+      background-color: rgba($primary, 0.15);
+    }
+
+    &.active {
+      color: lighten($primary, 25%);
+    }
+  }
+
+  // Color options
+  .sidenav-primary {
+    .sidenav-item {
+      .sidenav-link {
+        &:hover {
+          color: lighten($primary, 25%);
+          background-color: rgba($primary, 0.15);
+        }
+      }
+    }
+
+    .sidenav-link {
+      &:active,
+      &:focus {
+        color: lighten($primary, 25%);
+        background-color: rgba($primary, 0.15);
+      }
+
+      &.active {
+        color: lighten($primary, 25%);
+      }
+    }
+  }
+  .sidenav-secondary {
+    .sidenav-item {
+      .sidenav-link {
+        &:hover {
+          color: lighten($secondary, 10%);
+          background-color: rgba($secondary, 0.15);
+        }
+      }
+    }
+
+    .sidenav-link {
+      &:active,
+      &:focus {
+        color: lighten($secondary, 10%);
+        background-color: rgba($secondary, 0.15);
+      }
+
+      &.active {
+        color: lighten($secondary, 10%);
+      }
+    }
+  }
+}

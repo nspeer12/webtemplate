@@ -484,6 +484,10 @@ class Sidenav {
 
     this._appendArrow(toggler);
 
+    if (Manipulator.hasClass(list, 'show')) {
+      this._rotateArrow(toggler, 180);
+    }
+
     // Event listeners
 
     EventHandler.on(toggler, 'click', (e) => this._toggleCategory(e, instance, list));
@@ -526,11 +530,15 @@ class Sidenav {
   }
 
   _setupFocusTrap() {
-    this._focusTrap = new FocusTrap(this._element, {
-      event: 'keydown',
-      condition: (e) => e.keyCode === TAB,
-      onlyVisible: true,
-    });
+    this._focusTrap = new FocusTrap(
+      this._element,
+      {
+        event: 'keydown',
+        condition: (e) => e.keyCode === TAB,
+        onlyVisible: true,
+      },
+      this.toggler
+    );
   }
 
   _setupInitialStyling() {
@@ -869,10 +877,6 @@ class Sidenav {
       }
 
       this._focusTrap.disable();
-
-      if (this.toggler) {
-        this.toggler.focus();
-      }
     }
 
     this._focusTrap.disable();

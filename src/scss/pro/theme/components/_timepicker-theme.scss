@@ -1,0 +1,128 @@
+@mixin mdb-timepicker-theme($theme) {
+  $primary: map-get($theme, primary);
+  $secondary: map-get($theme, secondary);
+  $surface: map-get($theme, surface);
+  $onSurface: map-get($theme, onSurface);
+  $onPrimary: map-get($theme, onPrimary);
+  $onSecondary: map-get($theme, onSecondary);
+  $error: map-get($theme, error);
+  $onError: map-get($theme, onError);
+  $success: map-get($theme, success);
+  $onSuccess: map-get($theme, onSuccess);
+  $surfaceHover: map-get($theme, surfaceHover);
+  $pickerHeader: map-get($theme, pickerHeader);
+  $onLink: map-get($theme, onLink);
+  $dropdownDisabled: map-get($theme, dropdownDisabled);
+
+  .timepicker {
+    &-circle {
+      border-color: $primary;
+    }
+
+    &-elements {
+      background: $surface;
+    }
+
+    &-head {
+      background-color: $pickerHeader;
+    }
+
+    &-button {
+      color: $onSurface;
+
+      &:hover {
+        background-color: rgba($onSurface, 0.15);
+      }
+
+      &:focus {
+        background-color: rgba($onSurface, 0.15);
+      }
+    }
+
+    &-submit-inline {
+      color: $onSurface;
+    }
+
+    &-current {
+      color: $onSurface;
+    }
+
+    &-mode-wrapper {
+      color: rgba($onSurface, 0.54);
+    }
+
+    &-clock {
+      background-color: rgba($pickerHeader, 0.3);
+    }
+
+    &-time-tips-minutes,
+    &-time-tips-inner,
+    &-time-tips-hours {
+      &.active {
+        color: $onPrimary;
+        background-color: $primary;
+      }
+
+      &.disabled {
+        color: $dropdownDisabled;
+      }
+    }
+
+    &-current,
+    &-dot {
+      color: $onSurface;
+    }
+
+    &-middle-dot {
+      background-color: $primary;
+    }
+
+    &-hand-pointer {
+      background-color: $primary;
+    }
+
+    &-time-tips {
+      &.active {
+        color: $onSurface;
+      }
+    }
+
+    &-hour-mode {
+      color: $onSurface;
+    }
+
+    &-hour-mode,
+    &-hour,
+    &-minute {
+      &:hover,
+      &:focus {
+        background-color: $onLink;
+      }
+
+      &.active {
+        color: $onSurface;
+      }
+    }
+
+    &-footer {
+      background-color: $surface;
+    }
+
+    &-toggle-button {
+      color: rgba($onSurface, 0.7);
+
+      &:hover {
+        color: $primary;
+      }
+
+      &:focus {
+        color: $primary;
+      }
+    }
+
+    &-input:focus + &-toggle-button,
+    &-input:focus + &-toggle-button i {
+      color: $primary;
+    }
+  }
+}

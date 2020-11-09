@@ -303,3 +303,21 @@
     }
   }
 }
+
+@media (max-width: 520px) {
+  .datatable-pagination {
+    flex-direction: column-reverse;
+
+    &-nav {
+      margin: 0.8rem 0;
+    }
+
+    &-button {
+      font-size: 1rem;
+    }
+
+    &-buttons {
+      margin: 0.8rem 0;
+    }
+  }
+}

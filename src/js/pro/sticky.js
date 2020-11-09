@@ -289,7 +289,7 @@ class Sticky {
       ...this._getOffset(this._element.parentElement),
     };
     let stopPoint;
-    const stopper = SelectorEngine.findOne(this._options.stickyBoundary);
+    const stopper = SelectorEngine.findOne(stickyBoundary);
 
     if (stopper) {
       stopPoint = this._getOffset(stopper).top - height - stickyOffset;
@@ -297,20 +297,25 @@ class Sticky {
       stopPoint = parentOffset.height + parentOffset[stickyPosition] - height - stickyOffset;
     }
 
+    const isStickyTop = stickyPosition === 'top';
+    const isStickyBottom = stickyPosition === 'bottom';
+    const isStickyBoundary = stickyBoundary;
+    const isBelowStopPoint = stopPoint < 0;
+    const isBelowParentElementEnd = stopPoint > parentOffset.height - height;
     let elementStyle;
 
-    if (this._options.stickyPosition === 'top') {
-      if (stopPoint < 0 && stickyBoundary) {
+    if (isStickyTop) {
+      if (isBelowStopPoint && isStickyBoundary) {
         elementStyle = { top: `${stickyOffset + stopPoint}px` };
       } else {
         elementStyle = { top: `${stickyOffset + 0}px` };
       }
     }
 
-    if (this._options.stickyPosition === 'bottom') {
-      if (stopPoint < 0 && stickyBoundary) {
+    if (isStickyBottom) {
+      if (isBelowStopPoint && isStickyBoundary) {
         elementStyle = { bottom: `${stickyOffset + stopPoint}px` };
-      } else if (stopPoint > parentOffset.height - height && stickyBoundary) {
+      } else if (isBelowParentElementEnd && isStickyBoundary) {
         elementStyle = { bottom: `${stickyOffset + parentOffset.bottom}px` };
       } else {
         elementStyle = { bottom: `${stickyOffset + 0}px` };

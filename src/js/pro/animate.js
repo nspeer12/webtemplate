@@ -81,6 +81,18 @@ class Animate {
     this._init();
   }
 
+  startAnimation() {
+    this._startAnimation();
+  }
+
+  stopAnimation() {
+    this._clearAnimationClass();
+  }
+
+  changeAnimationType(animation) {
+    this._options.animation = animation;
+  }
+
   dispose() {
     Data.removeData(this._element, DATA_KEY);
     this._element = null;
@@ -98,11 +110,15 @@ class Animate {
       case 'onScroll':
         this._bindScrollEvents();
         break;
-      default:
+      case 'onClick':
         this._bindClickEvents();
         break;
+      default:
+        break;
     }
+
     this._bindTriggerOnEndCallback();
+
     if (this._options.animationReset) {
       this._bindResetAnimationAfterFinish();
     }

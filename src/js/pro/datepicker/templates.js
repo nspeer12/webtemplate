@@ -7,6 +7,7 @@ import {
   getMonth,
   getDate,
   getDayNumber,
+  getFirstDayOfWeek,
   addMonths,
   getDaysInMonth,
   createDate,
@@ -267,7 +268,7 @@ function getDatesArray(activeDate, selectedDate, options) {
   const nextMonth = getMonth(addMonths(activeDate, 1));
   const year = getYear(activeDate);
 
-  const firstDay = new Date(year, month).getDay();
+  const firstDay = getFirstDayOfWeek(year, month, options);
   const daysInMonth = getDaysInMonth(activeDate);
   const daysInPreviousMonth = getDaysInMonth(addMonths(activeDate, -1));
   const daysInWeek = 7;

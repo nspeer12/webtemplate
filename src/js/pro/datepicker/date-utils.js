@@ -14,14 +14,13 @@ export function getYear(date) {
   return date.getFullYear();
 }
 
-export function getFirstDayOfWeek(year, month, firstDay) {
-  const sundayIndex = firstDay > 0 ? 7 - firstDay : 0;
-  const date = new Date();
-  date.setDate(1);
-  date.setMonth(month - 1);
-  date.setFullYear(year);
+export function getFirstDayOfWeek(year, month, options) {
+  const firstDayIndex = options.startDay;
+  const sundayIndex = firstDayIndex > 0 ? 7 - firstDayIndex : 0;
+  const date = new Date(year, month);
   const index = date.getDay() + sundayIndex;
-  return index >= 7 ? index - 7 : index;
+  const newIndex = index >= 7 ? index - 7 : index;
+  return newIndex;
 }
 
 export function getDaysInMonth(date) {
