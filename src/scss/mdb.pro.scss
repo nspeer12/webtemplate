@@ -21,8 +21,3 @@
 @import './pro/autocomplete.scss';
 @import './pro/theme/theming';
 @import './pro/chips';
-
-$my-theme-primary: #2979ff;
-$my-theme-secondary: #b23cfd;
-$my-theme: mdb-light-theme($my-theme-primary, $my-theme-secondary);
-@include mdb-theme($my-theme);

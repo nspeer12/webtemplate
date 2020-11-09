@@ -240,6 +240,34 @@ class Modal extends BSModal {
     typeCheckConfig(NAME, config, DefaultType);
     return config;
   }
+
+  // Static
+
+  static jQueryInterface(config, relatedTarget) {
+    return this.each(function () {
+      let data = Data.getData(this, DATA_KEY);
+      const _config = {
+        ...Default,
+        ...Manipulator.getDataAttributes(this),
+        // eslint-disable-next-line no-extra-parens
+        ...(typeof config === 'object' && config ? config : {}),
+      };
+
+      if (!data) {
+        data = new Modal(this, _config);
+      }
+
+      if (typeof config === 'string') {
+        if (typeof data[config] === 'undefined') {
+          throw new TypeError(`No method named "${config}"`);
+        }
+
+        data[config](relatedTarget);
+      } else if (_config.show) {
+        data.show(relatedTarget);
+      }
+    });
+  }
 }
 
 /**
