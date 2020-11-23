@@ -1,6 +1,7 @@
 @mixin mdb-nav-theme($theme) {
   $primary: map-get($theme, primary);
   $secondary: map-get($theme, secondary);
+  $onBackground: map-get($theme, onBackground);
   $surface: map-get($theme, surface);
   $onSurface: map-get($theme, onSurface);
   $onPrimary: map-get($theme, onPrimary);
@@ -13,6 +14,10 @@
   $pickerHeader: map-get($theme, pickerHeader);
   $dropdownText: map-get($theme, dropdownText);
   $onLink: map-get($theme, onLink);
+  $onHover: map-get($theme, onHover);
+  $pillBackground: map-get($theme, pillBackground);
+  $pillText: map-get($theme, pillText);
+  $onHover: map-get($theme, onHover);
 
   .nav-tabs {
     .nav-link {
@@ -31,16 +36,16 @@
 
     .nav-link.active,
     .nav-item.show .nav-link {
-      color: $onPrimary;
+      color: $primary;
       border-color: $primary;
       background-color: transparent;
     }
   }
 
-  .nav-pills {
+  .nav-pills:not(.menu-sidebar) {
     .nav-link {
-      background-color: $onLink;
-      color: $onPrimary;
+      background-color: $pillBackground;
+      color: $pillText;
     }
 
     .nav-link.active,

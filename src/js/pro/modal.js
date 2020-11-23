@@ -45,6 +45,14 @@ const EVENT_MOUSEDOWN_DATA_API = `mousedown${EVENT_KEY}${DATA_API_KEY}`;
 const EVENT_SHOW_BS_MODAL = `show${EVENT_KEY}`;
 const EVENT_SHOWN_BS_MODAL = `shown${EVENT_KEY}`;
 const EVENT_HIDDEN_BS_MODAL = `hidden${EVENT_KEY}`;
+const EVENT_HIDE_BS_MODAL = 'hide.bs.modal';
+const EVENT_HIDE_PREVENTED_BS_MODAL = 'hidePrevented.bs.modal';
+
+const EVENT_HIDE = 'hide.mdb.modal';
+const EVENT_HIDE_PREVENTED = 'hidePrevented.mdb.modal';
+const EVENT_HIDDEN = 'hidden.mdb.modal';
+const EVENT_SHOW = 'show.mdb.modal';
+const EVENT_SHOWN = 'shown.mdb.modal';
 
 const Default = {
   backdrop: true,
@@ -87,6 +95,8 @@ class Modal extends BSModal {
       this._onModalHidden();
     }
     Data.setData(element, DATA_KEY, this);
+
+    this._bindEvents();
   }
 
   // Getters
@@ -98,7 +108,9 @@ class Modal extends BSModal {
   dispose() {
     EventHandler.off(this._element, EVENT_SHOW_BS_MODAL);
     EventHandler.off(this._element, EVENT_SHOWN_BS_MODAL);
+    EventHandler.off(this._element, EVENT_HIDE_BS_MODAL);
     EventHandler.off(this._element, EVENT_HIDDEN_BS_MODAL);
+    EventHandler.off(this._element, EVENT_HIDE_PREVENTED_BS_MODAL);
 
     this._modalRect = null;
     this._modalComputedStyles = null;
@@ -239,6 +251,45 @@ class Modal extends BSModal {
     };
     typeCheckConfig(NAME, config, DefaultType);
     return config;
+  }
+
+  // Private
+  _bindEvents() {
+    this._bindShowEvent();
+    this._bindShownEvent();
+    this._bindHideEvent();
+    this._bindHiddenEvent();
+    this._bindHidePreventedEvent();
+  }
+
+  _bindShowEvent() {
+    EventHandler.on(this._element, EVENT_SHOW_BS_MODAL, (e) => {
+      EventHandler.trigger(this._element, EVENT_SHOW, { relatedTarget: e.relatedTarget });
+    });
+  }
+
+  _bindShownEvent() {
+    EventHandler.on(this._element, EVENT_SHOWN_BS_MODAL, (e) => {
+      EventHandler.trigger(this._element, EVENT_SHOWN, { relatedTarget: e.relatedTarget });
+    });
+  }
+
+  _bindHideEvent() {
+    EventHandler.on(this._element, EVENT_HIDE_BS_MODAL, () => {
+      EventHandler.trigger(this._element, EVENT_HIDE);
+    });
+  }
+
+  _bindHiddenEvent() {
+    EventHandler.on(this._element, EVENT_HIDDEN_BS_MODAL, () => {
+      EventHandler.trigger(this._element, EVENT_HIDDEN);
+    });
+  }
+
+  _bindHidePreventedEvent() {
+    EventHandler.on(this._element, EVENT_HIDE_PREVENTED_BS_MODAL, () => {
+      EventHandler.trigger(this._element, EVENT_HIDE_PREVENTED);
+    });
   }
 
   // Static

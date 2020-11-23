@@ -5,8 +5,8 @@
   $secondary: map-get($theme, secondary);
   $onSecondary: map-get($theme, onSecondary);
   $divider: map-get($theme, divider);
-  $dropdownDisabled: map-get($theme, dropdownDisabled);
-  $dropdownHover: map-get($theme, dropdownHover);
+  $surfaceDisabled: map-get($theme, dropdownDisabled);
+  $surfaceHighlight: map-get($theme, surfaceHighlight);
 
   .list-group-item {
     background-color: $surface;
@@ -19,7 +19,7 @@
 
     &.disabled,
     &:disabled {
-      color: $dropdownDisabled;
+      color: $surfaceDisabled;
       background-color: $surface;
     }
   }
@@ -38,12 +38,12 @@
     &:hover,
     &:focus {
       color: $onSurface;
-      background: $dropdownHover;
+      background: $surfaceHighlight;
     }
 
     &:active {
-      background-color: $primary;
-      border-color: $primary;
+      color: $onSurface;
+      background: $surfaceHighlight;
     }
 
     &.list-group-item-primary {
@@ -64,6 +64,7 @@
   .list-group-item-primary {
     color: $primary;
   }
+
   .list-group-item-secondary {
     color: $secondary;
   }

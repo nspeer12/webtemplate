@@ -2,7 +2,7 @@
   $background: map-get($theme, background);
   $onBackground: map-get($theme, onBackground);
 
-  body {
+  #{if(&, '&', 'body')} {
     background-color: $background;
     color: $onBackground;
   }

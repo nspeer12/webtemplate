@@ -1,8 +1,9 @@
-import { getjQuery, typeCheckConfig, isVisible } from '../mdb/util/index';
+import { getjQuery, typeCheckConfig } from '../mdb/util/index';
 import EventHandler from '../mdb/dom/event-handler';
 import Manipulator from '../mdb/dom/manipulator';
 import SelectorEngine from '../mdb/dom/selector-engine';
 import BSToast from '../bootstrap/src/toast';
+import Stack from '../mdb/util/stack';
 /**
  * ------------------------------------------------------------------------
  * Constants
@@ -11,6 +12,16 @@ import BSToast from '../bootstrap/src/toast';
 const NAME = 'toast';
 const SELECTOR_TOAST = '.toast';
 const SELECTOR_HEADER = '.toast-header';
+
+const EVENT_SHOW_BS = 'show.bs.toast';
+const EVENT_SHOWN_BS = 'shown.bs.toast';
+const EVENT_HIDE_BS = 'hide.bs.toast';
+const EVENT_HIDDEN_BS = 'hidden.bs.toast';
+
+const EVENT_SHOW = 'show.mdb.toast';
+const EVENT_SHOWN = 'shown.mdb.toast';
+const EVENT_HIDE = 'hide.mdb.toast';
+const EVENT_HIDDEN = 'hidden.mdb.toast';
 
 const DefaultType = {
   position: '(string|null)',
@@ -51,31 +62,15 @@ class Toast extends BSToast {
   }
 
   get position() {
+    if (!this._options.position) return null;
     const [y, x] = this._options.position.split('-');
     return { y, x };
   }
 
   get verticalOffset() {
-    if (!this._options.stacking) return 0;
-    const offset = SelectorEngine.find(SELECTOR_TOAST)
-      .filter((toast) => toast !== this._element && isVisible(toast))
-      .map((toast) => ({ el: toast, instance: Toast.getInstance(toast) }))
-      .filter(({ instance }) => {
-        return (
-          instance._options.container === this._options.container &&
-          instance._options.position === this._options.position
-        );
-      })
-      .map(({ el, instance }) => {
-        const { y, height } = el.getBoundingClientRect();
+    if (!this._options.stacking || !this.position) return 0;
 
-        if (this.position.y === 'bottom') {
-          return y - (y - height - instance._options.offset * 2);
-        }
-        return instance._options.offset * 2 + height;
-      })
-      .reduce((a, b) => a + b, 0);
-    return offset;
+    return this.stackUtil.calculateOffset();
   }
 
   // Public
@@ -86,8 +81,26 @@ class Toast extends BSToast {
     if (!this._options.position) {
       return;
     }
+
+    if (this._options.stacking) {
+      this._setupStacking();
+
+      EventHandler.on(this._element, 'hidden.bs.toast', () => {
+        setTimeout(() => this._updateToastStack(), 150);
+      });
+    }
+
     this._setupPosition();
     this._setupAlignment();
+  }
+
+  dispose() {
+    EventHandler.off(this._element, EVENT_SHOW_BS);
+    EventHandler.off(this._element, EVENT_SHOWN_BS);
+    EventHandler.off(this._element, EVENT_HIDE_BS);
+    EventHandler.off(this._element, EVENT_HIDDEN_BS);
+
+    super.dispose();
   }
 
   // Private
@@ -100,11 +113,45 @@ class Toast extends BSToast {
     if (!this._options.position) {
       return;
     }
+
+    if (this._options.stacking) {
+      this._setupStacking();
+
+      EventHandler.on(this._element, 'hidden.bs.toast', () => {
+        setTimeout(() => this._updateToastStack(), 150);
+      });
+    }
+
     this._setupPosition();
     this._setupDisplay();
     if (!this._options.container && this._options.appendToBody) {
       this._appendToBody();
     }
+
+    this._bindShownEvent();
+    this._bindHideEvent();
+  }
+
+  _setupStacking() {
+    this.stackUtil = new Stack(this._element, SELECTOR_TOAST, {
+      position: this.position.y,
+      offset: this._options.offset,
+      container: this._options.container,
+      filter: (el) => {
+        const instance = Toast.getInstance(el);
+
+        if (!instance) return false;
+
+        return (
+          instance._options.container === this._options.container &&
+          instance._options.position === this._options.position
+        );
+      },
+    });
+
+    EventHandler.on(this._element, 'closed.bs.alert', () => {
+      this._updateAlertStack();
+    });
   }
 
   _setupColor() {
@@ -179,16 +226,32 @@ class Toast extends BSToast {
       });
     }
 
-    EventHandler.on(this._element, 'hidden.bs.toast', () => {
+    EventHandler.on(this._element, EVENT_HIDDEN_BS, () => {
+      EventHandler.trigger(this._element, EVENT_HIDDEN);
+
       Manipulator.style(this._element, {
         display: 'none',
       });
     });
-    EventHandler.on(this._element, 'show.bs.toast', () => {
+    EventHandler.on(this._element, EVENT_SHOW_BS, () => {
+      EventHandler.trigger(this._element, EVENT_SHOW);
+
       this._setupAlignment();
       Manipulator.style(this._element, {
         display: 'block',
       });
+    });
+  }
+
+  _bindShownEvent() {
+    EventHandler.on(this._element, EVENT_SHOWN_BS, () => {
+      EventHandler.trigger(this._element, EVENT_SHOWN);
+    });
+  }
+
+  _bindHideEvent() {
+    EventHandler.on(this._element, EVENT_HIDE_BS, () => {
+      EventHandler.trigger(this._element, EVENT_HIDE);
     });
   }
 
@@ -205,6 +268,24 @@ class Toast extends BSToast {
   _appendToBody() {
     this._element.parentNode.removeChild(this._element);
     document.body.appendChild(this._element);
+  }
+
+  _updatePosition() {
+    Manipulator.style(this._element, {
+      [this.position.y]: `${this.verticalOffset + this._options.offset}px`,
+    });
+  }
+
+  _updateToastStack() {
+    this.stackUtil.nextElements.forEach((el) => {
+      const instance = Toast.getInstance(el);
+
+      if (!instance) {
+        return;
+      }
+
+      instance._updatePosition();
+    });
   }
 }
 

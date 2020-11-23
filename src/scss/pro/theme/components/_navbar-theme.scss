@@ -5,7 +5,7 @@
   $onSurface: map-get($theme, onSurface);
   $onPrimary: map-get($theme, onPrimary);
   $onSecondary: map-get($theme, onSecondary);
-  $dropdownDisabled: map-get($theme, dropdownDisabled);
+  $surfaceDisabled: map-get($theme, dropdownDisabled);
 
   .navbar-brand {
     color: $onSurface;
@@ -25,7 +25,7 @@
       }
 
       &.disabled {
-        color: $dropdownDisabled;
+        color: $surfaceDisabled;
       }
     }
   }
@@ -46,5 +46,27 @@
 
   .navbar-scrolled {
     background-color: $primary;
+  }
+
+  .navbar {
+    &.navbar-light {
+      &.bg-light {
+        .breadcrumb {
+          .breadcrumb-item {
+            a {
+              color: rgba(0, 0, 0, 0.55);
+              &:hover {
+                color: rgba(0, 0, 0, 0.7);
+              }
+            }
+            + .breadcrumb-item {
+              &:before {
+                color: rgba(0, 0, 0, 0.55);
+              }
+            }
+          }
+        }
+      }
+    }
   }
 }

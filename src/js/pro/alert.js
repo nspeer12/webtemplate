@@ -3,6 +3,7 @@ import EventHandler from '../mdb/dom/event-handler';
 import Manipulator from '../mdb/dom/manipulator';
 import SelectorEngine from '../mdb/dom/selector-engine';
 import BSAlert from '../bootstrap/src/alert';
+import Stack from '../mdb/util/stack';
 
 /**
  * ------------------------------------------------------------------------
@@ -11,7 +12,10 @@ import BSAlert from '../bootstrap/src/alert';
  */
 
 const NAME = 'alert';
+const DATA_KEY = `mdb.${NAME}`;
+const EVENT_KEY = `.${DATA_KEY}`;
 const SELECTOR_ALERT = '.alert';
+
 const DefaultType = {
   position: '(string || null)',
   delay: 'number',
@@ -22,6 +26,7 @@ const DefaultType = {
   hidden: 'boolean',
   appendToBody: 'boolean',
   color: '(string || null)',
+  container: '(string|null)',
 };
 
 const Default = {
@@ -34,40 +39,36 @@ const Default = {
   hidden: false,
   appendToBody: false,
   color: null,
+  container: null,
 };
+
+const EVENT_CLOSE_BS = 'close.bs.alert';
+const EVENT_CLOSED_BS = 'closed.bs.alert';
+
+const EVENT_CLOSE = `close${EVENT_KEY}`;
+const EVENT_CLOSED = `closed${EVENT_KEY}`;
 
 class Alert extends BSAlert {
   constructor(element, data = {}) {
     super(element, data);
     this._options = this._getConfig(data);
+
     this._init();
+  }
+
+  dispose() {
+    EventHandler.off(this._element, EVENT_CLOSE_BS);
+    EventHandler.off(this._element, EVENT_CLOSED_BS);
+
+    super.dispose();
   }
 
   // Getters
 
   get verticalOffset() {
     if (!this._options.stacking) return 0;
-    const offset = SelectorEngine.find(SELECTOR_ALERT)
-      .filter((alert) => alert !== this._element && isVisible(alert))
-      .map((alert) => ({ el: alert, instance: Alert.getInstance(alert) }))
-      .filter(({ instance }) => {
-        if (!instance) return false;
-        return (
-          instance._options.container === this._options.container &&
-          instance._options.position === this._options.position
-        );
-      })
-      .map(({ el, instance }) => {
-        const { y, height } = el.getBoundingClientRect();
 
-        if (this.position.y === 'bottom') {
-          return y - (y - height - instance._options.offset * 2);
-        }
-
-        return instance._options.offset * 2 + height;
-      })
-      .reduce((a, b) => a + b, 0);
-    return offset;
+    return this.stackUtil.calculateOffset();
   }
 
   get parent() {
@@ -102,8 +103,14 @@ class Alert extends BSAlert {
           clearTimeout(this._timeout);
           this._timeout = null;
         }
+
+        if (this._options.stacking) {
+          this._updateAlertStack();
+        }
+
         EventHandler.off(e.target, 'transitionend', handler);
       };
+
       EventHandler.on(this._element, 'transitionend', handler);
     }
   }
@@ -143,10 +150,18 @@ class Alert extends BSAlert {
     if (this._options.color) {
       this._setColor();
     }
+
+    this._bindCloseEvent();
+    this._bindClosedEvent();
+
     this._setup();
   }
 
   _setup() {
+    if (this._options.stacking) {
+      this._setupStacking();
+    }
+
     if (this._options.autohide) {
       this._setupAutohide();
     }
@@ -161,6 +176,28 @@ class Alert extends BSAlert {
     }
     this._setupAlignment();
     this._setupPosition();
+  }
+
+  _setupStacking() {
+    this.stackUtil = new Stack(this._element, SELECTOR_ALERT, {
+      position: this.position.y,
+      offset: this._options.offset,
+      container: this._options.container,
+      filter: (el) => {
+        const instance = Alert.getInstance(el);
+
+        if (!instance) return false;
+
+        return (
+          instance._options.container === this._options.container &&
+          instance._options.position === this._options.position
+        );
+      },
+    });
+
+    EventHandler.on(this._element, 'closed.bs.alert', () => {
+      this._updateAlertStack();
+    });
   }
 
   _setColor() {
@@ -196,6 +233,7 @@ class Alert extends BSAlert {
   _setupAlignment() {
     const oppositeY = this.position.y === 'top' ? 'bottom' : 'top';
     const oppositeX = this.position.x === 'left' ? 'right' : 'left';
+
     if (this.position.x === 'center') {
       Manipulator.style(this._element, {
         [this.position.y]: `${this.verticalOffset + this._options.offset}px`,
@@ -236,6 +274,36 @@ class Alert extends BSAlert {
     };
     typeCheckConfig(NAME, config, DefaultType);
     return config;
+  }
+
+  _bindCloseEvent() {
+    EventHandler.on(this._element, EVENT_CLOSE_BS, () => {
+      EventHandler.trigger(this._element, EVENT_CLOSE);
+    });
+  }
+
+  _bindClosedEvent() {
+    EventHandler.on(this._element, EVENT_CLOSED_BS, () => {
+      EventHandler.trigger(this._element, EVENT_CLOSED);
+    });
+  }
+
+  _updatePosition() {
+    Manipulator.style(this._element, {
+      [this.position.y]: `${this.verticalOffset + this._options.offset}px`,
+    });
+  }
+
+  _updateAlertStack() {
+    this.stackUtil.nextElements.forEach((el) => {
+      const instance = Alert.getInstance(el);
+
+      if (!instance) {
+        return;
+      }
+
+      instance._updatePosition();
+    });
   }
 }
 

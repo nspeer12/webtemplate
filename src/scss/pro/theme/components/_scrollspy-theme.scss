@@ -1,18 +1,17 @@
 @mixin mdb-scrollspy-theme($theme) {
-  $primary: map-get($theme, primary);
-  $onPrimary: map-get($theme, onPrimary);
-  $onSurface: map-get($theme, onSurface);
+  $scrollspyActive: map-get($theme, scrollspyActive);
+  $onBackground: map-get($theme, onBackground);
 
   .nav-pills {
     &.menu-sidebar {
       .nav-link {
-        color: $onSurface;
+        color: $onBackground;
       }
 
       .nav-link.active,
       .show > .nav-link {
-        color: lighten($primary, 20%);
-        border-left-color: lighten($primary, 20%);
+        color: $scrollspyActive;
+        border-left-color: $scrollspyActive;
       }
     }
   }

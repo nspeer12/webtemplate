@@ -31,7 +31,7 @@
     border-color: $secondary !important;
   }
 
-  a {
+  a:not(.sidenav-link):not(.btn) {
     color: lighten($primary, 20%);
 
     &:hover {

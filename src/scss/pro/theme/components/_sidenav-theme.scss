@@ -11,17 +11,20 @@
   $onSuccess: map-get($theme, onSuccess);
   $surfaceHover: map-get($theme, surfaceHover);
   $pickerHeader: map-get($theme, pickerHeader);
+  $sidenavPrimaryText: map-get($theme, sidenavPrimaryText);
+  $sidenavSecondaryText: map-get($theme, sidenavSecondaryText);
+  $sidenavPrimaryBg: map-get($theme, sidenavPrimaryBg);
+  $sidenavSecondaryBg: map-get($theme, sidenavSecondaryBg);
 
   .sidenav {
     background-color: $surface;
-    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.25), 0 2px 10px 0 rgba(0, 0, 0, 0.25);
   }
 
   .sidenav-item {
     .sidenav-link {
       &:hover {
-        color: lighten($primary, 25%);
-        background-color: rgba($primary, 0.15);
+        color: $sidenavPrimaryText;
+        background-color: $sidenavPrimaryBg;
       }
     }
   }
@@ -29,12 +32,12 @@
   .sidenav-link {
     &:active,
     &:focus {
-      color: lighten($primary, 25%);
-      background-color: rgba($primary, 0.15);
+      color: $sidenavPrimaryText;
+      background-color: $sidenavPrimaryBg;
     }
 
     &.active {
-      color: lighten($primary, 25%);
+      color: $sidenavPrimaryText;
     }
   }
 
@@ -43,8 +46,8 @@
     .sidenav-item {
       .sidenav-link {
         &:hover {
-          color: lighten($primary, 25%);
-          background-color: rgba($primary, 0.15);
+          color: $sidenavPrimaryText;
+          background-color: $sidenavPrimaryBg;
         }
       }
     }
@@ -52,12 +55,12 @@
     .sidenav-link {
       &:active,
       &:focus {
-        color: lighten($primary, 25%);
-        background-color: rgba($primary, 0.15);
+        color: $sidenavPrimaryText;
+        background-color: $sidenavPrimaryBg;
       }
 
       &.active {
-        color: lighten($primary, 25%);
+        color: $sidenavPrimaryText;
       }
     }
   }
@@ -65,8 +68,8 @@
     .sidenav-item {
       .sidenav-link {
         &:hover {
-          color: lighten($secondary, 10%);
-          background-color: rgba($secondary, 0.15);
+          color: $sidenavSecondaryText;
+          background-color: $sidenavSecondaryBg;
         }
       }
     }
@@ -74,12 +77,12 @@
     .sidenav-link {
       &:active,
       &:focus {
-        color: lighten($secondary, 10%);
-        background-color: rgba($secondary, 0.15);
+        color: $sidenavSecondaryText;
+        background-color: $sidenavSecondaryBg;
       }
 
       &.active {
-        color: lighten($secondary, 10%);
+        color: $sidenavSecondaryText;
       }
     }
   }

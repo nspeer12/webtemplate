@@ -12,7 +12,10 @@
   $surfaceHover: map-get($theme, surfaceHover);
   $pickerHeader: map-get($theme, pickerHeader);
   $onLink: map-get($theme, onLink);
-  $dropdownDisabled: map-get($theme, dropdownDisabled);
+  $onBackground: map-get($theme, onBackground);
+  $surfaceDisabled: map-get($theme, dropdownDisabled);
+  $timepickerClockBg: map-get($theme, timepickerClockBg);
+  $timepickerClockText: map-get($theme, timepickerClockText);
 
   .timepicker {
     &-circle {
@@ -31,11 +34,11 @@
       color: $onSurface;
 
       &:hover {
-        background-color: rgba($onSurface, 0.15);
+        background-color: $surfaceHover;
       }
 
       &:focus {
-        background-color: rgba($onSurface, 0.15);
+        background-color: $surfaceHover;
       }
     }
 
@@ -52,7 +55,8 @@
     }
 
     &-clock {
-      background-color: rgba($pickerHeader, 0.3);
+      color: $timepickerClockText;
+      background-color: $timepickerClockBg;
     }
 
     &-time-tips-minutes,
@@ -64,7 +68,7 @@
       }
 
       &.disabled {
-        color: $dropdownDisabled;
+        color: $surfaceDisabled;
       }
     }
 
@@ -91,16 +95,22 @@
       color: $onSurface;
     }
 
+    &-dot {
+      color: $onPrimary;
+    }
+
     &-hour-mode,
     &-hour,
     &-minute {
+      color: $onPrimary;
+
       &:hover,
       &:focus {
         background-color: $onLink;
       }
 
       &.active {
-        color: $onSurface;
+        color: $onPrimary;
       }
     }
 
@@ -109,7 +119,7 @@
     }
 
     &-toggle-button {
-      color: rgba($onSurface, 0.7);
+      color: $onBackground;
 
       &:hover {
         color: $primary;

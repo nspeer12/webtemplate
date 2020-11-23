@@ -235,6 +235,18 @@
     }
   }
 
+  &.datatable-clickable-rows {
+    tbody {
+      tr {
+        cursor: pointer;
+
+        &.active {
+          background-color: var(--datatable-hover-bg);
+        }
+      }
+    }
+  }
+
   &.datatable-dark {
     --datatable-color: #{#fff};
     --datatable-border-color: #{#fff};

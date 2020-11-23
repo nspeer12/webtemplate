@@ -37,12 +37,14 @@ const SELECTOR_ROW_CHECKBOX = '.datatable-row-checkbox';
 
 const EVENT_SELECT = 'selectRows.mdb.datatable';
 const EVENT_RENDER = 'render.mdb.datatable';
+const EVENT_ROW_CLICK = 'rowClick.mdb.datatable';
 const EVENT_UPDATE = 'update.mdb.datatable';
 
 const TYPE_OPTIONS = {
   bordered: 'boolean',
   borderless: 'boolean',
   borderColor: '(string|null)',
+  clickableRows: 'boolean',
   color: '(string|null)',
   defaultValue: 'string',
   edit: 'boolean',
@@ -59,6 +61,8 @@ const TYPE_OPTIONS = {
   pagination: 'boolean',
   selectable: 'boolean',
   sm: 'boolean',
+  sortField: '(null|string)',
+  sortOrder: 'string',
   loaderClass: 'string',
   fixedHeader: 'boolean',
   striped: 'boolean',
@@ -69,6 +73,7 @@ const TYPE_COLUMN_FIELDS = {
   label: 'string',
   field: 'string',
   fixed: '(boolean|string)',
+  format: '(function|null)',
   width: '(number|null)',
   sort: 'boolean',
   columnIndex: 'number',
@@ -78,6 +83,7 @@ const DEFAULT_OPTIONS = {
   bordered: false,
   borderless: false,
   borderColor: null,
+  clickableRows: false,
   color: null,
   dark: false,
   defaultValue: '-',
@@ -97,6 +103,8 @@ const DEFAULT_OPTIONS = {
   pagination: true,
   selectable: false,
   sm: false,
+  sortField: null,
+  sortOrder: 'asc',
   striped: false,
   rowsText: 'Rows per page:',
 };
@@ -105,6 +113,7 @@ const DEFAUL_COLUMN = {
   label: '',
   field: '',
   fixed: false,
+  format: null,
   width: null,
   sort: true,
   columnIndex: 0,
@@ -122,8 +131,8 @@ class Datatable {
 
     this._options = this._getOptions(options);
 
-    this._sortField = null;
-    this._sortOrder = null;
+    this._sortField = this._options.sortField;
+    this._sortOrder = this._options.sortOrder;
     this._sortReverse = false;
 
     this._activePage = 0;
@@ -246,6 +255,7 @@ class Datatable {
       this._options.sm && 'datatable-sm',
       this._options.striped && 'datatable-striped',
       this._options.loading && 'datatable-loading',
+      this._options.clickableRows && 'datatable-clickable-rows',
     ].filter((className) => className);
   }
 
@@ -486,6 +496,10 @@ class Datatable {
       this._setupEditable();
     }
 
+    if (this._options.clickableRows) {
+      this._setupClickableRows();
+    }
+
     if (this._options.selectable) {
       this._setupSelectable();
     }
@@ -493,6 +507,18 @@ class Datatable {
     this._setupScroll();
 
     this._setupSort();
+  }
+
+  _setupClickableRows() {
+    SelectorEngine.find(SELECTOR_ROW, this._element).forEach((row) => {
+      const index = Manipulator.getDataAttribute(row, 'index');
+
+      EventHandler.on(row, 'click', (e) => {
+        if (!SelectorEngine.matches(e.target, SELECTOR_ROW_CHECKBOX)) {
+          EventHandler.trigger(this._element, EVENT_ROW_CLICK, { index, row: this.rows[index] });
+        }
+      });
+    });
   }
 
   _setupEditable() {
@@ -549,6 +575,10 @@ class Datatable {
       const field = Manipulator.getDataAttribute(icon, 'sort');
       const [header] = SelectorEngine.parents(icon, 'th');
       Manipulator.style(header, { cursor: 'pointer' });
+
+      if (field === this._options.sortField) {
+        this._setActiveSortIcon(icon);
+      }
 
       EventHandler.on(header, 'click', () => {
         if (this._sortField === field && this._sortOrder === 'asc') {
@@ -647,6 +677,12 @@ class Datatable {
       });
     }
 
+    if (this._options.clickableRows) {
+      SelectorEngine.find(SELECTOR_ROW, this._element).forEach((row) => {
+        EventHandler.off(row, 'click');
+      });
+    }
+
     SelectorEngine.find(SELECTOR_SORT_ICON, this._element).forEach((icon) => {
       const [header] = SelectorEngine.parents(icon, 'th');
 
@@ -665,6 +701,8 @@ class Datatable {
   _renderTable() {
     this._element.innerHTML = tableTemplate(this.tableOptions).table;
 
+    this._formatCells();
+
     EventHandler.trigger(this._element, EVENT_RENDER);
   }
 
@@ -679,6 +717,8 @@ class Datatable {
 
     body.innerHTML = tableTemplate(this.tableOptions).rows;
 
+    this._formatCells();
+
     if (this._options.edit) {
       this._setupEditable();
     }
@@ -689,7 +729,31 @@ class Datatable {
       this._setSelected();
     }
 
+    if (this._options.clickableRows) {
+      this._setupClickableRows();
+    }
+
     EventHandler.trigger(this._element, EVENT_RENDER);
+  }
+
+  _formatCells() {
+    const rows = SelectorEngine.find(SELECTOR_ROW, this._element);
+
+    rows.forEach((row) => {
+      const index = Manipulator.getDataAttribute(row, 'index');
+
+      const cells = SelectorEngine.find(SELECTOR_CELL, row);
+
+      cells.forEach((cell) => {
+        const field = Manipulator.getDataAttribute(cell, 'field');
+
+        const column = this.columns.find((column) => column.field === field);
+
+        if (column && column.format !== null) {
+          column.format(cell, this.rows[index][field]);
+        }
+      });
+    });
   }
 
   _toggleDisableState() {

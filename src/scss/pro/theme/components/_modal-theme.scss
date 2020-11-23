@@ -3,10 +3,11 @@
   $surface: map-get($theme, surface);
   $onSurface: map-get($theme, onSurface);
   $divider: map-get($theme, divider);
+  $cardShadow: map-get($theme, dardShadow);
 
   .modal-content {
     background-color: $surface;
-    box-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.25);
+    box-shadow: $cardShadow;
   }
   .modal-header {
     border-bottom-color: $divider;

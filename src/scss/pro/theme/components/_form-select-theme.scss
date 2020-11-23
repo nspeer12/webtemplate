@@ -9,18 +9,20 @@
   $onError: map-get($theme, onError);
   $success: map-get($theme, success);
   $onSuccess: map-get($theme, onSuccess);
+  $surfaceHighlight: map-get($theme, surfaceHighlight);
   $surfaceHover: map-get($theme, surfaceHover);
   $pickerHeader: map-get($theme, pickerHeader);
   $tooltipBackground: map-get($theme, tooltipBackground);
   $dropdownHover: map-get($theme, dropdownHover);
-  $dropdownDisabled: map-get($theme, dropdownDisabled);
+  $surfaceDisabled: map-get($theme, dropdownDisabled);
+  $onBackground: map-get($theme, onBackground);
 
   .select-arrow {
-    color: rgba($onSurface, 0.7);
+    color: $onBackground;
   }
 
   .select-clear-btn {
-    color: rgba($onSurface, 0.7);
+    color: $onBackground;
     &:focus {
       color: $primary;
     }
@@ -28,7 +30,6 @@
 
   .select-dropdown {
     background-color: $surface;
-    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
   }
 
   .select-input.focused {
@@ -57,18 +58,6 @@
     color: $primary;
   }
 
-  .form-white .select-input:focus ~ .select-arrow {
-    color: $onSurface;
-  }
-
-  .form-white .select-arrow {
-    color: $onSurface;
-  }
-
-  .form-white .select-clear-btn {
-    color: $onSurface;
-  }
-
   .select-options-wrapper {
     &::-webkit-scrollbar-button {
       &:start:decrement,
@@ -93,31 +82,31 @@
 
   .select-option {
     background-color: $surface;
-    color: rgba($onSurface, 0.7);
+    color: $onSurface;
 
     &:hover:not(.disabled) {
-      background-color: $dropdownHover;
+      background-color: $surfaceHover;
     }
 
     &.active {
-      background-color: $dropdownHover;
+      background-color: $surfaceHover;
     }
 
     &.selected.active {
-      background-color: $dropdownHover;
+      background-color: $surfaceHover;
     }
 
     &.selected.disabled {
-      color: $dropdownDisabled;
+      color: $surfaceDisabled;
       background-color: transparent;
     }
 
     &.selected {
-      background-color: $dropdownHover;
+      background-color: $surfaceHighlight;
     }
 
     &.disabled {
-      color: $dropdownDisabled;
+      color: $surfaceDisabled;
     }
   }
 

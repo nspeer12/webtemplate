@@ -32,8 +32,6 @@ class Pan extends TouchUtil {
   }
 
   handleTouchStart(e) {
-    e.preventDefault();
-
     this._startTouch = this._getCoordinates(e);
     this._movedTouch = e;
 
@@ -41,7 +39,9 @@ class Pan extends TouchUtil {
   }
 
   handleTouchMove(e) {
-    e.preventDefault();
+    // eslint-disable-next-line no-unused-expressions
+    e.type === 'touchmove' && e.preventDefault();
+
     const { threshold, direction } = this._options;
     const postion = this._getCoordinates(e);
     const movedPosition = this._getCoordinates(this._movedTouch);
@@ -75,7 +75,8 @@ class Pan extends TouchUtil {
   }
 
   handleTouchEnd(e) {
-    e.preventDefault();
+    // eslint-disable-next-line no-unused-expressions
+    e.type === 'touchend' && e.preventDefault();
 
     this._movedTouch = null;
     this._startTouch = null;

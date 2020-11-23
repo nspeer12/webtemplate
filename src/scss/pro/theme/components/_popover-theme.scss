@@ -12,10 +12,11 @@
   $surfaceHover: map-get($theme, surfaceHover);
   $pickerHeader: map-get($theme, pickerHeader);
   $divider: map-get($theme, divider);
+  $cardShadow: map-get($theme, dardShadow);
 
   .popover {
     background-color: $surface;
-    box-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.25);
+    box-shadow: $cardShadow;
   }
 
   .popover-body {

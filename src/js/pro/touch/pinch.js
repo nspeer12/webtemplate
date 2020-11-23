@@ -31,10 +31,22 @@ class Pinch extends TouchUtil {
     return NAME;
   }
 
-  handleTouchStart(e) {
-    e.preventDefault();
+  get isNumber() {
+    return (
+      typeof this._startTouch === 'number' &&
+      typeof this._touch === 'number' &&
+      // eslint-disable-next-line no-restricted-globals
+      !isNaN(this._startTouch) &&
+      // eslint-disable-next-line no-restricted-globals
+      !isNaN(this._touch)
+    );
+  }
 
+  handleTouchStart(e) {
     if (e.touches.length !== this._options.pointers) return;
+
+    // eslint-disable-next-line no-unused-expressions
+    e.type === 'touchstart' && e.preventDefault();
 
     const [touch, origin] = this._getPinchTouchOrigin(e.touches);
 
@@ -53,16 +65,13 @@ class Pinch extends TouchUtil {
 
     if (e.touches.length !== pointers) return;
 
-    e.preventDefault();
+    // eslint-disable-next-line no-unused-expressions
+    e.type === 'touchmove' && e.preventDefault();
 
     this._touch = this._getPinchTouchOrigin(e.touches)[0];
     this._ratio = this._touch / this._startTouch;
 
-    const typeofing = typeof this._startTouch === 'number' && typeof this._touch === 'number';
-    // eslint-disable-next-line no-restricted-globals
-    const isNumber = !isNaN(this._startTouch) && !isNaN(this._touch);
-
-    if (typeofing && isNumber) {
+    if (this.isNumber) {
       if (this._origin.x > threshold || this._origin.y > threshold) {
         this._startTouch = this._touch;
 
@@ -76,11 +85,7 @@ class Pinch extends TouchUtil {
   }
 
   handleTouchEnd() {
-    const typeofing = typeof this._startTouch === 'number' && typeof this._touch === 'number';
-    // eslint-disable-next-line no-restricted-globals
-    const isNumber = !isNaN(this._startTouch) && !isNaN(this._touch);
-
-    if (typeofing && isNumber) {
+    if (this.isNumber) {
       this._startTouch = null;
 
       EventHandler.trigger(this._element, EVENT_END, {

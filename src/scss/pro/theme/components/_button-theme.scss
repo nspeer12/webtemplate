@@ -7,17 +7,17 @@
 
   .btn-primary {
     background-color: $primary;
-    color: $onPrimary;
+    color: set-notification-text-color($primary);
 
     &:hover {
       background-color: darken($primary, 7.5%);
-      color: $onPrimary;
+      color: set-notification-text-color($primary);
     }
 
     &:focus,
     &.focus {
       background-color: darken($primary, 7.5%);
-      color: $onPrimary;
+      color: set-notification-text-color($primary);
     }
 
     .btn-check:checked + &,
@@ -26,29 +26,29 @@
     &.active,
     .show > &.dropdown-toggle {
       background-color: darken($primary, 20%);
-      color: $onPrimary;
+      color: set-notification-text-color($primary);
     }
 
     &:disabled,
     &.disabled {
       background-color: $primary;
-      color: $onPrimary;
+      color: set-notification-text-color($primary);
     }
   }
 
   .btn-secondary {
     background-color: $secondary;
-    color: $onSecondary;
+    color: set-notification-text-color($secondary);
 
     &:hover {
       background-color: darken($secondary, 7.5%);
-      color: $onSecondary;
+      color: set-notification-text-color($secondary);
     }
 
     &:focus,
     &.focus {
       background-color: darken($secondary, 7.5%);
-      color: $onSecondary;
+      color: set-notification-text-color($secondary);
     }
 
     .btn-check:checked + &,
@@ -57,13 +57,13 @@
     &.active,
     .show > &.dropdown-toggle {
       background-color: darken($secondary, 20%);
-      color: $onSecondary;
+      color: set-notification-text-color($secondary);
     }
 
     &:disabled,
     &.disabled {
-      background-color: $primary;
-      color: $onPrimary;
+      background-color: $secondary;
+      color: set-notification-text-color($secondary);
     }
   }
 

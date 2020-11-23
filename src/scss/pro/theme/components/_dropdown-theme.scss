@@ -10,17 +10,17 @@
   $success: map-get($theme, success);
   $onSuccess: map-get($theme, onSuccess);
   $surfaceHover: map-get($theme, surfaceHover);
+  $surfaceHighlight: map-get($theme, surfaceHighlight);
   $pickerHeader: map-get($theme, pickerHeader);
   $divider: map-get($theme, divider);
-  $dropdownHover: map-get($theme, dropdownHover);
-  $dropdownDisabled: map-get($theme, dropdownDisabled);
+  $surfaceDisabled: map-get($theme, dropdownDisabled);
   $dropdownText: map-get($theme, dropdownText);
-  $dropdownHeader: map-get($theme, dropdownHeader);
+  $toastShadow: map-get($theme, toastShadow);
 
   .dropdown-menu {
     color: $onSurface;
     background-color: $surface;
-    box-shadow: 0 5px 15px 0 rgba(0, 0, 0, 0.25);
+    box-shadow: $toastShadow;
   }
 
   .dropdown-item {
@@ -29,18 +29,18 @@
     &:hover,
     &:focus {
       color: $onSurface;
-      background: $dropdownHover;
+      background: $surfaceHighlight;
     }
 
     &.active,
     &:active {
       color: $onSurface;
-      background: $dropdownHover;
+      background: $surfaceHighlight;
     }
 
     &.disabled,
     &:disabled {
-      color: $dropdownDisabled;
+      color: $surfaceDisabled;
     }
   }
 
@@ -53,6 +53,6 @@
   }
 
   .dropdown-header {
-    color: $dropdownHeader;
+    color: $dropdownText;
   }
 }

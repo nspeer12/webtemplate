@@ -30,6 +30,10 @@ class Touch {
     this._touchStartHandler = (e) => this._handleTouchStart(e);
     this._touchMoveHandler = (e) => this._handleTouchMove(e);
     this._touchEndHandler = (e) => this._handleTouchEnd(e);
+
+    if (this._element) {
+      Data.setData(element, DATA_KEY, this);
+    }
   }
 
   dispose() {
@@ -91,7 +95,18 @@ class Touch {
       }
     });
   }
+
+  static getInstance(element) {
+    return Data.getData(element, DATA_KEY);
+  }
 }
+
+/**
+ * ------------------------------------------------------------------------
+ * jQuery
+ * ------------------------------------------------------------------------
+ * add .rating to jQuery only if jQuery is present
+ */
 
 const $ = getjQuery();
 

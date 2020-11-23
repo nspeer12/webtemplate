@@ -12,8 +12,8 @@
   $surfaceHover: map-get($theme, surfaceHover);
   $pickerHeader: map-get($theme, pickerHeader);
   $tooltipBackground: map-get($theme, tooltipBackground);
-  $dropdownHover: map-get($theme, dropdownHover);
-  $dropdownDisabled: map-get($theme, dropdownDisabled);
+  $surfaceHover: map-get($theme, surfaceHover);
+  $surfaceDisabled: map-get($theme, dropdownDisabled);
 
   .autocomplete-input.focused {
     color: $onSurface;
@@ -39,7 +39,6 @@
 
   .autocomplete-dropdown {
     background-color: $surface;
-    box-shadow: 0 5px 15px 0 rgba(0, 0, 0, 0.25);
   }
 
   .autocomplete-items-list {
@@ -64,15 +63,15 @@
     background-color: transparent;
 
     &:hover:not(.disabled) {
-      background-color: $dropdownHover;
+      background-color: $surfaceHover;
     }
 
     &.active {
-      background-color: $dropdownHover;
+      background-color: $surfaceHover;
     }
 
     &.disabled {
-      color: $dropdownDisabled;
+      color: $surfaceDisabled;
     }
   }
 }

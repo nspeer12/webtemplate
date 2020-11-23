@@ -28,7 +28,8 @@ class Rotate extends TouchUtil {
   }
 
   handleTouchStart(e) {
-    e.preventDefault();
+    // eslint-disable-next-line no-unused-expressions
+    e.type === 'touchstart' && e.preventDefault();
 
     if (e.touches.length < 2) return;
     this._startTouch = e;
@@ -38,7 +39,8 @@ class Rotate extends TouchUtil {
   }
 
   handleTouchMove(e) {
-    e.preventDefault();
+    // eslint-disable-next-line no-unused-expressions
+    e.type === 'touchmove' && e.preventDefault();
 
     let origin;
     let input;
@@ -89,7 +91,9 @@ class Rotate extends TouchUtil {
   }
 
   handleTouchEnd(e) {
-    e.preventDefault();
+    // eslint-disable-next-line no-unused-expressions
+    e.type === 'touchend' && e.preventDefault();
+
     this._origin = {};
 
     EventHandler.trigger(this._element, EVENT_END, { touch: e });

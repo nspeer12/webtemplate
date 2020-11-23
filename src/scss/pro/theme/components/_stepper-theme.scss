@@ -13,17 +13,18 @@
   $pickerHeader: map-get($theme, pickerHeader);
   $tooltipBackground: map-get($theme, tooltipBackground);
   $dropdownHeader: map-get($theme, dropdownHeader);
+  $divider: map-get($theme, divider);
 
   .stepper:not(.stepper-vertical) {
     .stepper-step {
       &:not(:first-child) .stepper-head {
         &:before {
-          background-color: $tooltipBackground;
+          background-color: rgba($onSurface, 0.1);
         }
       }
       &:not(:last-child) .stepper-head {
         &:after {
-          background-color: $tooltipBackground;
+          background-color: rgba($onSurface, 0.1);
         }
       }
     }
@@ -31,7 +32,7 @@
   .stepper-vertical {
     .stepper-step {
       &:not(:last-child):after {
-        background-color: $tooltipBackground;
+        background-color: rgba($onSurface, 0.1);
       }
     }
   }

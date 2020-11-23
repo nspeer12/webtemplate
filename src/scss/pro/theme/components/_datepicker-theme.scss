@@ -11,6 +11,7 @@
   $onSuccess: map-get($theme, onSuccess);
   $surfaceHover: map-get($theme, surfaceHover);
   $pickerHeader: map-get($theme, pickerHeader);
+  $onBackground: map-get($theme, onBackground);
 
   .datepicker {
     &-modal-container {
@@ -90,7 +91,7 @@
     }
 
     &-toggle-button {
-      color: rgba($onSurface, 0.7);
+      color: $onBackground;
 
       &:focus {
         color: $primary;

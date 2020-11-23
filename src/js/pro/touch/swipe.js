@@ -26,7 +26,8 @@ class Swipe extends TouchUtil {
   }
 
   handleTouchMove(e) {
-    e.preventDefault();
+    // eslint-disable-next-line no-unused-expressions
+    e.type === 'touchmove' && e.preventDefault();
 
     if (!this._startPosition) return;
 

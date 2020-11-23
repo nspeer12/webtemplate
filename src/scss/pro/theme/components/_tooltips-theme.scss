@@ -14,9 +14,9 @@
     }
   }
   .link-secondary {
-    color: $secondary;
+    color: lighten($secondary, 20%);
     &:hover {
-      color: darken($secondary, 15%);
+      color: lighten($secondary, 15%);
     }
   }
 

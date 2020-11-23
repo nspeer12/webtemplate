@@ -11,25 +11,30 @@
   $onSuccess: map-get($theme, onSuccess);
   $surfaceHover: map-get($theme, surfaceHover);
   $pickerHeader: map-get($theme, pickerHeader);
+  $inputBorder: map-get($theme, inputBorder);
+  $inputLabel: map-get($theme, inputLabel);
+  $inputText: map-get($theme, inputText);
+  $inputPlaceholder: map-get($theme, inputPlaceholder);
+  $inputReadonly: map-get($theme, inputReadonly);
 
   .form-label {
-    color: rgba($onSurface, 0.7);
+    color: $inputLabel;
   }
 
   .form-control {
     background-color: transparent;
     &:focus {
       background-color: transparent;
-      color: rgba($onSurface, 0.7);
+      color: $inputText;
     }
   }
 
   .form-control::placeholder {
-    color: rgba($onSurface, 0.7);
+    color: $inputPlaceholder;
   }
 
   .form-control {
-    color: rgba($onSurface, 0.7);
+    color: $inputText;
     &:focus {
       border-color: $primary;
       box-shadow: inset 0px 0px 0px 1px $primary;
@@ -39,13 +44,13 @@
   .form-outline {
     .form-control {
       background: transparent;
-      color: rgba($onSurface, 0.7);
+      color: $inputText;
       ~ .form-label {
-        color: rgba($onSurface, 0.7);
+        color: $inputLabel;
       }
       ~ .form-notch {
         div {
-          border-color: rgba($onSurface, 0.7);
+          border-color: $inputBorder;
           background: transparent;
         }
       }
@@ -65,8 +70,8 @@
       }
       &:disabled,
       &.disabled,
-      &[readonly] {
-        background-color: rgba($onSurface, 0.2);
+      &[readonly]:not(.select-input) {
+        background-color: $inputReadonly;
       }
     }
   }

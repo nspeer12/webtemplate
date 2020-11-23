@@ -2,10 +2,11 @@
   $primary: map-get($theme, primary);
   $surface: map-get($theme, surface);
   $divider: map-get($theme, divider);
+  $cardShadow: map-get($theme, cardShadow);
 
   .card {
     background-color: $surface;
-    box-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.25);
+    box-shadow: $cardShadow;
   }
 
   .card-header {
