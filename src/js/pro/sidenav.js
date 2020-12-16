@@ -1,11 +1,19 @@
 import PerfectScrollbar from 'perfect-scrollbar';
-import { array, element, isVisible, getjQuery, typeCheckConfig } from '../mdb/util/index';
+import {
+  array,
+  element,
+  isVisible,
+  getjQuery,
+  typeCheckConfig,
+  onDOMContentLoaded,
+  isRTL,
+} from '../mdb/util/index';
 import FocusTrap from '../mdb/util/focusTrap';
 import { ENTER, TAB, ESCAPE } from '../mdb/util/keycodes';
 import Touch from '../mdb/util/touch';
-import Collapse from '../bootstrap/src/collapse';
+import Collapse from '../bootstrap/mdb-prefix/collapse';
 import Data from '../mdb/dom/data';
-import EventHandler from '../bootstrap/src/dom/event-handler';
+import EventHandler from '../mdb/dom/event-handler';
 import Manipulator from '../mdb/dom/manipulator';
 import SelectorEngine from '../mdb/dom/selector-engine';
 import Ripple from '../free/ripple';
@@ -21,15 +29,15 @@ const DATA_KEY = 'mdb.sidenav';
 const ARROW_CLASS = 'rotate-icon';
 const BACKDROP_CLASS = 'sidenav-backdrop';
 const SELECTOR_SIDENAV = '.sidenav';
-const SELECTOR_TOGGLE = '[data-toggle="sidenav"]';
-const SELECTOR_SHOW_SLIM = '[data-slim="true"]';
-const SELECTOR_HIDE_SLIM = '[data-slim="false"]';
+const SELECTOR_TOGGLE = '[data-mdb-toggle="sidenav"]';
+const SELECTOR_SHOW_SLIM = '[data-mdb-slim="true"]';
+const SELECTOR_HIDE_SLIM = '[data-mdb-slim="false"]';
 const SELECTOR_NAVIGATION = '.sidenav-menu';
 const SELECTOR_COLLAPSE = '.sidenav-collapse';
 const SELECTOR_LINK = '.sidenav-link';
 
-const TRANSLATION_LEFT = -100;
-const TRANSLATION_RIGHT = 100;
+const TRANSLATION_LEFT = isRTL ? 100 : -100;
+const TRANSLATION_RIGHT = isRTL ? -100 : 100;
 
 let instanceCount = 0;
 
@@ -977,16 +985,18 @@ SelectorEngine.find(SELECTOR_SIDENAV).forEach((sidenav) => {
  * add .sidenav to jQuery only if jQuery is present
  */
 
-const $ = getjQuery();
+onDOMContentLoaded(() => {
+  const $ = getjQuery();
 
-if ($) {
-  const JQUERY_NO_CONFLICT = $.fn[NAME];
-  $.fn[NAME] = Sidenav.jQueryInterface;
-  $.fn[NAME].Constructor = Sidenav;
-  $.fn[NAME].noConflict = () => {
-    $.fn[NAME] = JQUERY_NO_CONFLICT;
-    return Sidenav.jQueryInterface;
-  };
-}
+  if ($) {
+    const JQUERY_NO_CONFLICT = $.fn[NAME];
+    $.fn[NAME] = Sidenav.jQueryInterface;
+    $.fn[NAME].Constructor = Sidenav;
+    $.fn[NAME].noConflict = () => {
+      $.fn[NAME] = JQUERY_NO_CONFLICT;
+      return Sidenav.jQueryInterface;
+    };
+  }
+});
 
 export default Sidenav;

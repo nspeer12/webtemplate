@@ -1,6 +1,6 @@
 import { Chart as Chartjs } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import { element, getjQuery } from '../mdb/util/index';
+import { element, getjQuery, onDOMContentLoaded } from '../mdb/util/index';
 import Data from '../mdb/dom/data';
 import Manipulator from '../mdb/dom/manipulator';
 import SelectorEngine from '../mdb/dom/selector-engine';
@@ -475,7 +475,7 @@ const PARSE_DATA = (data) => {
   return dataset;
 };
 
-SelectorEngine.find('[data-chart]').forEach((el) => {
+SelectorEngine.find('[data-mdb-chart]').forEach((el) => {
   if (
     Manipulator.getDataAttribute(el, 'chart') !== 'bubble' &&
     Manipulator.getDataAttribute(el, 'chart') !== 'scatter'
@@ -507,16 +507,18 @@ SelectorEngine.find('[data-chart]').forEach((el) => {
  * add .chart to jQuery only if jQuery is present
  */
 
-const $ = getjQuery();
+onDOMContentLoaded(() => {
+  const $ = getjQuery();
 
-if ($) {
-  const JQUERY_NO_CONFLICT = $.fn[NAME];
-  $.fn[NAME] = Chart.jQueryInterface;
-  $.fn[NAME].Constructor = Chart;
-  $.fn[NAME].noConflict = () => {
-    $.fn[NAME] = JQUERY_NO_CONFLICT;
-    return Chart.jQueryInterface;
-  };
-}
+  if ($) {
+    const JQUERY_NO_CONFLICT = $.fn[NAME];
+    $.fn[NAME] = Chart.jQueryInterface;
+    $.fn[NAME].Constructor = Chart;
+    $.fn[NAME].noConflict = () => {
+      $.fn[NAME] = JQUERY_NO_CONFLICT;
+      return Chart.jQueryInterface;
+    };
+  }
+});
 
 export default Chart;

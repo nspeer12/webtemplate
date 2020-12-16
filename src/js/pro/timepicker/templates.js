@@ -91,7 +91,7 @@ export const getTimepickerTemplate = ({
                       ${
                         !format24
                           ? `<div class="d-flex justify-content-center timepicker-mode-wrapper">
-                              <button type='button' class="timepicker-hour-mode timepicker-am ripple mr-2 ml-4" tabindex="0">${amLabel}</button>
+                              <button type='button' class="timepicker-hour-mode timepicker-am ripple me-2 ms-4" tabindex="0">${amLabel}</button>
                               <button class="timepicker-hour-mode timepicker-pm ripple" tabindex="0">${pmLabel}</button>
                               <button type='button' class='timepicker-button timepicker-submit timepicker-submit-inline ripple py-1 px-2 mb-0' tabindex="0">${okLabel}</button>
                             </div>`
@@ -116,7 +116,7 @@ export const getToggleButtonTemplate = (options, id) => {
   const { iconClass } = options;
 
   return `
-  <button id="${id}" tabindex="0" type="button" class="timepicker-toggle-button" data-toggle="timepicker"  >
+  <button id="${id}" tabindex="0" type="button" class="timepicker-toggle-button" data-mdb-toggle="timepicker"  >
     <i class="${iconClass}"></i>
   </button>
 `;

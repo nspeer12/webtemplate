@@ -1,9 +1,15 @@
-import Popper from 'popper.js';
+import { createPopper } from '@popperjs/core';
 import Data from '../../mdb/dom/data';
 import EventHandler from '../../mdb/dom/event-handler';
 import Manipulator from '../../mdb/dom/manipulator';
 import SelectorEngine from '../../mdb/dom/selector-engine';
-import { typeCheckConfig, getjQuery, getUID } from '../../mdb/util/index';
+import {
+  typeCheckConfig,
+  getjQuery,
+  getUID,
+  isRTL,
+  onDOMContentLoaded,
+} from '../../mdb/util/index';
 import FocusTrap from '../../mdb/util/focusTrap';
 import {
   getDate,
@@ -69,7 +75,7 @@ const EVENT_DATE_CHANGE = `dateChange${EVENT_KEY}`;
 const EVENT_CLICK_DATA_API = `click${EVENT_KEY}${DATA_API_KEY}`;
 
 const SELECTOR_DATEPICKER = '.datepicker';
-const SELECTOR_DATA_TOGGLE = '[data-toggle="datepicker"]';
+const SELECTOR_DATA_TOGGLE = '[data-mdb-toggle="datepicker"]';
 const SELECTOR_MODAL_CONTAINER = '.datepicker-modal-container';
 const SELECTOR_DROPDOWN_CONTAINER = '.datepicker-dropdown-container';
 const SELECTOR_VIEW_CHANGE_BUTTON = '.datepicker-view-change-button';
@@ -397,7 +403,7 @@ class Datepicker {
   }
 
   _openDropdown(template) {
-    this._popper = new Popper(this._input, template, {
+    this._popper = createPopper(this._input, template, {
       placement: 'bottom-start',
     });
     document.body.appendChild(template);
@@ -449,18 +455,18 @@ class Datepicker {
       const dataset = e.target.nodeName === 'DIV' ? e.target.parentNode.dataset : e.target.dataset;
       const cell = e.target.nodeName === 'DIV' ? e.target.parentNode : e.target;
 
-      if (dataset.date) {
-        this._pickDay(dataset.date, cell);
+      if (dataset.mdbDate) {
+        this._pickDay(dataset.mdbDate, cell);
       }
 
-      if (dataset.month && dataset.year) {
-        const month = parseInt(dataset.month, 10);
-        const year = parseInt(dataset.year, 10);
+      if (dataset.mdbMonth && dataset.mdbYear) {
+        const month = parseInt(dataset.mdbMonth, 10);
+        const year = parseInt(dataset.mdbYear, 10);
         this._pickMonth(month, year);
       }
 
-      if (dataset.year && !dataset.month) {
-        const year = parseInt(dataset.year, 10);
+      if (dataset.mdbYear && !dataset.mdbMonth) {
+        const year = parseInt(dataset.mdbYear, 10);
         this._pickYear(year);
       }
 
@@ -581,10 +587,10 @@ class Datepicker {
 
     switch (event.keyCode) {
       case LEFT_ARROW:
-        this._activeDate = addDays(this._activeDate, -1);
+        this._activeDate = addDays(this._activeDate, isRTL ? 1 : -1);
         break;
       case RIGHT_ARROW:
-        this._activeDate = addDays(this._activeDate, 1);
+        this._activeDate = addDays(this._activeDate, isRTL ? -1 : 1);
         break;
       case UP_ARROW:
         this._activeDate = addDays(this._activeDate, -7);
@@ -658,7 +664,7 @@ class Datepicker {
     const cells = SelectorEngine.find('td', this.datesContainer);
 
     const activeCell = Array.from(cells).find((cell) => {
-      const cellDate = convertStringToDate(cell.dataset.date);
+      const cellDate = convertStringToDate(cell.dataset.mdbDate);
       return isSameDate(cellDate, this._activeDate);
     });
 
@@ -671,10 +677,10 @@ class Datepicker {
 
     switch (event.keyCode) {
       case LEFT_ARROW:
-        this._activeDate = addMonths(this._activeDate, -1);
+        this._activeDate = addMonths(this._activeDate, isRTL ? 1 : -1);
         break;
       case RIGHT_ARROW:
-        this._activeDate = addMonths(this._activeDate, 1);
+        this._activeDate = addMonths(this._activeDate, isRTL ? -1 : 1);
         break;
       case UP_ARROW:
         this._activeDate = addMonths(this._activeDate, -4);
@@ -724,8 +730,8 @@ class Datepicker {
     const cells = SelectorEngine.find('td', this.datesContainer);
 
     const activeCell = Array.from(cells).find((cell) => {
-      const cellYear = parseInt(cell.dataset.year, 10);
-      const cellMonth = parseInt(cell.dataset.month, 10);
+      const cellYear = parseInt(cell.dataset.mdbYear, 10);
+      const cellMonth = parseInt(cell.dataset.mdbMonth, 10);
       return cellYear === this.activeYear && cellMonth === this.activeMonth;
     });
 
@@ -740,10 +746,10 @@ class Datepicker {
 
     switch (event.keyCode) {
       case LEFT_ARROW:
-        this._activeDate = addYears(this._activeDate, -1);
+        this._activeDate = addYears(this._activeDate, isRTL ? 1 : -1);
         break;
       case RIGHT_ARROW:
-        this._activeDate = addYears(this._activeDate, 1);
+        this._activeDate = addYears(this._activeDate, isRTL ? -1 : 1);
         break;
       case UP_ARROW:
         this._activeDate = addYears(this._activeDate, -yearsPerRow);
@@ -799,7 +805,7 @@ class Datepicker {
     const cells = SelectorEngine.find('td', this.datesContainer);
 
     const activeCell = Array.from(cells).find((cell) => {
-      const cellYear = parseInt(cell.dataset.year, 10);
+      const cellYear = parseInt(cell.dataset.mdbYear, 10);
       return cellYear === this.activeYear;
     });
 
@@ -1393,8 +1399,6 @@ SelectorEngine.find(SELECTOR_DATEPICKER).forEach((datepicker) => {
   }
 });
 
-const $ = getjQuery();
-
 /**
  * ------------------------------------------------------------------------
  * jQuery
@@ -1402,12 +1406,16 @@ const $ = getjQuery();
  * add .timepicker to jQuery only if jQuery is present
  */
 
-if ($) {
-  const JQUERY_NO_CONFLICT = $.fn[NAME];
-  $.fn[NAME] = Datepicker.jQueryInterface;
-  $.fn[NAME].Constructor = Datepicker;
-  $.fn[NAME].noConflict = () => {
-    $.fn[NAME] = JQUERY_NO_CONFLICT;
-    return Datepicker.jQueryInterface;
-  };
-}
+onDOMContentLoaded(() => {
+  const $ = getjQuery();
+
+  if ($) {
+    const JQUERY_NO_CONFLICT = $.fn[NAME];
+    $.fn[NAME] = Datepicker.jQueryInterface;
+    $.fn[NAME].Constructor = Datepicker;
+    $.fn[NAME].noConflict = () => {
+      $.fn[NAME] = JQUERY_NO_CONFLICT;
+      return Datepicker.jQueryInterface;
+    };
+  }
+});

@@ -10,42 +10,42 @@
   height: $sidenav-height;
   box-shadow: $sidenav-box-shadow;
 
-  &[data-hidden='false'] {
+  &[data-mdb-hidden='false'] {
     transform: $sidenav-data-hidden-false-transform;
   }
 
-  &[data-color='light'] {
+  &[data-mdb-color='light'] {
     color: $sidenav-data-color-light-color;
   }
 
-  &[data-right='true'] {
+  &[data-mdb-right='true'] {
     right: 0;
     left: unset;
     transform: $sidenav-data-right-true-transform;
   }
 
-  &[data-position='absolute'] {
+  &[data-mdb-position='absolute'] {
     position: absolute;
     height: 100%;
   }
 
-  &[data-position='relative'] {
+  &[data-mdb-position='relative'] {
     position: relative;
     height: 100%;
   }
 
-  [data-slim='true'] {
+  [data-mdb-slim='true'] {
     display: none;
   }
 
-  &[data-slim-collapsed='true'] {
+  &[data-mdb-slim-collapsed='true'] {
     width: $sidenav-data-slim-collapsed-true-width;
 
-    [data-slim='false'] {
+    [data-mdb-slim='false'] {
       display: none;
     }
 
-    [data-slim='true'] {
+    [data-mdb-slim='true'] {
       display: unset;
     }
   }

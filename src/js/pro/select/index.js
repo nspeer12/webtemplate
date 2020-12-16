@@ -1,9 +1,9 @@
-import Popper from 'popper.js';
+import { createPopper } from '@popperjs/core';
 import Data from '../../mdb/dom/data';
 import EventHandler from '../../mdb/dom/event-handler';
 import Manipulator from '../../mdb/dom/manipulator';
 import SelectorEngine from '../../mdb/dom/selector-engine';
-import { typeCheckConfig, getjQuery, getUID } from '../../mdb/util/index';
+import { typeCheckConfig, getjQuery, getUID, onDOMContentLoaded } from '../../mdb/util/index';
 import Input from '../../free/input';
 import SelectOption from './select-option';
 import SelectionModel from './selection-model';
@@ -174,6 +174,10 @@ class Select {
 
   get hasSelectAll() {
     return this.multiple && this._config.selectAll;
+  }
+
+  get hasSelection() {
+    return this._selectionModel.selection || this._selectionModel.selections.length > 0;
   }
 
   _getConfig(config) {
@@ -639,7 +643,7 @@ class Select {
         return;
       }
 
-      const id = target.dataset.id;
+      const id = target.dataset.mdbId;
       const option = this.options.find((option) => option.id === id);
 
       if (option && !option.disabled) {
@@ -758,7 +762,7 @@ class Select {
       this._config.displayedLabels !== -1 &&
       this._selectionModel.selections.length > this._config.displayedLabels
     ) {
-      value = `${this._selectionModel.selections.length} options selected`;
+      value = `${this._selectionModel.selections.length} ${this._config.optionsSelectedLabel}`;
     } else {
       value = labels;
     }
@@ -771,16 +775,14 @@ class Select {
   }
 
   _updateLabelPosition() {
-    const label = SelectorEngine.findOne(SELECTOR_LABEL, this._wrapper);
-
-    if (!label) {
+    if (!this._label) {
       return;
     }
 
     if (this._input.value !== '' || this._isOpen) {
-      Manipulator.addClass(label, CLASS_NAME_ACTIVE);
+      Manipulator.addClass(this._label, CLASS_NAME_ACTIVE);
     } else {
-      Manipulator.removeClass(label, CLASS_NAME_ACTIVE);
+      Manipulator.removeClass(this._label, CLASS_NAME_ACTIVE);
     }
   }
 
@@ -858,7 +860,7 @@ class Select {
   }
 
   _openDropdown() {
-    this._popper = new Popper(this._input, this._dropdownContainer, {
+    this._popper = createPopper(this._input, this._dropdownContainer, {
       placement: 'bottom-start',
     });
     this._container.appendChild(this._dropdownContainer);
@@ -957,7 +959,7 @@ class Select {
 
     if (hasFilteredOptions) {
       this._updateOptionsListTemplate(filtered);
-      this._popper.scheduleUpdate();
+      this._popper.forceUpdate();
       this._filteredOptionsList = this._getPlainOptions(filtered);
 
       if (this.hasSelectAll) {
@@ -1031,8 +1033,10 @@ class Select {
 
     setTimeout(() => {
       Manipulator.removeClass(this._input, CLASS_NAME_FOCUSED);
-      Manipulator.removeClass(this._input, CLASS_NAME_ACTIVE);
-      this._updateLabelPosition();
+
+      if (this._label && !this.hasSelection) {
+        Manipulator.removeClass(this._label, CLASS_NAME_ACTIVE);
+      }
     }, 0);
 
     setTimeout(() => {
@@ -1263,12 +1267,14 @@ SelectorEngine.find(SELECTOR_SELECT).forEach((select) => {
  * add .timepicker to jQuery only if jQuery is present
  */
 
-if ($) {
-  const JQUERY_NO_CONFLICT = $.fn[NAME];
-  $.fn[NAME] = Select.jQueryInterface;
-  $.fn[NAME].Constructor = Select;
-  $.fn[NAME].noConflict = () => {
-    $.fn[NAME] = JQUERY_NO_CONFLICT;
-    return Select.jQueryInterface;
-  };
-}
+onDOMContentLoaded(() => {
+  if ($) {
+    const JQUERY_NO_CONFLICT = $.fn[NAME];
+    $.fn[NAME] = Select.jQueryInterface;
+    $.fn[NAME].Constructor = Select;
+    $.fn[NAME].noConflict = () => {
+      $.fn[NAME] = JQUERY_NO_CONFLICT;
+      return Select.jQueryInterface;
+    };
+  }
+});

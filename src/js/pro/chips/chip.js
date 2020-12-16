@@ -1,5 +1,4 @@
-import { element, getjQuery, typeCheckConfig } from '../../mdb/util/index';
-// import EventHandler from '../../mdb/dom/event-handler';
+import { element, getjQuery, typeCheckConfig, onDOMContentLoaded } from '../../mdb/util/index';
 import Manipulator from '../../mdb/dom/manipulator';
 import SelectorEngine from '../../mdb/dom/selector-engine';
 import Data from '../../mdb/dom/data';
@@ -155,16 +154,18 @@ SelectorEngine.find(`.${NAME}`).forEach((chip) => {
  * ------------------------------------------------------------------------
  */
 
-const $ = getjQuery();
+onDOMContentLoaded(() => {
+  const $ = getjQuery();
 
-if ($) {
-  const JQUERY_NO_CONFLICT = $.fn[NAME];
-  $.fn[NAME] = Chip.jQueryInterface;
-  $.fn[NAME].Constructor = Chip;
-  $.fn[NAME].noConflict = () => {
-    $.fn[NAME] = JQUERY_NO_CONFLICT;
-    return Chip.jQueryInterface;
-  };
-}
+  if ($) {
+    const JQUERY_NO_CONFLICT = $.fn[NAME];
+    $.fn[NAME] = Chip.jQueryInterface;
+    $.fn[NAME].Constructor = Chip;
+    $.fn[NAME].noConflict = () => {
+      $.fn[NAME] = JQUERY_NO_CONFLICT;
+      return Chip.jQueryInterface;
+    };
+  }
+});
 
 export default Chip;

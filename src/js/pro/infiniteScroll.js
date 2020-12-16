@@ -1,4 +1,4 @@
-import { getjQuery, typeCheckConfig } from '../mdb/util/index';
+import { getjQuery, typeCheckConfig, onDOMContentLoaded } from '../mdb/util/index';
 import Data from '../mdb/dom/data';
 import Manipulator from '../mdb/dom/manipulator';
 import SelectorEngine from '../mdb/dom/selector-engine';
@@ -134,14 +134,18 @@ SelectorEngine.find(SELECTOR_INFINITE_SCROLL).forEach((infiniteScroll) => {
  * ------------------------------------------------------------------------
  */
 
-const $ = getjQuery();
-if ($) {
-  const JQUERY_NO_CONFLICT = $.fn[NAME];
-  $.fn[NAME] = InfiniteScroll.jQueryInterface;
-  $.fn[NAME].Constructor = InfiniteScroll;
-  $.fn[NAME].noConflict = () => {
-    $.fn[NAME] = JQUERY_NO_CONFLICT;
-    return InfiniteScroll.jQueryInterface;
-  };
-}
+onDOMContentLoaded(() => {
+  const $ = getjQuery();
+
+  if ($) {
+    const JQUERY_NO_CONFLICT = $.fn[NAME];
+    $.fn[NAME] = InfiniteScroll.jQueryInterface;
+    $.fn[NAME].Constructor = InfiniteScroll;
+    $.fn[NAME].noConflict = () => {
+      $.fn[NAME] = JQUERY_NO_CONFLICT;
+      return InfiniteScroll.jQueryInterface;
+    };
+  }
+});
+
 export default InfiniteScroll;

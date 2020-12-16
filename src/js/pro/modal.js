@@ -1,9 +1,14 @@
-import { getjQuery, typeCheckConfig, getElementFromSelector } from '../mdb/util/index';
+import {
+  getjQuery,
+  typeCheckConfig,
+  getElementFromSelector,
+  onDOMContentLoaded,
+} from '../mdb/util/index';
 import SelectorEngine from '../mdb/dom/selector-engine';
 import EventHandler from '../mdb/dom/event-handler';
 import Data from '../mdb/dom/data';
-import BSModal from '../bootstrap/src/modal';
-import Manipulator from '../bootstrap/src/dom/manipulator';
+import Manipulator from '../mdb/dom/manipulator';
+import BSModal from '../bootstrap/mdb-prefix/modal';
 
 /**
  * ------------------------------------------------------------------------
@@ -32,7 +37,7 @@ const MODAL_TOP_RIGHT_CLASS = 'modal-top-right';
 const MODAL_TOP_LEFT_CLASS = 'modal-top-left';
 const MODAL_DIALOG_SCROLLABLE_CLASS = 'modal-dialog-scrollable';
 
-const SELECTOR_DATA_TOGGLE = '[data-toggle="modal"]';
+const SELECTOR_DATA_TOGGLE = '[data-mdb-toggle="modal"]';
 const SELECTOR_MODAL_CONTENT = `.${MODAL_CONTENT_CLASS}`;
 const SELECTOR_MODAL_BOTTOM = `.${MODAL_BOTTOM_CLASS}`;
 const SELECTOR_MODAL_BOTTOM_RIGHT = `.${MODAL_BOTTOM_RIGHT_CLASS}`;
@@ -348,16 +353,18 @@ EventHandler.on(document, EVENT_MOUSEDOWN_DATA_API, SELECTOR_DATA_TOGGLE, functi
  * add .modal to jQuery only if jQuery is present
  */
 
-const $ = getjQuery();
+onDOMContentLoaded(() => {
+  const $ = getjQuery();
 
-if ($) {
-  const JQUERY_NO_CONFLICT = $.fn[NAME];
-  $.fn[NAME] = Modal.jQueryInterface;
-  $.fn[NAME].Constructor = Modal;
-  $.fn[NAME].noConflict = () => {
-    $.fn[NAME] = JQUERY_NO_CONFLICT;
-    return Modal.jQueryInterface;
-  };
-}
+  if ($) {
+    const JQUERY_NO_CONFLICT = $.fn[NAME];
+    $.fn[NAME] = Modal.jQueryInterface;
+    $.fn[NAME].Constructor = Modal;
+    $.fn[NAME].noConflict = () => {
+      $.fn[NAME] = JQUERY_NO_CONFLICT;
+      return Modal.jQueryInterface;
+    };
+  }
+});
 
 export default Modal;

@@ -48,7 +48,7 @@ export function getItemsTemplate(items = [], options) {
           typeof itemContent === 'function'
             ? sanitizeHtml(itemContent(item), DefaultWhitelist, null)
             : displayValue(item);
-        return `<li data-index="${index}" role="option" class="${CLASS_NAME_AUTOCOMPLETE_ITEM}">${content}</li>`;
+        return `<li data-mdb-index="${index}" role="option" class="${CLASS_NAME_AUTOCOMPLETE_ITEM}">${content}</li>`;
       })
       .join('')}
   `;

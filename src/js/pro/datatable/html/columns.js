@@ -22,7 +22,7 @@ const columns = (columns, selectable, multi) => {
       column.fixed ? `${column.fixed === 'right' ? 'right' : 'left'}: ${fixedOffset}px;` : ''
     }" ${column.fixed ? 'class="fixed-cell"' : ''} scope="col">${
       column.sort
-        ? `<i data-sort="${column.field}" class="datatable-sort-icon fas fa-arrow-up"></i>`
+        ? `<i data-mdb-sort="${column.field}" class="datatable-sort-icon fas fa-arrow-up"></i>`
         : ''
     } ${column.label}</th>`;
   });

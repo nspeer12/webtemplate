@@ -1,5 +1,12 @@
-import Popper from 'popper.js';
-import { getjQuery, element, typeCheckConfig, getUID } from '../mdb/util/index';
+import { createPopper } from '@popperjs/core';
+import {
+  getjQuery,
+  element,
+  typeCheckConfig,
+  getUID,
+  isRTL,
+  onDOMContentLoaded,
+} from '../mdb/util/index';
 import Data from '../mdb/dom/data';
 import EventHandler from '../mdb/dom/event-handler';
 import SelectorEngine from '../mdb/dom/selector-engine';
@@ -131,10 +138,16 @@ class Popconfirm {
   }
 
   _handlePopconfirmTransitionEnd(event) {
+    const popoverTemplate = SelectorEngine.findOne('.popconfirm-popover');
     EventHandler.off(this.popconfirmBody, 'transitionend');
 
     if (this._isOpen && event && event.propertyName === 'opacity') {
       this._popper.destroy();
+
+      if (popoverTemplate) {
+        document.body.removeChild(popoverTemplate);
+      }
+
       this._isOpen = false;
     }
   }
@@ -202,9 +215,16 @@ class Popconfirm {
   }
 
   _openPopover(template) {
-    this._popper = new Popper(this._element, template, {
+    this._popper = createPopper(this._element, template, {
       placement: this._translatePositionValue(),
-      removeOnDestroy: true,
+      modifiers: [
+        {
+          name: 'offset',
+          options: {
+            offset: [0, 5],
+          },
+        },
+      ],
     });
     document.body.appendChild(template);
 
@@ -273,25 +293,29 @@ class Popconfirm {
     switch (this._options.position) {
       // left, right as default
       case 'top left':
-        return 'top-end';
+        return isRTL ? 'top-start' : 'top-end';
       case 'top':
         return 'top';
       case 'top right':
-        return 'top-start';
+        return isRTL ? 'top-end' : 'top-start';
       case 'bottom left':
-        return 'bottom-end';
+        return isRTL ? 'bottom-start' : 'bottom-end';
       case 'bottom':
         return 'bottom';
       case 'bottom right':
-        return 'bottom-start';
+        return isRTL ? 'bottom-end' : 'bottom-start';
+      case 'left':
+        return isRTL ? 'right' : 'left';
       case 'left top':
-        return 'left-end';
+        return isRTL ? 'right-end' : 'left-end';
       case 'left bottom':
-        return 'left-start';
+        return isRTL ? 'right-start' : 'left-start';
+      case 'right':
+        return isRTL ? 'left' : 'right';
       case 'right top':
-        return 'right-end';
+        return isRTL ? 'left-end' : 'right-end';
       case 'right bottom':
-        return 'right-start';
+        return isRTL ? 'left-start' : 'right-start';
       case undefined:
         return 'bottom';
       default:
@@ -350,16 +374,18 @@ SelectorEngine.find(SELECTOR_POPCONFIRM).forEach((el) => {
  * ------------------------------------------------------------------------
  */
 
-const $ = getjQuery();
+onDOMContentLoaded(() => {
+  const $ = getjQuery();
 
-if ($) {
-  const JQUERY_NO_CONFLICT = $.fn[NAME];
-  $.fn[NAME] = Popconfirm.jQueryInterface;
-  $.fn[NAME].Constructor = Popconfirm;
-  $.fn[NAME].noConflict = () => {
-    $.fn[NAME] = JQUERY_NO_CONFLICT;
-    return Popconfirm.jQueryInterface;
-  };
-}
+  if ($) {
+    const JQUERY_NO_CONFLICT = $.fn[NAME];
+    $.fn[NAME] = Popconfirm.jQueryInterface;
+    $.fn[NAME].Constructor = Popconfirm;
+    $.fn[NAME].noConflict = () => {
+      $.fn[NAME] = JQUERY_NO_CONFLICT;
+      return Popconfirm.jQueryInterface;
+    };
+  }
+});
 
 export default Popconfirm;

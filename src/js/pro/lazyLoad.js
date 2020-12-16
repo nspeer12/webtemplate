@@ -1,4 +1,4 @@
-import { getjQuery, typeCheckConfig } from '../mdb/util/index';
+import { getjQuery, typeCheckConfig, onDOMContentLoaded } from '../mdb/util/index';
 import Data from '../mdb/dom/data';
 import EventHandler from '../mdb/dom/event-handler';
 import Manipulator from '../mdb/dom/manipulator';
@@ -102,6 +102,7 @@ class LazyLoad {
     Data.removeData(this._element, DATA_KEY);
     if (this._animation) {
       this._animation.dispose();
+      this._animation = null;
     }
 
     this._element = null;
@@ -255,16 +256,18 @@ SelectorEngine.find(SELECTOR_LAZYLOAD).forEach((lazy) => {
  * ------------------------------------------------------------------------
  */
 
-const $ = getjQuery();
+onDOMContentLoaded(() => {
+  const $ = getjQuery();
 
-if ($) {
-  const JQUERY_NO_CONFLICT = $.fn[NAME];
-  $.fn[NAME] = LazyLoad.jQueryInterface;
-  $.fn[NAME].Constructor = LazyLoad;
-  $.fn[NAME].noConflict = () => {
-    $.fn[NAME] = JQUERY_NO_CONFLICT;
-    return LazyLoad.jQueryInterface;
-  };
-}
+  if ($) {
+    const JQUERY_NO_CONFLICT = $.fn[NAME];
+    $.fn[NAME] = LazyLoad.jQueryInterface;
+    $.fn[NAME].Constructor = LazyLoad;
+    $.fn[NAME].noConflict = () => {
+      $.fn[NAME] = JQUERY_NO_CONFLICT;
+      return LazyLoad.jQueryInterface;
+    };
+  }
+});
 
 export default LazyLoad;

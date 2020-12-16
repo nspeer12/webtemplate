@@ -1,13 +1,13 @@
-import { element, getjQuery, typeCheckConfig } from '../mdb/util/index';
+import { element, getjQuery, typeCheckConfig, onDOMContentLoaded } from '../mdb/util/index';
 import Data from '../mdb/dom/data';
-import EventHandler from '../bootstrap/src/dom/event-handler';
+import EventHandler from '../mdb/dom/event-handler';
 import Manipulator from '../mdb/dom/manipulator';
 import SelectorEngine from '../mdb/dom/selector-engine';
 
 const NAME = 'smoothScroll';
 const DATA_KEY = `mdb.${NAME}`;
 const EVENT_KEY = `.${DATA_KEY}`;
-const SELECTOR_COMPONENT = 'a[data-smooth-scroll="smooth-scroll"]';
+const SELECTOR_COMPONENT = 'a[data-mdb-smooth-scroll="smooth-scroll"]';
 
 const DefaultType = {
   container: 'string',
@@ -395,16 +395,18 @@ SelectorEngine.find(SELECTOR_COMPONENT).forEach((el) => {
  * ------------------------------------------------------------------------
  * */
 
-const $ = getjQuery();
+onDOMContentLoaded(() => {
+  const $ = getjQuery();
 
-if ($) {
-  const JQUERY_NO_CONFLICT = $.fn[NAME];
-  $.fn[NAME] = SmoothScroll.jQueryInterface;
-  $.fn[NAME].Constructor = SmoothScroll;
-  $.fn[NAME].noConflict = () => {
-    $.fn[NAME] = JQUERY_NO_CONFLICT;
-    return SmoothScroll.jQueryInterface;
-  };
-}
+  if ($) {
+    const JQUERY_NO_CONFLICT = $.fn[NAME];
+    $.fn[NAME] = SmoothScroll.jQueryInterface;
+    $.fn[NAME].Constructor = SmoothScroll;
+    $.fn[NAME].noConflict = () => {
+      $.fn[NAME] = JQUERY_NO_CONFLICT;
+      return SmoothScroll.jQueryInterface;
+    };
+  }
+});
 
 export default SmoothScroll;

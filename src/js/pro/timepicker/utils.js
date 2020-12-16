@@ -1,5 +1,5 @@
 /* eslint-disable consistent-return */
-import EventHandler from '../../bootstrap/src/dom/event-handler';
+import EventHandler from '../../mdb/dom/event-handler';
 import Manipulator from '../../mdb/dom/manipulator';
 
 // eslint-disable-next-line import/prefer-default-export

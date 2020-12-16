@@ -1,8 +1,8 @@
-import Popper from 'popper.js';
+import { createPopper } from '@popperjs/core';
 import Data from '../../mdb/dom/data';
 import Manipulator from '../../mdb/dom/manipulator';
 import SelectorEngine from '../../mdb/dom/selector-engine';
-import { typeCheckConfig, getjQuery, getUID } from '../../mdb/util/index';
+import { typeCheckConfig, getjQuery, getUID, onDOMContentLoaded } from '../../mdb/util/index';
 import EventHandler from '../../mdb/dom/event-handler';
 import {
   getDropdownTemplate,
@@ -311,7 +311,7 @@ class Autocomplete {
       this.open();
     }
 
-    this._popper.scheduleUpdate();
+    this._popper.forceUpdate();
   }
 
   _listenToKeydown() {
@@ -430,9 +430,7 @@ class Autocomplete {
       return;
     }
 
-    this._popper = new Popper(this._element, this._dropdownContainer, {
-      removeOnDestroy: true,
-    });
+    this._popper = createPopper(this._element, this._dropdownContainer);
     document.body.appendChild(this._dropdownContainer);
 
     this._listenToOutsideClick();
@@ -534,6 +532,11 @@ class Autocomplete {
     // to run this code once
     if (this._isOpen && event && event.propertyName === 'opacity') {
       this._popper.destroy();
+
+      if (this._dropdownContainer) {
+        document.body.removeChild(this._dropdownContainer);
+      }
+
       this._isOpen = false;
       EventHandler.off(this.dropdown, 'transitionend');
     }
@@ -585,8 +588,6 @@ class Autocomplete {
 
 export default Autocomplete;
 
-const $ = getjQuery();
-
 /**
  * ------------------------------------------------------------------------
  * jQuery
@@ -594,12 +595,16 @@ const $ = getjQuery();
  * add .timepicker to jQuery only if jQuery is present
  */
 
-if ($) {
-  const JQUERY_NO_CONFLICT = $.fn[NAME];
-  $.fn[NAME] = Autocomplete.jQueryInterface;
-  $.fn[NAME].Constructor = Autocomplete;
-  $.fn[NAME].noConflict = () => {
-    $.fn[NAME] = JQUERY_NO_CONFLICT;
-    return Autocomplete.jQueryInterface;
-  };
-}
+onDOMContentLoaded(() => {
+  const $ = getjQuery();
+
+  if ($) {
+    const JQUERY_NO_CONFLICT = $.fn[NAME];
+    $.fn[NAME] = Autocomplete.jQueryInterface;
+    $.fn[NAME].Constructor = Autocomplete;
+    $.fn[NAME].noConflict = () => {
+      $.fn[NAME] = JQUERY_NO_CONFLICT;
+      return Autocomplete.jQueryInterface;
+    };
+  }
+});

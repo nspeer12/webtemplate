@@ -1,4 +1,4 @@
-import { getjQuery, typeCheckConfig } from '../../mdb/util/index';
+import { getjQuery, typeCheckConfig, onDOMContentLoaded } from '../../mdb/util/index';
 import Data from '../../mdb/dom/data';
 import Manipulator from '../../mdb/dom/manipulator';
 import SelectorEngine from '../../mdb/dom/selector-engine';
@@ -218,15 +218,18 @@ SelectorEngine.find(SELECTOR_LOADING).forEach((loading) => {
  * ------------------------------------------------------------------------
  */
 
-const $ = getjQuery();
-if ($) {
-  const JQUERY_NO_CONFLICT = $.fn[NAME];
-  $.fn[NAME] = Loading.jQueryInterface;
-  $.fn[NAME].Constructor = Loading;
-  $.fn[NAME].noConflict = () => {
-    $.fn[NAME] = JQUERY_NO_CONFLICT;
-    return Loading.jQueryInterface;
-  };
-}
+onDOMContentLoaded(() => {
+  const $ = getjQuery();
+
+  if ($) {
+    const JQUERY_NO_CONFLICT = $.fn[NAME];
+    $.fn[NAME] = Loading.jQueryInterface;
+    $.fn[NAME].Constructor = Loading;
+    $.fn[NAME].noConflict = () => {
+      $.fn[NAME] = JQUERY_NO_CONFLICT;
+      return Loading.jQueryInterface;
+    };
+  }
+});
 
 export default Loading;

@@ -195,6 +195,19 @@
   margin-top: $datepicker-arrow-controls-margin-top;
 }
 
+/*rtl:begin:options:
+{
+  "autoRename": true,
+  "stringMap":[
+      {
+      "name"    : "prev-next",
+      "search"  : ["datepicker-previous-button", "datepicker-next-button"],
+      "replace" : ["datepicker-next-button", "datepicker-previous-button"],
+      "options" : {"ignoreCase":false}
+      }
+  ]
+}
+*/
 .datepicker-previous-button {
   position: relative;
   padding: 0;
@@ -261,6 +274,7 @@
   border-right-width: $datepicker-next-button-after-border-width;
   transform: $datepicker-next-button-after-transform;
 }
+/*rtl:end:options*/
 
 .datepicker-view {
   padding-left: $datepicker-view-padding-x;

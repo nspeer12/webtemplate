@@ -2,9 +2,9 @@
 const rows = ({ rows, columns, noFoundMessage, edit, selectable, loading }) => {
   const rowsTemplate = rows.map((row) => {
     const checkbox = `
-    <td data-field="checkbox">
+    <td data-mdb-field="checkbox">
       <div class="form-check">
-        <input data-row-index="${row.rowIndex}" class="datatable-row-checkbox form-check-input" type="checkbox">
+        <input data-mdb-row-index="${row.rowIndex}" class="datatable-row-checkbox form-check-input" type="checkbox">
       </div>
     </td>
     `;
@@ -28,13 +28,15 @@ const rows = ({ rows, columns, noFoundMessage, edit, selectable, loading }) => {
           .map((property) => `${property}: ${style[property]}`)
           .join('; ');
 
-        return `<td style="${cssText}" class="${column.fixed ? 'fixed-cell' : ''}" data-field="${
-          column.field
-        }" ${edit && 'contenteditable="true"'}>${row[column.field]}</td>`;
+        return `<td style="${cssText}" class="${
+          column.fixed ? 'fixed-cell' : ''
+        }" data-mdb-field="${column.field}" ${edit && 'contenteditable="true"'}>${
+          row[column.field]
+        }</td>`;
       })
       .join('');
 
-    return `<tr scope="row" data-index="${row.rowIndex}">${
+    return `<tr scope="row" data-mdb-index="${row.rowIndex}">${
       selectable ? checkbox : ''
     }${innerRow}</tr>`;
   });

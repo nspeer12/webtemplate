@@ -140,6 +140,7 @@
   &-pagination-nav {
     padding: 0;
     font-size: $datatable-pagination-nav-font-size;
+    direction: ltr #{'/* rtl:ignore */'};
   }
 
   &-pagination-buttons {

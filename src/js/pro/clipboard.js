@@ -1,6 +1,6 @@
-import { typeCheckConfig, getjQuery, element } from '../mdb/util/index';
+import { typeCheckConfig, getjQuery, element, onDOMContentLoaded } from '../mdb/util/index';
 import Data from '../mdb/dom/data';
-import EventHandler from '../bootstrap/src/dom/event-handler';
+import EventHandler from '../mdb/dom/event-handler';
 import Manipulator from '../mdb/dom/manipulator';
 import SelectorEngine from '../mdb/dom/selector-engine';
 
@@ -68,12 +68,12 @@ class Clipboard {
   }
 
   get copyText() {
-    const clipboardTextExist = this.clipboardTarget.hasAttribute('data-clipboard-text');
+    const clipboardTextExist = this.clipboardTarget.hasAttribute('data-mdb-clipboard-text');
     const inputValue = this.clipboardTarget.value;
     const targetText = this.clipboardTarget.textContent;
 
     if (clipboardTextExist) {
-      return this.clipboardTarget.getAttribute('data-clipboard-text');
+      return this.clipboardTarget.getAttribute('data-mdb-clipboard-text');
     }
 
     if (inputValue) {
@@ -167,16 +167,18 @@ SelectorEngine.find(SELECTOR_COMPONENT).forEach((el) => {
  * add .treeview to jQuery only if jQuery is present
  */
 
-const $ = getjQuery();
+onDOMContentLoaded(() => {
+  const $ = getjQuery();
 
-if ($) {
-  const JQUERY_NO_CONFLICT = $.fn[NAME];
-  $.fn[NAME] = Clipboard.jQueryInterface;
-  $.fn[NAME].Constructor = Clipboard;
-  $.fn[NAME].noConflict = () => {
-    $.fn[NAME] = JQUERY_NO_CONFLICT;
-    return Clipboard.jQueryInterface;
-  };
-}
+  if ($) {
+    const JQUERY_NO_CONFLICT = $.fn[NAME];
+    $.fn[NAME] = Clipboard.jQueryInterface;
+    $.fn[NAME].Constructor = Clipboard;
+    $.fn[NAME].noConflict = () => {
+      $.fn[NAME] = JQUERY_NO_CONFLICT;
+      return Clipboard.jQueryInterface;
+    };
+  }
+});
 
 export default Clipboard;

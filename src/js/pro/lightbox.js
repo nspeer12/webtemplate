@@ -1,4 +1,4 @@
-import { element, typeCheckConfig, getjQuery } from '../mdb/util/index';
+import { element, typeCheckConfig, getjQuery, isRTL, onDOMContentLoaded } from '../mdb/util/index';
 import Data from '../mdb/dom/data';
 import EventHandler from '../mdb/dom/event-handler';
 import Manipulator from '../mdb/dom/manipulator';
@@ -757,10 +757,20 @@ class Lightbox {
     this._resetToolsToggler();
     switch (e.keyCode) {
       case 39:
-        this.slide();
+        if (isRTL) {
+          this.slide('left');
+        } else {
+          this.slide();
+        }
+
         break;
       case 37:
-        this.slide('left');
+        if (isRTL) {
+          this.slide();
+        } else {
+          this.slide('left');
+        }
+
         break;
       case 27:
         this.close();
@@ -797,9 +807,17 @@ class Lightbox {
 
     const movement = this._positionX - this._originalPositionX;
     if (movement > 0) {
-      this.slide('left');
+      if (isRTL) {
+        this.slide();
+      } else {
+        this.slide('left');
+      }
     } else if (movement < 0) {
-      this.slide();
+      if (isRTL) {
+        this.slide('left');
+      } else {
+        this.slide();
+      }
     }
   }
 
@@ -997,16 +1015,18 @@ EventHandler.on(document, 'click', SELECTOR_TOGGLE, Lightbox.toggle());
  * ------------------------------------------------------------------------
  */
 
-const $ = getjQuery();
+onDOMContentLoaded(() => {
+  const $ = getjQuery();
 
-if ($) {
-  const JQUERY_NO_CONFLICT = $.fn[NAME];
-  $.fn[NAME] = Lightbox.jQueryInterface;
-  $.fn[NAME].Constructor = Lightbox;
-  $.fn[NAME].noConflict = () => {
-    $.fn[NAME] = JQUERY_NO_CONFLICT;
-    return Lightbox.jQueryInterface;
-  };
-}
+  if ($) {
+    const JQUERY_NO_CONFLICT = $.fn[NAME];
+    $.fn[NAME] = Lightbox.jQueryInterface;
+    $.fn[NAME].Constructor = Lightbox;
+    $.fn[NAME].noConflict = () => {
+      $.fn[NAME] = JQUERY_NO_CONFLICT;
+      return Lightbox.jQueryInterface;
+    };
+  }
+});
 
 export default Lightbox;

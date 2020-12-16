@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-globals */
 import PerfectScrollbar from 'perfect-scrollbar';
-import { getjQuery, typeCheckConfig } from '../mdb/util/index';
+import { getjQuery, typeCheckConfig, onDOMContentLoaded } from '../mdb/util/index';
 import Data from '../mdb/dom/data';
 import Manipulator from '../mdb/dom/manipulator';
 import EventHandler from '../mdb/dom/event-handler';
@@ -161,7 +161,7 @@ class PerfectScrollbars {
   }
 }
 
-SelectorEngine.find('[data-perfect-scrollbar="true"]').forEach((scroll) => {
+SelectorEngine.find('[data-mdb-perfect-scrollbar="true"]').forEach((scroll) => {
   let instance = PerfectScrollbars.getInstance(scroll);
   if (!instance) {
     instance = new PerfectScrollbars(scroll);
@@ -176,16 +176,18 @@ SelectorEngine.find('[data-perfect-scrollbar="true"]').forEach((scroll) => {
  * add .perfectScrollbar to jQuery only if jQuery is present
  */
 
-const $ = getjQuery();
+onDOMContentLoaded(() => {
+  const $ = getjQuery();
 
-if ($) {
-  const JQUERY_NO_CONFLICT = $.fn[NAME];
-  $.fn[NAME] = PerfectScrollbars.jQueryInterface;
-  $.fn[NAME].Constructor = PerfectScrollbars;
-  $.fn[NAME].noConflict = () => {
-    $.fn[NAME] = JQUERY_NO_CONFLICT;
-    return PerfectScrollbars.jQueryInterface;
-  };
-}
+  if ($) {
+    const JQUERY_NO_CONFLICT = $.fn[NAME];
+    $.fn[NAME] = PerfectScrollbars.jQueryInterface;
+    $.fn[NAME].Constructor = PerfectScrollbars;
+    $.fn[NAME].noConflict = () => {
+      $.fn[NAME] = JQUERY_NO_CONFLICT;
+      return PerfectScrollbars.jQueryInterface;
+    };
+  }
+});
 
 export default PerfectScrollbars;

@@ -1,5 +1,5 @@
 import Data from '../mdb/dom/data';
-import EventHandler from '../bootstrap/src/dom/event-handler';
+import EventHandler from '../mdb/dom/event-handler';
 import Manipulator from '../mdb/dom/manipulator';
 import SelectorEngine from '../mdb/dom/selector-engine';
 

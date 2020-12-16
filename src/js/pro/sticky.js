@@ -1,6 +1,6 @@
-import { getjQuery, typeCheckConfig } from '../mdb/util/index';
+import { getjQuery, typeCheckConfig, onDOMContentLoaded } from '../mdb/util/index';
 import Data from '../mdb/dom/data';
-import EventHandler from '../bootstrap/src/dom/event-handler';
+import EventHandler from '../mdb/dom/event-handler';
 import Manipulator from '../mdb/dom/manipulator';
 import SelectorEngine from '../mdb/dom/selector-engine';
 
@@ -498,16 +498,18 @@ SelectorEngine.find(SELECTOR_EXPAND).forEach((stickyEl) => {
  * add .sticky() to jQuery only if jQuery is present
  */
 
-const $ = getjQuery();
+onDOMContentLoaded(() => {
+  const $ = getjQuery();
 
-if ($) {
-  const JQUERY_NO_CONFLICT = $.fn[NAME];
-  $.fn[NAME] = Sticky.jQueryInterface;
-  $.fn[NAME].Constructor = Sticky;
-  $.fn[NAME].noConflict = () => {
-    $.fn[NAME] = JQUERY_NO_CONFLICT;
-    return Sticky.jQueryInterface;
-  };
-}
+  if ($) {
+    const JQUERY_NO_CONFLICT = $.fn[NAME];
+    $.fn[NAME] = Sticky.jQueryInterface;
+    $.fn[NAME].Constructor = Sticky;
+    $.fn[NAME].noConflict = () => {
+      $.fn[NAME] = JQUERY_NO_CONFLICT;
+      return Sticky.jQueryInterface;
+    };
+  }
+});
 
 export default Sticky;

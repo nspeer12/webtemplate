@@ -1,9 +1,9 @@
-import { getjQuery, typeCheckConfig } from '../mdb/util/index';
+import { getjQuery, typeCheckConfig, onDOMContentLoaded } from '../mdb/util/index';
 import Data from '../mdb/dom/data';
-import EventHandler from '../bootstrap/src/dom/event-handler';
+import EventHandler from '../mdb/dom/event-handler';
 import SelectorEngine from '../mdb/dom/selector-engine';
-import Tooltip from '../bootstrap/src/tooltip';
-import Manipulator from '../bootstrap/src/dom/manipulator';
+import Tooltip from '../bootstrap/mdb-prefix/tooltip';
+import Manipulator from '../mdb/dom/manipulator';
 
 /**
  * ------------------------------------------------------------------------
@@ -13,7 +13,7 @@ import Manipulator from '../bootstrap/src/dom/manipulator';
 
 const NAME = 'rating';
 const DATA_KEY = 'mdb.rating';
-const SELECTOR_EXPAND = '[data-toggle="rating"]';
+const SELECTOR_EXPAND = '[data-mdb-toggle="rating"]';
 const EVENT_KEY = `.${DATA_KEY}`;
 
 const ARROW_LEFT_KEY = 'ArrowLeft';
@@ -356,16 +356,18 @@ SelectorEngine.find(SELECTOR_EXPAND).forEach((el) => {
  * add .rating to jQuery only if jQuery is present
  */
 
-const $ = getjQuery();
+onDOMContentLoaded(() => {
+  const $ = getjQuery();
 
-if ($) {
-  const JQUERY_NO_CONFLICT = $.fn[NAME];
-  $.fn[NAME] = Rating.jQueryInterface;
-  $.fn[NAME].Constructor = Rating;
-  $.fn[NAME].noConflict = () => {
-    $.fn[NAME] = JQUERY_NO_CONFLICT;
-    return Rating.jQueryInterface;
-  };
-}
+  if ($) {
+    const JQUERY_NO_CONFLICT = $.fn[NAME];
+    $.fn[NAME] = Rating.jQueryInterface;
+    $.fn[NAME].Constructor = Rating;
+    $.fn[NAME].noConflict = () => {
+      $.fn[NAME] = JQUERY_NO_CONFLICT;
+      return Rating.jQueryInterface;
+    };
+  }
+});
 
 export default Rating;

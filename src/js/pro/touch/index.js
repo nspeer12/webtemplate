@@ -1,4 +1,4 @@
-import { getjQuery } from '../../mdb/util';
+import { getjQuery, onDOMContentLoaded } from '../../mdb/util';
 import Data from '../../mdb/dom/data';
 import EventHandler from '../../mdb/dom/event-handler';
 import Press from './press';
@@ -108,16 +108,18 @@ class Touch {
  * add .rating to jQuery only if jQuery is present
  */
 
-const $ = getjQuery();
+onDOMContentLoaded(() => {
+  const $ = getjQuery();
 
-if ($) {
-  const JQUERY_NO_CONFLICT = $.fn[NAME];
-  $.fn[NAME] = Touch.jQueryInterface;
-  $.fn[NAME].Constructor = Touch;
-  $.fn[NAME].noConflict = () => {
-    $.fn[NAME] = JQUERY_NO_CONFLICT;
-    return Touch.jQueryInterface;
-  };
-}
+  if ($) {
+    const JQUERY_NO_CONFLICT = $.fn[NAME];
+    $.fn[NAME] = Touch.jQueryInterface;
+    $.fn[NAME].Constructor = Touch;
+    $.fn[NAME].noConflict = () => {
+      $.fn[NAME] = JQUERY_NO_CONFLICT;
+      return Touch.jQueryInterface;
+    };
+  }
+});
 
 export default Touch;

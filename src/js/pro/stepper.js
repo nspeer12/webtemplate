@@ -1,8 +1,8 @@
 import Data from '../mdb/dom/data';
-import EventHandler from '../bootstrap/src/dom/event-handler';
+import EventHandler from '../mdb/dom/event-handler';
 import SelectorEngine from '../mdb/dom/selector-engine';
-import Manipulator from '../bootstrap/src/dom/manipulator';
-import { typeCheckConfig, getjQuery } from '../mdb/util/index';
+import Manipulator from '../mdb/dom/manipulator';
+import { typeCheckConfig, getjQuery, isRTL, onDOMContentLoaded } from '../mdb/util/index';
 import {
   LEFT_ARROW,
   RIGHT_ARROW,
@@ -23,7 +23,7 @@ import {
 
 const NAME = 'stepper';
 const DATA_KEY = 'mdb.stepper';
-const SELECTOR_EXPAND = '[data-stepper="stepper"]';
+const SELECTOR_EXPAND = '[data-mdb-stepper="stepper"]';
 const EVENT_KEY = `.${DATA_KEY}`;
 
 const STEPPER_HORIZONTAL = 'horizontal';
@@ -93,14 +93,14 @@ const MOBILE_BUTTON_NEXT = `
   <div class="${NEXT_BTN_CLASS}">
     <button class="btn btn-link">
       NEXT
-      <i class="fas fa-chevron-right"></i> 
+      <i class="fas fa-chevron-right"></i>
     </button>
   </div>
 `;
 const MOBILE_BUTTON_BACK = `
   <div class="${BACK_BTN_CLASS}">
     <button class="btn btn-link">
-      <i class="fas fa-chevron-left"></i> 
+      <i class="fas fa-chevron-left"></i>
       BACK
     </button>
   </div>
@@ -486,20 +486,30 @@ class Stepper {
         }
 
         if (e.keyCode === LEFT_ARROW && this._currentView !== STEPPER_VERTICAL) {
-          if (prevStepHead) {
+          if (!isRTL && prevStepHead) {
             this._toggleStepTabIndex(focusedStepHead, prevStepHead);
             this._toggleOutlineStyles(focusedStepHead, prevStepHead);
 
             prevStepHead.focus();
-          }
-        }
-
-        if (e.keyCode === RIGHT_ARROW && this._currentView !== STEPPER_VERTICAL) {
-          if (nextStepHead) {
+          } else if (isRTL && nextStepHead) {
             this._toggleStepTabIndex(focusedStepHead, nextStepHead);
             this._toggleOutlineStyles(focusedStepHead, nextStepHead);
 
             nextStepHead.focus();
+          }
+        }
+
+        if (e.keyCode === RIGHT_ARROW && this._currentView !== STEPPER_VERTICAL) {
+          if (!isRTL && nextStepHead) {
+            this._toggleStepTabIndex(focusedStepHead, nextStepHead);
+            this._toggleOutlineStyles(focusedStepHead, nextStepHead);
+
+            nextStepHead.focus();
+          } else if (isRTL && prevStepHead) {
+            this._toggleStepTabIndex(focusedStepHead, prevStepHead);
+            this._toggleOutlineStyles(focusedStepHead, prevStepHead);
+
+            prevStepHead.focus();
           }
         }
 
@@ -712,7 +722,7 @@ class Stepper {
 
       if (isOptional) {
         const stepHeadText = SelectorEngine.findOne(`.${HEAD_TEXT_CLASS}`, el);
-        stepHeadText.setAttribute('data-content', 'Optional');
+        stepHeadText.setAttribute('data-mdb-content', 'Optional');
       }
     });
   }
@@ -913,16 +923,18 @@ SelectorEngine.find(SELECTOR_EXPAND).forEach((el) => {
  * add .rating to jQuery only if jQuery is present
  */
 
-const $ = getjQuery();
+onDOMContentLoaded(() => {
+  const $ = getjQuery();
 
-if ($) {
-  const JQUERY_NO_CONFLICT = $.fn[NAME];
-  $.fn[NAME] = Stepper.jQueryInterface;
-  $.fn[NAME].Constructor = Stepper;
-  $.fn[NAME].noConflict = () => {
-    $.fn[NAME] = JQUERY_NO_CONFLICT;
-    return Stepper.jQueryInterface;
-  };
-}
+  if ($) {
+    const JQUERY_NO_CONFLICT = $.fn[NAME];
+    $.fn[NAME] = Stepper.jQueryInterface;
+    $.fn[NAME].Constructor = Stepper;
+    $.fn[NAME].noConflict = () => {
+      $.fn[NAME] = JQUERY_NO_CONFLICT;
+      return Stepper.jQueryInterface;
+    };
+  }
+});
 
 export default Stepper;

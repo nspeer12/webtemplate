@@ -1,11 +1,10 @@
-import { getjQuery, typeCheckConfig, element } from '../../mdb/util/index';
-// import EventHandler from '../../mdb/dom/event-handler';
+import { getjQuery, typeCheckConfig, element, onDOMContentLoaded } from '../../mdb/util/index';
 import Manipulator from '../../mdb/dom/manipulator';
 import SelectorEngine from '../../mdb/dom/selector-engine';
 import Chip from './chip';
 import Data from '../../mdb/dom/data';
 import { getInputField } from './templates';
-import EventHandler from '../../bootstrap/src/dom/event-handler';
+import EventHandler from '../../mdb/dom/event-handler';
 import {
   LEFT_ARROW,
   RIGHT_ARROW,
@@ -477,16 +476,18 @@ SelectorEngine.find(`.${NAME}`).forEach((chip) => {
  * ------------------------------------------------------------------------
  */
 
-const $ = getjQuery();
+onDOMContentLoaded(() => {
+  const $ = getjQuery();
 
-if ($) {
-  const JQUERY_NO_CONFLICT = $.fn[NAME];
-  $.fn[NAME] = ChipsInput.jQueryInterface;
-  $.fn[NAME].Constructor = ChipsInput;
-  $.fn[NAME].noConflict = () => {
-    $.fn[NAME] = JQUERY_NO_CONFLICT;
-    return ChipsInput.jQueryInterface;
-  };
-}
+  if ($) {
+    const JQUERY_NO_CONFLICT = $.fn[NAME];
+    $.fn[NAME] = ChipsInput.jQueryInterface;
+    $.fn[NAME].Constructor = ChipsInput;
+    $.fn[NAME].noConflict = () => {
+      $.fn[NAME] = JQUERY_NO_CONFLICT;
+      return ChipsInput.jQueryInterface;
+    };
+  }
+});
 
 export default ChipsInput;

@@ -9,6 +9,6 @@
     padding: $rating-icon-padding;
   }
 }
-.rating:not([data-readonly='true']) li {
+.rating:not([data-mdb-readonly='true']) li {
   cursor: pointer;
 }

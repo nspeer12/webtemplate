@@ -1,7 +1,13 @@
 /* eslint-disable consistent-return */
 /* eslint-disable no-else-return */
-import Popper from 'popper.js';
-import { typeCheckConfig, getjQuery, element, getUID } from '../../mdb/util/index';
+import { createPopper } from '@popperjs/core';
+import {
+  typeCheckConfig,
+  getjQuery,
+  element,
+  getUID,
+  onDOMContentLoaded,
+} from '../../mdb/util/index';
 import { getTimepickerTemplate, getToggleButtonTemplate } from './templates';
 import Data from '../../mdb/dom/data';
 import Manipulator from '../../mdb/dom/manipulator';
@@ -164,12 +170,12 @@ class Timepicker {
 
     this._checkToggleButton();
 
-    this.inputFormatShow = SelectorEngine.findOne('[data-timepicker-format24]', this._element);
+    this.inputFormatShow = SelectorEngine.findOne('[data-mdb-timepicker-format24]', this._element);
 
     this.inputFormat =
       this.inputFormatShow === null ? '' : Object.values(this.inputFormatShow.dataset)[0];
-    this.elementToggle = SelectorEngine.findOne('[data-toggle]', this._element);
-    this.toggleElement = Object.values(element.querySelector('[data-toggle]').dataset)[0];
+    this.elementToggle = SelectorEngine.findOne('[data-mdb-toggle]', this._element);
+    this.toggleElement = Object.values(element.querySelector('[data-mdb-toggle]').dataset)[0];
 
     this._hour = null;
     this._minutes = null;
@@ -280,7 +286,7 @@ class Timepicker {
     this.input = null;
     this._focusTrap = null;
 
-    EventHandler.off(this._document, 'click', `[data-toggle='${this.toggleElement}']`);
+    EventHandler.off(this._document, 'click', `[data-mdb-toggle='${this.toggleElement}']`);
   }
 
   // private
@@ -672,116 +678,121 @@ class Timepicker {
   }
 
   _handleOpen() {
-    EventHandlerMulti.on(this._element, 'click', `[data-toggle='${this.toggleElement}']`, (e) => {
-      if (this._options === null) {
-        return;
-      }
-
-      // Fix for input with open, if is not for settimeout input has incorrent jumping label
-      const fixForInput = Manipulator.getDataAttribute(this.input, 'toggle') !== null ? 200 : 0;
-
-      setTimeout(() => {
-        Manipulator.addStyle(this.elementToggle, {
-          pointerEvents: 'none',
-        });
-
-        this.elementToggle.blur();
-
-        let checkInputValue;
-
-        if (takeValue(this.input)[0] === '') {
-          checkInputValue = ['12', '00', 'PM'];
-        } else {
-          checkInputValue = takeValue(this.input);
+    EventHandlerMulti.on(
+      this._element,
+      'click',
+      `[data-mdb-toggle='${this.toggleElement}']`,
+      (e) => {
+        if (this._options === null) {
+          return;
         }
 
-        const { modalID, inline, format12, overflowHidden } = this._options;
-        const [hour, minute, format] = checkInputValue;
-        const div = element('div');
+        // Fix for input with open, if is not for settimeout input has incorrent jumping label
+        const fixForInput = Manipulator.getDataAttribute(this.input, 'toggle') !== null ? 200 : 0;
 
-        if (Number(hour) > 12 || hour === '00') {
-          this._isInner = true;
-        }
-
-        this.input.blur();
-        e.target.blur();
-
-        div.innerHTML = getTimepickerTemplate(this._options);
-        Manipulator.addClass(div, MODAL_CLASS);
-
-        div.setAttribute('role', 'dialog');
-        div.setAttribute('tabIndex', '-1');
-        div.setAttribute('id', modalID);
-
-        if (!inline) {
-          this._document.body.appendChild(div);
-        } else {
-          this._popper = new Popper(this.input, div, {
-            placement: 'bottom-start',
-          });
-
-          this._document.body.appendChild(div);
-        }
-
-        this._getDomElements();
-        this._toggleBackdropAnimation();
-        this._setActiveClassToTipsOnOpen(hour, minute, format);
-        this._appendTimes();
-        this._setActiveClassToTipsOnOpen(hour, minute, format);
-        this._setTipsAndTimesDependOnInputValue(hour, minute);
-
-        if (this.input.value === '') {
-          const allTipsHours = SelectorEngine.find(`.${TIPS_HOURS_CLASS}`, this._modal);
-
-          if (format12) {
-            Manipulator.addClass(this._PM, ACTIVE_CLASS);
-          }
-
-          this._hour.textContent = '12';
-          this._minutes.textContent = '00';
-          this._addActiveClassToTip(allTipsHours, Number(this._hour.textContent));
-        }
-
-        this._handleSwitchTimeMode();
-        this._handleOkButton();
-        this._handleClose();
-
-        if (inline) {
-          this._handleHoverInlineBtn();
-          this._handleDocumentClickInline();
-          this._handleInlineClicks();
-        } else {
-          this._handleSwitchHourMinute();
-          this._handleClockClick();
-          this._handleKeyboard();
-
-          Manipulator.addStyle(this._hour, {
+        setTimeout(() => {
+          Manipulator.addStyle(this.elementToggle, {
             pointerEvents: 'none',
           });
-          Manipulator.addStyle(this._minutes, {
-            pointerEvents: '',
-          });
-        }
 
-        if (overflowHidden) {
-          Manipulator.addStyle(this._document.body, {
-            overflow: 'hidden',
-          });
+          this.elementToggle.blur();
 
-          if (!checkBrowser()) {
-            Manipulator.addStyle(this._document.body, {
-              paddingRight: `${this._getScrollbarWidth()}px`,
+          let checkInputValue;
+
+          if (takeValue(this.input)[0] === '') {
+            checkInputValue = ['12', '00', 'PM'];
+          } else {
+            checkInputValue = takeValue(this.input);
+          }
+
+          const { modalID, inline, format12, overflowHidden } = this._options;
+          const [hour, minute, format] = checkInputValue;
+          const div = element('div');
+
+          if (Number(hour) > 12 || hour === '00') {
+            this._isInner = true;
+          }
+
+          this.input.blur();
+          e.target.blur();
+
+          div.innerHTML = getTimepickerTemplate(this._options);
+          Manipulator.addClass(div, MODAL_CLASS);
+
+          div.setAttribute('role', 'dialog');
+          div.setAttribute('tabIndex', '-1');
+          div.setAttribute('id', modalID);
+
+          if (!inline) {
+            this._document.body.appendChild(div);
+          } else {
+            this._popper = createPopper(this.input, div, {
+              placement: 'bottom-start',
+            });
+
+            this._document.body.appendChild(div);
+          }
+
+          this._getDomElements();
+          this._toggleBackdropAnimation();
+          this._setActiveClassToTipsOnOpen(hour, minute, format);
+          this._appendTimes();
+          this._setActiveClassToTipsOnOpen(hour, minute, format);
+          this._setTipsAndTimesDependOnInputValue(hour, minute);
+
+          if (this.input.value === '') {
+            const allTipsHours = SelectorEngine.find(`.${TIPS_HOURS_CLASS}`, this._modal);
+
+            if (format12) {
+              Manipulator.addClass(this._PM, ACTIVE_CLASS);
+            }
+
+            this._hour.textContent = '12';
+            this._minutes.textContent = '00';
+            this._addActiveClassToTip(allTipsHours, Number(this._hour.textContent));
+          }
+
+          this._handleSwitchTimeMode();
+          this._handleOkButton();
+          this._handleClose();
+
+          if (inline) {
+            this._handleHoverInlineBtn();
+            this._handleDocumentClickInline();
+            this._handleInlineClicks();
+          } else {
+            this._handleSwitchHourMinute();
+            this._handleClockClick();
+            this._handleKeyboard();
+
+            Manipulator.addStyle(this._hour, {
+              pointerEvents: 'none',
+            });
+            Manipulator.addStyle(this._minutes, {
+              pointerEvents: '',
             });
           }
-        }
 
-        this._focusTrap = new FocusTrap(this._wrapper, {
-          event: 'keydown',
-          condition: ({ key }) => key === 'Tab',
-        });
-        this._focusTrap.trap();
-      }, fixForInput);
-    });
+          if (overflowHidden) {
+            Manipulator.addStyle(this._document.body, {
+              overflow: 'hidden',
+            });
+
+            if (!checkBrowser()) {
+              Manipulator.addStyle(this._document.body, {
+                paddingRight: `${this._getScrollbarWidth()}px`,
+              });
+            }
+          }
+
+          this._focusTrap = new FocusTrap(this._wrapper, {
+            event: 'keydown',
+            condition: ({ key }) => key === 'Tab',
+          });
+          this._focusTrap.trap();
+        }, fixForInput);
+      }
+    );
   }
 
   _handleInlineClicks() {
@@ -2232,15 +2243,17 @@ EventHandler.on(window, 'DOMContentLoaded', () => {
  * add .timepicker to jQuery only if jQuery is present
  */
 
-const $ = getjQuery();
+onDOMContentLoaded(() => {
+  const $ = getjQuery();
 
-if ($) {
-  const JQUERY_NO_CONFLICT = $.fn[NAME];
+  if ($) {
+    const JQUERY_NO_CONFLICT = $.fn[NAME];
 
-  $.fn[NAME] = Timepicker.jQueryInterface;
-  $.fn[NAME].Constructor = Timepicker;
-  $.fn[NAME].noConflict = () => {
-    $.fn[NAME] = JQUERY_NO_CONFLICT;
-    return Timepicker.jQueryInterface;
-  };
-}
+    $.fn[NAME] = Timepicker.jQueryInterface;
+    $.fn[NAME].Constructor = Timepicker;
+    $.fn[NAME].noConflict = () => {
+      $.fn[NAME] = JQUERY_NO_CONFLICT;
+      return Timepicker.jQueryInterface;
+    };
+  }
+});

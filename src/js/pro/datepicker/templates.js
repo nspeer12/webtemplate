@@ -231,7 +231,7 @@ export function createDayViewTemplate(date, selectedDate, options) {
               class="datepicker-cell datepicker-small-cell datepicker-day-cell ${
                 day.disabled ? 'disabled' : ''
               } ${day.isToday && 'current'} ${day.isSelected && 'selected'}"
-              data-date="${getYear(day.date)}-${getMonth(day.date)}-${getDate(day.date)}"
+              data-mdb-date="${getYear(day.date)}-${getMonth(day.date)}-${getDate(day.date)}"
               aria-label="${day.date}"
               aria-selected="${day.isSelected}">
                 <div
@@ -354,7 +354,7 @@ export function createMonthViewTemplate(year, selectedYear, selectedMonth, optio
                   isMonthDisabled(monthIndex, year, options.min, options.max) ? 'disabled' : ''
                 } ${monthIndex === selectedMonth && year === selectedYear ? 'selected' : ''} ${
                   monthIndex === currentMonth ? 'current' : ''
-                }" data-month="${monthIndex}" data-year="${year}" aria-label="${month}, ${year}">
+                }" data-mdb-month="${monthIndex}" data-mdb-year="${year}" aria-label="${month}, ${year}">
                   <div class="datepicker-cell-content datepicker-large-cell-content">${month}</div>
                 </td>
               `;
@@ -409,7 +409,7 @@ export function createYearViewTemplate(date, selectedYear, options, yearsInView,
                 isYearDisabled(year, options.min, options.max) ? 'disabled' : ''
               } ${year === selectedYear ? 'selected' : ''} ${
                 year === currentYear ? 'current' : ''
-              }" aria-label="${year}" data-year="${year}">
+              }" aria-label="${year}" data-mdb-year="${year}">
                 <div class="datepicker-cell-content datepicker-large-cell-content">${year}</div>
               </td>
             `;
@@ -454,7 +454,7 @@ function getYearsArray(date, yearsInView, yearsInRow) {
 
 export function getToggleButtonTemplate(id) {
   return `
-    <button id="${id}" type="button" class="datepicker-toggle-button" data-toggle="datepicker">
+    <button id="${id}" type="button" class="datepicker-toggle-button" data-mdb-toggle="datepicker">
       <i class="far fa-calendar datepicker-toggle-icon"></i>
     </button>
   `;

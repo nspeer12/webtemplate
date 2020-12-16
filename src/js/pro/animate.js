@@ -1,4 +1,4 @@
-import { getjQuery, typeCheckConfig } from '../mdb/util/index';
+import { getjQuery, typeCheckConfig, onDOMContentLoaded } from '../mdb/util/index';
 import Data from '../mdb/dom/data';
 import Manipulator from '../mdb/dom/manipulator';
 import SelectorEngine from '../mdb/dom/selector-engine';
@@ -12,7 +12,7 @@ import EventHandler from '../mdb/dom/event-handler';
 
 const NAME = 'animation';
 const DATA_KEY = 'mdb.animation';
-const SELECTOR_EXPAND = '[data-toggle="animation"]';
+const SELECTOR_EXPAND = '[data-mdb-toggle="animation"]';
 
 const DefaultType = {
   animation: 'string',
@@ -335,16 +335,18 @@ SelectorEngine.find(SELECTOR_EXPAND).forEach((el) => {
  * add .animate to jQuery only if jQuery is present
  */
 
-const $ = getjQuery();
+onDOMContentLoaded(() => {
+  const $ = getjQuery();
 
-if ($) {
-  const JQUERY_NO_CONFLICT = $.fn[NAME];
-  $.fn[NAME] = Animate.jQueryInterface;
-  $.fn[NAME].Constructor = Animate;
-  $.fn[NAME].noConflict = () => {
-    $.fn[NAME] = JQUERY_NO_CONFLICT;
-    return Animate.jQueryInterface;
-  };
-}
+  if ($) {
+    const JQUERY_NO_CONFLICT = $.fn[NAME];
+    $.fn[NAME] = Animate.jQueryInterface;
+    $.fn[NAME].Constructor = Animate;
+    $.fn[NAME].noConflict = () => {
+      $.fn[NAME] = JQUERY_NO_CONFLICT;
+      return Animate.jQueryInterface;
+    };
+  }
+});
 
 export default Animate;

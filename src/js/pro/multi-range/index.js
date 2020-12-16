@@ -1,4 +1,4 @@
-import { getjQuery, typeCheckConfig } from '../../mdb/util/index';
+import { getjQuery, typeCheckConfig, onDOMContentLoaded } from '../../mdb/util/index';
 import EventHandler, { EventHandlerMulti } from '../../mdb/dom/event-handler';
 import Manipulator from '../../mdb/dom/manipulator';
 import SelectorEngine from '../../mdb/dom/selector-engine';
@@ -511,16 +511,18 @@ SelectorEngine.find(SELECTOR_MULTI_RANGE).forEach((range) => {
  * ------------------------------------------------------------------------
  */
 
-const $ = getjQuery();
+onDOMContentLoaded(() => {
+  const $ = getjQuery();
 
-if ($) {
-  const JQUERY_NO_CONFLICT = $.fn[NAME];
-  $.fn[NAME] = MultiRangeSlider.jQueryInterface;
-  $.fn[NAME].Constructor = MultiRangeSlider;
-  $.fn[NAME].noConflict = () => {
-    $.fn[NAME] = JQUERY_NO_CONFLICT;
-    return MultiRangeSlider.jQueryInterface;
-  };
-}
+  if ($) {
+    const JQUERY_NO_CONFLICT = $.fn[NAME];
+    $.fn[NAME] = MultiRangeSlider.jQueryInterface;
+    $.fn[NAME].Constructor = MultiRangeSlider;
+    $.fn[NAME].noConflict = () => {
+      $.fn[NAME] = JQUERY_NO_CONFLICT;
+      return MultiRangeSlider.jQueryInterface;
+    };
+  }
+});
 
 export default MultiRangeSlider;

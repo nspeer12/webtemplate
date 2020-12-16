@@ -1,8 +1,8 @@
-import { getjQuery, typeCheckConfig } from '../mdb/util/index';
+import { getjQuery, typeCheckConfig, onDOMContentLoaded } from '../mdb/util/index';
 import EventHandler from '../mdb/dom/event-handler';
 import Manipulator from '../mdb/dom/manipulator';
 import SelectorEngine from '../mdb/dom/selector-engine';
-import BSToast from '../bootstrap/src/toast';
+import BSToast from '../bootstrap/mdb-prefix/toast';
 import Stack from '../mdb/util/stack';
 /**
  * ------------------------------------------------------------------------
@@ -309,16 +309,18 @@ SelectorEngine.find(SELECTOR_TOAST).forEach((toast) => {
  * ------------------------------------------------------------------------
  */
 
-const $ = getjQuery();
+onDOMContentLoaded(() => {
+  const $ = getjQuery();
 
-if ($) {
-  const JQUERY_NO_CONFLICT = $.fn[NAME];
-  $.fn[NAME] = Toast.jQueryInterface;
-  $.fn[NAME].Constructor = Toast;
-  $.fn[NAME].noConflict = () => {
-    $.fn[NAME] = JQUERY_NO_CONFLICT;
-    return Toast.jQueryInterface;
-  };
-}
+  if ($) {
+    const JQUERY_NO_CONFLICT = $.fn[NAME];
+    $.fn[NAME] = Toast.jQueryInterface;
+    $.fn[NAME].Constructor = Toast;
+    $.fn[NAME].noConflict = () => {
+      $.fn[NAME] = JQUERY_NO_CONFLICT;
+      return Toast.jQueryInterface;
+    };
+  }
+});
 
 export default Toast;

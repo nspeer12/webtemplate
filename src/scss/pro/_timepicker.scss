@@ -114,6 +114,10 @@
     &.active {
       opacity: 1;
     }
+
+    &-wrapper {
+      direction: ltr #{'/* rtl:ignore */'};
+    }
   }
 
   &-mode-wrapper {
@@ -248,8 +252,8 @@
     background-color: $timepicker-hand-pointer-background-color;
     bottom: $timepicker-hand-pointer-bottom;
     height: $timepicker-hand-pointer-height;
-    left: $timepicker-hand-pointer-left;
-    transform-origin: center bottom 0;
+    left: $timepicker-hand-pointer-left #{'/* rtl:ignore */'};
+    transform-origin: center bottom 0 #{'/* rtl:ignore */'};
     width: $timepicker-hand-pointer-width;
   }
 

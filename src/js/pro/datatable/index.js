@@ -1,5 +1,5 @@
 import PerfectScrollbar from '../../mdb/perfect-scrollbar';
-import { getjQuery, typeCheckConfig } from '../../mdb/util/index';
+import { getjQuery, typeCheckConfig, onDOMContentLoaded } from '../../mdb/util/index';
 import Data from '../../mdb/dom/data';
 import EventHandler from '../../mdb/dom/event-handler';
 import Manipulator from '../../mdb/dom/manipulator';
@@ -334,7 +334,7 @@ class Datatable {
       this._sortField = column.field;
     }
 
-    const icon = SelectorEngine.findOne(`i[data-sort="${this._sortField}"]`, this._element);
+    const icon = SelectorEngine.findOne(`i[data-mdb-sort="${this._sortField}"]`, this._element);
 
     this._activePage = 0;
 
@@ -893,16 +893,18 @@ SelectorEngine.find(SELECTOR_DATATABLE).forEach((datatable) => {
  * add .datatable to jQuery only if jQuery is present
  */
 
-const $ = getjQuery();
+onDOMContentLoaded(() => {
+  const $ = getjQuery();
 
-if ($) {
-  const JQUERY_NO_CONFLICT = $.fn[NAME];
-  $.fn[NAME] = Datatable.jQueryInterface;
-  $.fn[NAME].Constructor = Datatable;
-  $.fn[NAME].noConflict = () => {
-    $.fn[NAME] = JQUERY_NO_CONFLICT;
-    return Datatable.jQueryInterface;
-  };
-}
+  if ($) {
+    const JQUERY_NO_CONFLICT = $.fn[NAME];
+    $.fn[NAME] = Datatable.jQueryInterface;
+    $.fn[NAME].Constructor = Datatable;
+    $.fn[NAME].noConflict = () => {
+      $.fn[NAME] = JQUERY_NO_CONFLICT;
+      return Datatable.jQueryInterface;
+    };
+  }
+});
 
 export default Datatable;
