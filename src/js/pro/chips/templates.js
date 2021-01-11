@@ -1,9 +1,9 @@
 /* eslint-disable import/prefer-default-export */
-export const getInputField = ({ inputID }) => {
+export const getInputField = ({ inputID, labelText }) => {
   return `<div class="form-outline chips-input-wrapper">
       <input type="text" id="${inputID}" class="form-control chips-input" />
       <label class="form-label" for="${inputID}">
-        Example label
+        ${labelText}
       </label>
 
       <div class="form-notch">

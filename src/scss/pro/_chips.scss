@@ -5,7 +5,6 @@
   height: $chip-height;
   padding: 0 $chip-padding-right;
   margin-right: $chip-margin-right;
-  margin-bottom: $chip-margin-bottom;
   font-size: $chip-font-size;
   font-weight: $chip-font-weight;
   color: $chip-font-color;
@@ -16,6 +15,8 @@
   word-wrap: break-word;
   box-shadow: none;
   text-transform: none;
+  margin-top: 5px;
+  margin-bottom: 5px;
 
   &:hover {
     box-shadow: none;
@@ -83,7 +84,14 @@
   border: none;
   outline: none;
   box-shadow: none;
-  transition: all 0.3s;
+  transition: all 0.3s ease;
+
+  &-transition {
+    transition: all 0.3s ease;
+  }
+  &-padding {
+    padding: 5px;
+  }
 
   &.focus {
     box-shadow: 0 1px 0 0 red;
@@ -127,14 +135,11 @@
       display: flex;
       align-items: center;
       flex-wrap: wrap;
+      transition: all 0.3s ease;
 
       input {
         width: 150px;
       }
-    }
-
-    .chip {
-      margin-bottom: 0;
     }
   }
 }

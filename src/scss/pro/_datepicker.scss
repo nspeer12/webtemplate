@@ -195,7 +195,7 @@
   margin-top: $datepicker-arrow-controls-margin-top;
 }
 
-/*rtl:begin:options:
+/*!rtl:begin:options:
 {
   "autoRename": true,
   "stringMap":[
@@ -274,7 +274,7 @@
   border-right-width: $datepicker-next-button-after-border-width;
   transform: $datepicker-next-button-after-transform;
 }
-/*rtl:end:options*/
+/*!rtl:end:options*/
 
 .datepicker-view {
   padding-left: $datepicker-view-padding-x;

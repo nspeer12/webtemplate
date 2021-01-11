@@ -31,6 +31,9 @@ const CLASSNAME_CHIPS_INITIAL = `${NAME}-initial`;
 const CLASSNAME_CHIPS_PLACEHOLDER = `${NAME}-placeholder`;
 const CLASSNAME_CLOSE_OPACITY = 'close-opacity';
 const CLASSNAME_CHIP_OPACITY = 'chip-opacity';
+const CLASSNAME_CHIPS_PADDING = `${NAME}-padding`;
+const CLASSNAME_CHIPS_TANSITION = `${NAME}-transition`;
+const CLASSNAME_CHIPS_WRAPPER = `${NAME}-input-wrapper`;
 
 const SELECTOR_CHIP = '.chip';
 const SELECTOR_CHIP_ACTIVE = `${SELECTOR_CHIP}.${CLASSNAME_ACTIVE}`;
@@ -49,6 +52,7 @@ const DefaultType = {
   parentSelector: 'string',
   initialValues: 'array',
   editable: 'boolean',
+  labelText: 'string',
 };
 
 const Default = {
@@ -56,6 +60,7 @@ const Default = {
   parentSelector: '',
   initialValues: [{ tag: 'init1' }, { tag: 'init2' }],
   editable: false,
+  labelText: 'Example label',
 };
 
 class ChipsInput extends Chip {
@@ -86,16 +91,22 @@ class ChipsInput extends Chip {
     return SelectorEngine.find(SELECTOR_CHIP, this._element);
   }
 
+  get chipsInputWrapper() {
+    return SelectorEngine.findOne(`.${CLASSNAME_CHIPS_WRAPPER}`, this._element);
+  }
+
   // Public
 
   init() {
     this._setChipsClass();
     this._appendInputToElement(CLASSNAME_CHIPS_PLACEHOLDER);
-    this._handleInputText();
     this._handleInitialValue();
+    this._handleInputText();
     this._handleKeyboard();
     this._handleChipsOnSelect();
     this._handleEditable();
+    this._handleChipsFocus();
+    this._handleClicksOnChips();
   }
 
   dispose() {
@@ -265,6 +276,15 @@ class ChipsInput extends Chip {
     return this.allChips[chipIndex];
   }
 
+  _handleClicksOnChips() {
+    EventHandler.on(this._element, 'click', () => {
+      if (this.allChips.length === 0) {
+        Manipulator.removeClass(this.chipsInputWrapper, CLASSNAME_CHIPS_PADDING);
+        Manipulator.removeClass(this.input, CLASSNAME_ACTIVE);
+      }
+    });
+  }
+
   _handleTextContent() {
     const arr = [];
 
@@ -291,6 +311,20 @@ class ChipsInput extends Chip {
     });
   }
 
+  _handleChipsFocus() {
+    EventHandler.on(this._element, 'click', ({ target: { classList } }) => {
+      if (
+        classList.contains('chip') ||
+        classList.contains('close') ||
+        classList.contains('text-chip')
+      ) {
+        return;
+      }
+
+      this.input.focus();
+    });
+  }
+
   _handleInitialValue() {
     this._appendInputToElement(CLASSNAME_CHIPS_INITIAL);
 
@@ -300,6 +334,11 @@ class ChipsInput extends Chip {
       initialValues.forEach(({ tag }) => this._handleCreateChip(this.input, tag));
 
       Manipulator.addClass(this.input, CLASSNAME_ACTIVE);
+    }
+
+    if (this.allChips.length > 0) {
+      Manipulator.addClass(this.chipsInputWrapper, CLASSNAME_CHIPS_PADDING);
+      Manipulator.addClass(this.chipsInputWrapper, CLASSNAME_CHIPS_TANSITION);
     }
   }
 
@@ -341,27 +380,36 @@ class ChipsInput extends Chip {
 
       this._handleEvents(event, EVENT_ADD);
     }
+
+    if (this.allChips.length > 0) {
+      Manipulator.addClass(this.chipsInputWrapper, CLASSNAME_CHIPS_PADDING);
+      Manipulator.addClass(this.chipsInputWrapper, CLASSNAME_CHIPS_TANSITION);
+    } else {
+      Manipulator.removeClass(this.chipsInputWrapper, CLASSNAME_CHIPS_PADDING);
+    }
   }
 
-  _handleChangeInput = ({ target }) => {
-    if (this.allChips.length + 1 > 0) {
-      Manipulator.addClass(target, CLASSNAME_ACTIVE);
-    }
-
-    if (this.allChips.length === 0 || this.allChips.length + 1 === 0) {
-      Manipulator.removeClass(target, CLASSNAME_ACTIVE);
-    }
-
+  _handleBlurInput = ({ target }) => {
     if (target.value.length > 0) {
       this._handleCreateChip(target, target.value);
     }
+
+    if (this.allChips.length > 0) {
+      Manipulator.addClass(target, CLASSNAME_ACTIVE);
+      Manipulator.addClass(this.chipsInputWrapper, CLASSNAME_CHIPS_PADDING);
+    } else {
+      Manipulator.removeClass(target, CLASSNAME_ACTIVE);
+      Manipulator.removeClass(this.chipsInputWrapper, CLASSNAME_CHIPS_PADDING);
+    }
+
+    this.allChips.forEach((chip) => Manipulator.removeClass(chip, CLASSNAME_ACTIVE));
   };
 
   _handleInputText() {
     const placeholder = SelectorEngine.findOne(CLASSNAME_CHIPS_PLACEHOLDER, this._element);
 
     EventHandler.on(this._element, 'keyup', placeholder, (e) => this._handleKeysInputToElement(e));
-    EventHandler.on(this.input, 'blur', (e) => this._handleChangeInput(e));
+    EventHandler.on(this.input, 'blur', (e) => this._handleBlurInput(e));
   }
 
   _appendInputToElement(selector) {
