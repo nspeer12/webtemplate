@@ -138,6 +138,10 @@ class Popconfirm {
   }
 
   _handlePopconfirmTransitionEnd(event) {
+    if (event.target !== this.popconfirmBody) {
+      return;
+    }
+
     const popoverTemplate = SelectorEngine.findOne('.popconfirm-popover');
     EventHandler.off(this.popconfirmBody, 'transitionend');
 

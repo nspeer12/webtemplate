@@ -1,5 +1,6 @@
 @import './components/core-theme';
 @import './components/colors-theme';
+@import './components/type-theme';
 @import './components/datepicker-theme';
 @import './components/alert-theme';
 @import './components/badge-theme';
@@ -37,6 +38,7 @@
 @mixin mdb-theme($theme) {
   @include mdb-core-theme($theme);
   @include mdb-colors-theme($theme);
+  @include mdb-type-theme($theme);
   @include mdb-datepicker-theme($theme);
   @include mdb-alert-theme($theme);
   @include mdb-button-theme($theme);

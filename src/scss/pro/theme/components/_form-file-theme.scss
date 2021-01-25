@@ -11,6 +11,7 @@
   $onSuccess: map-get($theme, onSuccess);
   $surfaceHover: map-get($theme, surfaceHover);
   $pickerHeader: map-get($theme, pickerHeader);
+  $onBackground: map-get($theme, onBackground);
 
   .form-file-input {
     &:focus-within ~ .form-file-label {
@@ -37,5 +38,9 @@
   .form-file-text {
     background-color: transparent;
     color: rgba($onSurface, 0.7);
+  }
+
+  .form-control::-webkit-file-upload-button {
+    color: rgba($onBackground, 0.7);
   }
 }

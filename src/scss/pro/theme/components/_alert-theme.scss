@@ -4,17 +4,17 @@
 
   .alert-primary {
     @include alert-variant(
-      color-level($primary, $alert-bg-level),
-      color-level($primary, $alert-border-level),
-      color-level($primary, $alert-color-level)
+      shift-color($primary, $alert-bg-scale),
+      shift-color($primary, $alert-border-scale),
+      shift-color($primary, $alert-color-scale)
     );
   }
 
   .alert-secondary {
     @include alert-variant(
-      color-level($secondary, $alert-bg-level),
-      color-level($secondary, $alert-border-level),
-      color-level($secondary, $alert-color-level)
+      shift-color($secondary, $alert-bg-scale),
+      shift-color($secondary, $alert-border-scale),
+      shift-color($secondary, $alert-color-scale)
     );
   }
 }

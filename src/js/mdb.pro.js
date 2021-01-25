@@ -1,5 +1,5 @@
 // BOOTSTRAP CORE COMPONENTS
-import Button from './bootstrap/mdb-prefix/button';
+import Button from './free/button';
 import Collapse from './bootstrap/mdb-prefix/collapse';
 import Carousel from './free/carousel';
 import Popover from './free/popover';
