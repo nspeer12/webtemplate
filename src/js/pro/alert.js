@@ -147,9 +147,6 @@ class Alert extends BSAlert {
         display: 'none',
       });
     }
-    if (this._options.color) {
-      this._setColor();
-    }
 
     this._bindCloseEvent();
     this._bindClosedEvent();
@@ -158,6 +155,10 @@ class Alert extends BSAlert {
   }
 
   _setup() {
+    if (this._options.color) {
+      this._setColor();
+    }
+
     if (this._options.stacking) {
       this._setupStacking();
     }

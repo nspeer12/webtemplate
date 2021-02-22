@@ -40,6 +40,7 @@ import Modal from './pro/modal';
 import Clipboard from './pro/clipboard';
 import ChipsInput from './pro/chips/index';
 import MultiRangeSlider from './pro/multi-range/index';
+import Datetimepicker from './pro/dateTimePicker/date-time-picker';
 
 export {
   // FREE
@@ -81,4 +82,5 @@ export {
   Clipboard,
   ChipsInput,
   MultiRangeSlider,
+  Datetimepicker,
 };

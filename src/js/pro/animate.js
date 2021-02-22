@@ -94,8 +94,17 @@ class Animate {
   }
 
   dispose() {
+    EventHandler.off(this._element, 'mousedown');
+    EventHandler.off(this._animateElement, 'animationend');
+    EventHandler.off(window, 'scroll');
+    EventHandler.off(this._element, 'mouseover');
+
     Data.removeData(this._element, DATA_KEY);
     this._element = null;
+    this._animateElement = null;
+    this._isFirstScroll = null;
+    this._repeatAnimateOnScroll = null;
+    this._options = null;
   }
 
   // Private
@@ -286,7 +295,7 @@ class Animate {
   }
 
   _bindHoverEvents() {
-    EventHandler.one(this._element, 'mouseenter', () => {
+    EventHandler.one(this._element, 'mouseover', () => {
       this._startAnimation();
     });
     EventHandler.one(this._animateElement, 'animationend', () => {
