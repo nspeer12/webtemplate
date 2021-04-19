@@ -1,6 +1,7 @@
 // BOOTSTRAP CORE COMPONENTS
 import Button from './free/button';
 import Collapse from './bootstrap/mdb-prefix/collapse';
+import Offcanvas from './bootstrap/mdb-prefix/offcanvas';
 import Carousel from './free/carousel';
 import Popover from './free/popover';
 import ScrollSpy from './free/scrollspy';
@@ -47,6 +48,7 @@ export {
   Button,
   Carousel,
   Collapse,
+  Offcanvas,
   Dropdown,
   Input,
   Modal,

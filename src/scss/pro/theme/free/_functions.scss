@@ -33,6 +33,7 @@ $mdb-theme-light-pill-text: rgba(0, 0, 0, 0.6);
 $mdb-theme-light-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.05);
 $mdb-theme-light-shadow-variant: 0 5px 15px 0 rgba(0, 0, 0, 0.05);
 $mdb-theme-light-input-background: #000;
+$mdb-theme-light-modal-button-color: invert(1) grayscale(10%) brightness(10%);
 
 // Dark theme defaults
 $mdb-theme-dark-background: #303030;
@@ -70,6 +71,7 @@ $mdb-theme-dark-shadow-variant: 0 5px 15px 0 rgba(0, 0, 0, 0.25);
 $mdb-theme-dark-input-background: #fff;
 $mdb-theme-dark-pill-background: #424242;
 $mdb-theme-dark-pill-text: #ffffff;
+$mdb-theme-dark-modal-button-color: invert(1) grayscale(100%) brightness(200%);
 
 // Predefined colors for light and dark themes
 @function mdb-light-theme($primary, $secondary) {
@@ -93,24 +95,25 @@ $mdb-theme-dark-pill-text: #ffffff;
     onLink: $mdb-theme-light-link-background-hover,
     divider: $mdb-theme-light-divider,
     onHover: $mdb-theme-light-on-hover,
+    modalButtonColor: $mdb-theme-light-modal-button-color,
     // Datepicker and timepicker
-      pickerHeader: $primary,
+    pickerHeader: $primary,
     // Dropdown
-      dropdownText: $mdb-theme-light-dropdown-text,
+    dropdownText: $mdb-theme-light-dropdown-text,
     // Tooltip
-      tooltipBackground: $mdb-theme-light-tooltip-background,
+    tooltipBackground: $mdb-theme-light-tooltip-background,
     // Scrollspy
-      scrollspyActive: $primary,
+    scrollspyActive: $primary,
     // Sidenav
-      sidenavPrimaryText: $primary,
+    sidenavPrimaryText: $primary,
     sidenavPrimaryBg: rgba($primary, 0.1),
     sidenavSecondaryText: $secondary,
     sidenavSecondaryBg: rgba($secondary, 0.1),
     // Timepicker
-      timepickerClockBg: $mdb-theme-light-timepicker-clock-bg,
+    timepickerClockBg: $mdb-theme-light-timepicker-clock-bg,
     timepickerClockText: $mdb-theme-light-timepicker-clock-text,
     // Input
-      inputBorder: $mdb-theme-light-input-border,
+    inputBorder: $mdb-theme-light-input-border,
     inputLabel: $mdb-theme-light-input-label,
     inputText: $mdb-theme-light-input-text,
     inputPlaceholder: $mdb-theme-light-input-placeholder,
@@ -119,7 +122,7 @@ $mdb-theme-dark-pill-text: #ffffff;
     toastShadow: $mdb-theme-light-shadow-variant,
     inputBackground: $mdb-theme-light-input-background,
     // Pills
-      pillBackground: $mdb-theme-light-pill-background,
+    pillBackground: $mdb-theme-light-pill-background,
     pillText: $mdb-theme-light-pill-text
   );
 }
@@ -145,24 +148,25 @@ $mdb-theme-dark-pill-text: #ffffff;
     onLink: $mdb-theme-dark-link-background-hover,
     divider: $mdb-theme-dark-divider,
     onHover: $mdb-theme-dark-on-hover,
+    modalButtonColor: $mdb-theme-dark-modal-button-color,
     // Datepicker and timepicker
-      pickerHeader: $mdb-theme-dark-picker-header,
+    pickerHeader: $mdb-theme-dark-picker-header,
     // Dropdown
-      dropdownText: $mdb-theme-dark-dropdown-text,
+    dropdownText: $mdb-theme-dark-dropdown-text,
     // Tooltip
-      tooltipBackground: $mdb-theme-dark-tooltip-background,
+    tooltipBackground: $mdb-theme-dark-tooltip-background,
     // Scrollspy
-      scrollspyActive: lighten($primary, 20%),
+    scrollspyActive: lighten($primary, 20%),
     // Sidenav
-      sidenavPrimaryText: lighten($primary, 10%),
+    sidenavPrimaryText: lighten($primary, 10%),
     sidenavPrimaryBg: rgba($primary, 0.1),
     sidenavSecondaryText: lighten($secondary, 10%),
     sidenavSecondaryBg: rgba($secondary, 0.1),
     // Timepicker
-      timepickerClockBg: $mdb-theme-dark-timepicker-clock-bg,
+    timepickerClockBg: $mdb-theme-dark-timepicker-clock-bg,
     timepickerClockText: $mdb-theme-dark-timepicker-clock-text,
     // Input
-      inputBorder: $mdb-theme-dark-input-border,
+    inputBorder: $mdb-theme-dark-input-border,
     inputLabel: $mdb-theme-dark-input-label,
     inputText: $mdb-theme-dark-input-text,
     inputPlaceholder: $mdb-theme-light-input-placeholder,
@@ -171,7 +175,7 @@ $mdb-theme-dark-pill-text: #ffffff;
     toastShadow: $mdb-theme-dark-shadow-variant,
     inputBackground: $mdb-theme-dark-input-background,
     // Pills
-      pillBackground: $mdb-theme-dark-pill-background,
+    pillBackground: $mdb-theme-dark-pill-background,
     pillText: $mdb-theme-dark-pill-text
   );
 }

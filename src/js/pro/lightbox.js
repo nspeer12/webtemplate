@@ -366,7 +366,7 @@ class Lightbox {
           this._galleryContent.append(newImgWrapper);
 
           newImg.onload = resolve;
-          newImg.src = img.dataset.img || img.src;
+          newImg.src = img.dataset.mdbImg || img.src;
           imageArray.push(newImg);
 
           positionLeft += 100;

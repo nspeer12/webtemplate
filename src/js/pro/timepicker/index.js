@@ -774,11 +774,12 @@ class Timepicker {
           }
 
           if (overflowHidden) {
+            const hasVerticalScroll = window.innerWidth > document.documentElement.clientWidth;
             Manipulator.addStyle(this._document.body, {
               overflow: 'hidden',
             });
 
-            if (!checkBrowser()) {
+            if (!checkBrowser() && hasVerticalScroll) {
               Manipulator.addStyle(this._document.body, {
                 paddingRight: `${this._getScrollbarWidth()}px`,
               });

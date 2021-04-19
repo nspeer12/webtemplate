@@ -554,7 +554,21 @@ class Datatable {
     Manipulator.style(datatableBody, style);
 
     if (this._options.fixedHeader) {
-      SelectorEngine.find(SELECTOR_HEADER, this._element).forEach((header, i) => {
+      let headers = SelectorEngine.find(SELECTOR_HEADER, this._element);
+
+      if (this._options.selectable) {
+        headers = headers.filter((header, index) => {
+          Manipulator.addClass(header, CLASS_FIXED_CELL);
+
+          if (this._options.color) {
+            Manipulator.addClass(header, this._options.color);
+          }
+
+          return index !== 0;
+        });
+      }
+
+      headers.forEach((header, i) => {
         Manipulator.addClass(header, CLASS_FIXED_CELL);
 
         if (this.columns[i].fixed) {

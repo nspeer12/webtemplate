@@ -228,9 +228,9 @@ export function createDayViewTemplate(date, selectedDate, options) {
             .map((day) => {
               return `
               <td
-              class="datepicker-cell datepicker-small-cell datepicker-day-cell ${
-                day.disabled ? 'disabled' : ''
-              } ${day.isToday && 'current'} ${day.isSelected && 'selected'}"
+              class="datepicker-cell datepicker-small-cell datepicker-day-cell
+              ${day.currentMonth ? '' : 'disabled'} ${day.disabled ? 'disabled' : ''}
+              ${day.isToday && 'current'} ${day.isSelected && 'selected'}"
               data-mdb-date="${getYear(day.date)}-${getMonth(day.date)}-${getDate(day.date)}"
               aria-label="${day.date}"
               aria-selected="${day.isSelected}">

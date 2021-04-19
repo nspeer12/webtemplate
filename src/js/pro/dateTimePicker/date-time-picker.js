@@ -71,6 +71,7 @@ class Datetimepicker {
     this._isInvalidTimeFormat = false;
     this._validationInfo = null;
     this._format = this._options.datepicker.format ? this._options.datepicker.format : 'dd/mm/yyyy';
+    this._cancel = false;
 
     if (this._element) {
       Data.setData(element, DATA_KEY, this);
@@ -211,6 +212,18 @@ class Datetimepicker {
     }
   }
 
+  _listenToCancelClick() {
+    const DATEPICKER_CANCEL_BTN = SelectorEngine.findOne(
+      `${SELECTOR_DATEPICKER}-cancel-btn`,
+      document.body
+    );
+
+    EventHandler.one(DATEPICKER_CANCEL_BTN, 'mousedown', () => {
+      this._cancel = true;
+      EventHandler.off(DATEPICKER_CANCEL_BTN, 'mousedown');
+    });
+  }
+
   _listenToToggleClick() {
     EventHandler.on(this._element, 'click', SELECTOR_DATA_TOGGLE, (event) => {
       event.preventDefault();
@@ -307,9 +320,16 @@ class Datetimepicker {
     }
     this._addIconButtons();
 
+    this._listenToCancelClick();
+
     EventHandler.one(this._datepicker._element, EVENT_CLOSE_DATEPICKER, () => {
       this._dateValue = this._datepicker._input.value;
       this._updateInputValue();
+
+      if (this._cancel) {
+        this._cancel = false;
+        return;
+      }
       this._openTimePicker();
     });
 

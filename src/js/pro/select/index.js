@@ -1033,9 +1033,9 @@ class Select {
 
     setTimeout(() => {
       Manipulator.removeClass(this._input, CLASS_NAME_FOCUSED);
-
       if (this._label && !this.hasSelection) {
         Manipulator.removeClass(this._label, CLASS_NAME_ACTIVE);
+        Manipulator.removeClass(this._input, CLASS_NAME_ACTIVE);
       }
     }, 0);
 
@@ -1055,7 +1055,7 @@ class Select {
   }
 
   _removeDropdownEvents() {
-    EventHandler.off(document, 'click');
+    EventHandler.off(document, 'click', this._handleOutSideClick.bind(this));
 
     if (this._config.filter) {
       EventHandler.off(this.dropdown, 'keydown');

@@ -122,8 +122,8 @@ export function getStartYear(yearsInView, minDate, maxDate) {
 }
 
 export function isDateDisabled(date, minDate, maxDate, filter) {
-  const isBeforeMin = minDate && compareDates(date, minDate) <= 0;
-  const isAfterMax = maxDate && compareDates(date, maxDate) >= 0;
+  const isBeforeMin = minDate && compareDates(date, minDate) <= -1;
+  const isAfterMax = maxDate && compareDates(date, maxDate) >= 1;
 
   const isDisabled = filter && filter(date) === false;
 

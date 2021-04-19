@@ -645,7 +645,7 @@ class Stepper {
           // wait for other elements transition end
           // the input transition takes 200ms. + 10ms is added, because without it it would not expand to the correct height
 
-          if (!this._currentView === STEPPER_VERTICAL) {
+          if (this._currentView !== STEPPER_VERTICAL) {
             setTimeout(() => {
               this._setHeight(this.activeStep);
             }, 210);

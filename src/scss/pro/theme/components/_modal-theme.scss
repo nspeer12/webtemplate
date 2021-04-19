@@ -4,6 +4,7 @@
   $onSurface: map-get($theme, onSurface);
   $divider: map-get($theme, divider);
   $cardShadow: map-get($theme, dardShadow);
+  $modalButtonColor: map-get($theme, modalButtonColor);
 
   .modal-content {
     background-color: $surface;
@@ -18,7 +19,7 @@
   }
 
   .btn-close {
-    filter: invert(1) grayscale(100%) brightness(200%);
+    filter: $modalButtonColor;
     width: 20px;
   }
 }
