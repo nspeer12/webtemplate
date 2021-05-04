@@ -248,7 +248,7 @@ class Stepper {
       }
 
       if (this._currentView === STEPPER_HORIZONTAL) {
-        this._setHeight();
+        this._setHeight(this.activeStep);
       }
 
       if (this._options.stepperVerticalBreakpoint || this._options.stepperMobileBreakpoint) {

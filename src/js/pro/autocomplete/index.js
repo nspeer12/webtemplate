@@ -444,6 +444,7 @@ class Autocomplete {
     if (this._isOpen || openEvent.defaultPrevented) {
       return;
     }
+    this._updateDropdownWidth();
     this._listenToWindowResize();
 
     this._popper = createPopper(this._element, this._dropdownContainer);

@@ -771,6 +771,9 @@ class Datatable {
   }
 
   _toggleDisableState() {
+    if (this._options.pagination === false) {
+      return;
+    }
     if (this._activePage === 0 || this._options.loading) {
       this._paginationLeft.setAttribute('disabled', true);
 

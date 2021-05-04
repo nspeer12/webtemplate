@@ -1,5 +1,5 @@
 MDB5
-Version: PRO 3.5.0
+Version: PRO 3.5.1
 
 Documentation:
 https://mdbootstrap.com/docs/standard/
